@@ -1,0 +1,44 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Check if user is authenticated admin
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == "admin1@gmail.com" ||
+        request.auth.token.email == "teacher@gmail.com" ||
+        request.auth.token.email == "sauravpandey3221@gmail.com"
+      );
+    }
+
+    // Exam Configs
+    match /examConfigs/{examId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Questions pool
+    match /questions/{qId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Results (Students can only write once, admin can read/manage all)
+    match /results/{resultId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Leaderboard (Public read, system/admin write)
+    match /leaderboard/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Active Sessions (Student state)
+    match /examSessions/{sessionId} {
+      allow create, read, update: if true;
+      allow delete: if isAdmin();
+    }
+  }
+}

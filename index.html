@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Elite - Student Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="brand-header">
+                <h2>EXAM ELITE</h2>
+                <p>NTA-Style Online Testing Engine</p>
+            </div>
+            
+            <form id="studentLoginForm" onsubmit="event.preventDefault(); startStudentSession();">
+                <div class="form-group">
+                    <label for="studentName">Full Name</label>
+                    <input type="text" id="studentName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentEmail">Email Address</label>
+                    <input type="email" id="studentEmail" placeholder="student@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentRoll">Roll Number / Candidate ID</label>
+                    <input type="text" id="studentRoll" placeholder="e.g. CGL2026-9081" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="examSelect">Select Active Examination</label>
+                    <select id="examSelect" required>
+                        <option value="">-- Loading Exams --</option>
+                    </select>
+                </div>
+
+                <div id="loginMessage" class="status-msg"></div>
+
+                <button type="submit" id="startExamBtn" class="btn btn-primary">Proceed to Exam Portal</button>
+            </form>
+
+            <div class="admin-portal-link">
+                <p>Are you an Administrator? <a href="admin.html">Access Control Room</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadExamListDropdown();
+        });
+    </script>
+</body>
+</html>

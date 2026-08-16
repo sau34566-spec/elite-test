@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Elite - Control Room</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div id="adminLoginOverlay" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Admin Authentication</h3>
+            <p>Access requires verified administrative rights.</p>
+            <form id="adminAuthForm" onsubmit="event.preventDefault(); handleAdminLogin();">
+                <div class="form-group">
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <div id="adminAuthErr" class="status-msg error"></div>
+                <button type="submit" class="btn btn-primary">Login to Control Room</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="brand">
+                <h2>Control Room</h2>
+                <span>Exam Elite Admin</span>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" onclick="switchTab('configTab')">Test Setup</button>
+                <button class="nav-item" onclick="switchTab('questionsTab')">Question Pool</button>
+                <button class="nav-item" onclick="switchTab('analyticsTab')">Security & Analytics</button>
+                <button class="nav-item" onclick="switchTab('resultsTab')">Student Results</button>
+                <button class="nav-item" onclick="switchTab('leaderboardTab')">Live Leaderboard</button>
+            </nav>
+            <button class="btn btn-danger btn-logout" onclick="handleAdminLogout()">Logout</button>
+        </aside>
+
+        <main class="main-content">
+            <!-- CONFIGURATION TAB -->
+            <section id="configTab" class="dashboard-section active">
+                <div class="section-header">
+                    <h2>Test Configuration</h2>
+                </div>
+                <form id="examConfigForm" class="config-grid" onsubmit="event.preventDefault(); saveExamConfiguration();">
+                    <div class="card">
+                        <h3>General Settings</h3>
+                        <div class="form-group">
+                            <label for="cfgExamId">Exam ID (Unique)</label>
+                            <input type="text" id="cfgExamId" value="SSC-CGL-MOCK-1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfgExamName">Exam Name</label>
+                            <input type="text" id="cfgExamName" value="SSC CGL Tier-1 Grand Mock Test" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfgSubject">Subject / Category</label>
+                            <input type="text" id="cfgSubject" value="General Knowledge & Aptitude">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Questions & Timing</h3>
+                        <div class="form-group">
+                            <label for="cfgDisplayCount">Questions Shown to Student</label>
+                            <input type="number" id="cfgDisplayCount" value="25" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfgDuration">Exam Duration (Minutes)</label>
+                            <input type="number" id="cfgDuration" value="30" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfgMarks">Marks per Correct Answer</label>
+                            <input type="number" id="cfgMarks" step="0.1" value="2.0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfgNegMarks">Negative Marks per Wrong Answer</label>
+                            <input type="number" id="cfgNegMarks" step="0.1" value="0.5" required>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Security & Permissions</h3>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="cfgMonitorTabSwitch" checked>
+                            <label for="cfgMonitorTabSwitch">Monitor Tab Switches</label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="cfgBlockCopyPaste" checked>
+                            <label for="cfgBlockCopyPaste">Block Copy / Paste / Context Menu</label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="cfgRandomizeQ" checked>
+                            <label for="cfgRandomizeQ">Randomize Question Order</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfgAuthorizedEmails">Authorized / Unlimited Access Emails (Comma-separated)</label>
+                            <textarea id="cfgAuthorizedEmails" rows="2" placeholder="admin1@gmail.com, teacher@gmail.com, sauravpandey3221@gmail.com"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="full-width">
+                        <button type="submit" class="btn btn-success">Save Configuration</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- QUESTION MANAGEMENT TAB -->
+            <section id="questionsTab" class="dashboard-section">
+                <div class="section-header">
+                    <h2>Question Management</h2>
+                </div>
+
+                <div class="tabs-sub">
+                    <button class="btn btn-secondary" onclick="toggleImportMode('manual')">Manual Entry</button>
+                    <button class="btn btn-secondary" onclick="toggleImportMode('word')">Word Copy-Paste Parser</button>
+                    <button class="btn btn-secondary" onclick="toggleImportMode('json')">JSON Upload</button>
+                </div>
+
+                <!-- Manual Form -->
+                <div id="importManual" class="card import-block">
+                    <h3>Single Question Builder</h3>
+                    <form onsubmit="event.preventDefault(); saveSingleQuestion();">
+                        <div class="form-group">
+                            <label for="qText">Question Text</label>
+                            <textarea id="qText" required></textarea>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group"><label>Option A</label><input type="text" id="qOptA" required></div>
+                            <div class="form-group"><label>Option B</label><input type="text" id="qOptB" required></div>
+                            <div class="form-group"><label>Option C</label><input type="text" id="qOptC" required></div>
+                            <div class="form-group"><label>Option D</label><input type="text" id="qOptD" required></div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="qCorrect">Correct Option</label>
+                                <select id="qCorrect" required>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="qChapter">Chapter / Tag</label>
+                                <input type="text" id="qChapter" value="General">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Question to Firestore</button>
+                    </form>
+                </div>
+
+                <!-- MS Word Parser -->
+                <div id="importWord" class="card import-block hidden">
+                    <h3>Paste Content from MS Word</h3>
+                    <p class="help-text">Format: Question line followed by A., B., C., D. and 'Answer: X'</p>
+                    <textarea id="wordRawInput" rows="8" placeholder="1. What is photosynthesis?&#10;A. Respiration&#10;B. Photosynthesis&#10;C. Digestion&#10;D. Transpiration&#10;Answer: B"></textarea>
+                    <button class="btn btn-primary" onclick="parseWordContent()">Parse & Preview</button>
+                    <div id="parsedPreview"></div>
+                </div>
+
+                <!-- JSON Upload -->
+                <div id="importJson" class="card import-block hidden">
+                    <h3>Upload JSON Question File</h3>
+                    <input type="file" id="jsonFileInput" accept=".json" onchange="handleJsonUpload(event)">
+                    <div id="jsonPreview"></div>
+                </div>
+
+                <!-- Question Pool Table -->
+                <div class="card margin-top">
+                    <div class="flex-between">
+                        <h3>Live Question Pool (<span id="qPoolCount">0</span>)</h3>
+                        <button class="btn btn-danger" onclick="clearQuestionPool()">Clear Whole Pool</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Question</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>C</th>
+                                    <th>D</th>
+                                    <th>Ans</th>
+                                    <th>Chapter</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="questionTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS TAB -->
+            <section id="analyticsTab" class="dashboard-section">
+                <h2>Security Analytics & Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h4 id="statTotalSubmissions">0</h4>
+                        <p>Total Exams Submitted</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4 id="statTabViolations">0</h4>
+                        <p>Tab Switch Flags</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4 id="statAutoSubmits">0</h4>
+                        <p>Security Auto-Submissions</p>
+                    </div>
+                    <div class="metric-card">
+                        <h4 id="statAvgScore">0.0</h4>
+                        <p>Average Score</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESULTS TAB -->
+            <section id="resultsTab" class="dashboard-section">
+                <h2>Student Results</h2>
+                <div class="table-responsive card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Roll</th>
+                                <th>Score</th>
+                                <th>Correct</th>
+                                <th>Wrong</th>
+                                <th>Violations</th>
+                                <th>Reason</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- LEADERBOARD TAB -->
+            <section id="leaderboardTab" class="dashboard-section">
+                <h2>Live Global Leaderboard</h2>
+                <div id="leaderboardContent" class="card"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/questions.js"></script>
+    <script src="js/results.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

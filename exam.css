@@ -1,0 +1,125 @@
+.exam-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.exam-header {
+    background: #0f172a;
+    color: #fff;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.exam-header h1 { font-size: 18px; color: #38bdf8; }
+
+.timer-box {
+    background: #1e293b;
+    padding: 6px 16px;
+    border-radius: 6px;
+    text-align: right;
+    border: 1px solid #334155;
+}
+
+#examTimerDisplay {
+    font-family: monospace;
+    font-size: 20px;
+    color: #f59e0b;
+    font-weight: bold;
+}
+
+.exam-container {
+    display: flex;
+    flex-grow: 1;
+    height: calc(100vh - 60px);
+}
+
+.question-workspace {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 16px;
+    padding: 24px;
+}
+
+.q-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 12px;
+}
+
+.q-body {
+    font-size: 16px;
+    margin: 20px 0;
+    flex-grow: 1;
+    line-height: 1.6;
+}
+
+.q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.option-node {
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+}
+
+.option-node:hover { background: #f8fafc; }
+.option-node.selected {
+    background: #eff6ff;
+    border-color: var(--primary);
+    font-weight: 600;
+}
+
+.q-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+}
+
+.palette-sidebar {
+    width: 320px;
+    margin: 16px 16px 16px 0;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.q-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.grid-btn {
+    aspect-ratio: 1;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.grid-btn.answered { background: var(--success); color: #fff; border-color: var(--success); }
+.grid-btn.current { border: 2px solid var(--primary); font-weight: bold; }

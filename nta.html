@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Elite Portal - Examination Window</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/exam.css">
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="exam-body select-none">
+    <header class="exam-header">
+        <div class="brand">
+            <h1 id="examTitleHeader">Exam Elite Engine</h1>
+        </div>
+        <div class="candidate-info">
+            <span id="dispCandidateName">Candidate: --</span>
+            <span id="dispCandidateRoll">Roll: --</span>
+        </div>
+        <div class="timer-box">
+            <span>Time Remaining:</span>
+            <div id="examTimerDisplay">00:00:00</div>
+        </div>
+    </header>
+
+    <main class="exam-container">
+        <div class="question-workspace card">
+            <div class="q-header">
+                <span id="qNumberBadge">Question 1</span>
+                <span id="qMarksBadge" class="badge">Marks: +2.0 | -0.5</span>
+            </div>
+
+            <div id="qTextDisplay" class="q-body">
+                Loading exam questions...
+            </div>
+
+            <div id="qOptionsContainer" class="q-options"></div>
+
+            <div class="q-footer">
+                <button id="btnPrev" class="btn btn-secondary" onclick="navigateQuestion(-1)">Previous</button>
+                <button id="btnNext" class="btn btn-primary" onclick="navigateQuestion(1)">Save & Next</button>
+                <button id="btnSubmit" class="btn btn-danger" onclick="triggerCentralSubmission('MANUAL')">Submit Exam</button>
+            </div>
+        </div>
+
+        <aside class="palette-sidebar card">
+            <h3>Question Palette</h3>
+            <div id="questionGrid" class="q-grid"></div>
+            <div class="legend">
+                <div><span class="dot answered"></span> Answered</div>
+                <div><span class="dot current"></span> Current</div>
+                <div><span class="dot unvisited"></span> Not Visited</div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Submission Modal -->
+    <div id="submissionOverlay" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2 id="subModalTitle">Exam Completed</h2>
+            <div id="subModalBody">
+                Calculating score & saving result to database...
+            </div>
+            <button id="subModalCloseBtn" class="btn btn-primary hidden" onclick="window.location.href='index.html'">Return to Portal</button>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/exam.js"></script>
+</body>
+</html>
