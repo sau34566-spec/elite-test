@@ -1,503 +1,926 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exam Elite | Admin Dashboard Panel</title>
-  
-  <!-- Google Fonts & FontAwesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Exam Elite | Admin Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <style>
-    :root {
-      --primary: #1e3a8a;
-      --primary-light: #3b82f6;
-      --accent: #f59e0b;
-      --bg-dark: #0f172a;
-      --bg-card: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --danger: #ef4444;
-      --success: #10b981;
+    :root{
+      --primary:#1e3a8a;
+      --primary-light:#3b82f6;
+      --accent:#f59e0b;
+      --bg:#f8fafc;
+      --card:#fff;
+      --text:#1e293b;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --danger:#ef4444;
+      --success:#10b981;
+      --warning:#f59e0b;
+      --shadow:0 10px 25px -5px rgba(15,23,42,.08);
     }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,sans-serif}
+    body{background:var(--bg);color:var(--text);min-height:100vh;padding:20px}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body { background-color: #f8fafc; color: var(--text-main); min-height: 100vh; padding: 2rem 1rem; }
-    
-    #login-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(15, 23, 42, 0.9); z-index: 9999;
-      display: flex; align-items: center; justify-content: center;
+    #login-overlay{
+      position:fixed;inset:0;background:rgba(15,23,42,.94);
+      display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px
     }
-    .login-card {
-      background: #ffffff; padding: 2.5rem; border-radius: 16px;
-      width: 100%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
-      text-align: center;
+    .login-card{
+      width:100%;max-width:420px;background:#fff;border-radius:18px;
+      padding:32px;box-shadow:0 25px 60px rgba(0,0,0,.3);text-align:center
     }
-    .login-card h2 { color: var(--primary); margin-bottom: 0.5rem; }
-    .login-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-    
-    .admin-container { max-width: 1000px; margin: 0 auto; display: none; }
-    
-    header {
-      margin-bottom: 2rem; border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 10px;
+    .login-icon{font-size:48px;color:var(--primary);margin-bottom:14px}
+    .login-card h2{color:var(--primary);margin-bottom:7px}
+    .login-card p{color:var(--muted);font-size:14px;margin-bottom:22px}
+    .form-group{text-align:left;margin-bottom:16px}
+    label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.45px;margin-bottom:7px}
+    input,select{
+      width:100%;padding:12px 13px;border:2px solid var(--border);border-radius:9px;
+      outline:none;background:#fff;color:var(--text)
     }
-    header h1 { color: var(--primary); font-size: 2rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
-    
-    .header-actions { display: flex; gap: 10px; align-items: center; }
-
-    .slide-navigation { display: flex; gap: 10px; margin-bottom: 2rem; background: #e2e8f0; padding: 6px; border-radius: 12px; }
-    .slide-tab-btn {
-      flex: 1; background: transparent; border: none; padding: 1rem;
-      font-size: 1rem; font-weight: 600; color: var(--text-muted);
-      border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
+    input:focus,select:focus{border-color:var(--primary-light);box-shadow:0 0 0 4px rgba(59,130,246,.1)}
+    .btn{
+      border:0;border-radius:9px;padding:11px 15px;background:var(--primary);color:#fff;
+      font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      transition:.18s
     }
-    .slide-tab-btn.active { background: var(--bg-card); color: var(--primary); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+    .btn-success{background:var(--success)}
+    .btn-danger{background:var(--danger)}
+    .btn-accent{background:var(--accent);color:#111827}
+    .btn-muted{background:#475569}
+    .btn-light{background:#e2e8f0;color:#334155}
+    .btn-small{padding:7px 9px;font-size:12px}
+    .error{color:var(--danger);font-size:13px;margin-top:8px;display:none}
 
-    .admin-slide-content { display: none; }
-    .admin-slide-content.active { display: block; }
-
-    .admin-card {
-      background: var(--bg-card); padding: 2.5rem; border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; margin-bottom: 2rem;
+    .container{max-width:1200px;margin:0 auto}
+    header{
+      display:flex;justify-content:space-between;align-items:center;gap:15px;
+      flex-wrap:wrap;padding:12px 0 20px;border-bottom:2px solid var(--border);margin-bottom:20px
     }
-    h3 { font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    p.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    header h1{font-size:28px;color:var(--primary);display:flex;align-items:center;gap:11px}
+    .header-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 1.5rem; }
-    .form-group { margin-bottom: 1.25rem; text-align: left; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main); margin-bottom: 0.5rem; }
-    input[type="text"], input[type="password"], input[type="number"], input[type="datetime-local"], textarea, select {
-      width: 100%; padding: 0.85rem 1rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; outline: none; transition: all 0.2s; background: white;
+    .status-bar{
+      display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--border);
+      padding:10px 14px;border-radius:10px;margin-bottom:16px;box-shadow:var(--shadow);font-size:13px
     }
-    input:focus, textarea:focus, select:focus { border-color: var(--primary-light); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    .status-dot{width:9px;height:9px;border-radius:50%;background:var(--success)}
+    .status-dot.error{background:var(--danger)}
+    .status-dot.busy{background:var(--warning)}
 
-    .btn {
-      background: var(--primary); color: white; border: none; padding: 0.85rem 1.5rem;
-      font-size: 0.95rem; font-weight: 600; border-radius: 8px; cursor: pointer;
-      transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+    .stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+    .stat-card .label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase}
+    .stat-card .value{font-size:26px;font-weight:800;color:var(--primary);margin-top:6px}
+    .stat-card .sub{font-size:11px;color:var(--muted);margin-top:4px}
+
+    .tabs{display:flex;gap:7px;background:#e2e8f0;padding:6px;border-radius:12px;margin-bottom:18px;overflow:auto}
+    .tab{flex:1;min-width:150px;border:0;background:transparent;color:var(--muted);padding:12px;border-radius:8px;font-weight:700}
+    .tab.active{background:#fff;color:var(--primary);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+    .panel{display:none}.panel.active{display:block}
+
+    .card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+    .card h2{font-size:19px;color:var(--primary);margin-bottom:6px;display:flex;align-items:center;gap:9px}
+    .subtitle{color:var(--muted);font-size:13px;margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:8px}
+    .radio-box{background:#f1f5f9;padding:14px;border-radius:10px;margin:10px 0 17px}
+    .radio-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:9px}
+    .radio-row label{display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:13px;margin:0}
+    .radio-row input{width:auto}
+
+    .table-wrap{width:100%;overflow:auto;border:1px solid var(--border);border-radius:10px}
+    table{width:100%;border-collapse:collapse;min-width:850px;background:#fff}
+    th,td{padding:11px 12px;border-bottom:1px solid var(--border);font-size:12px;text-align:left;vertical-align:top}
+    th{background:#f8fafc;color:var(--primary);font-weight:800;position:sticky;top:0}
+    tr:hover td{background:#f8fafc}
+    .badge{display:inline-block;padding:4px 7px;border-radius:999px;font-size:11px;font-weight:800}
+    .safe{background:#d1fae5;color:#065f46}.warn{background:#fee2e2;color:#991b1b}.neutral{background:#e2e8f0;color:#334155}
+    .rank{background:var(--accent);color:#111827;border-radius:999px;padding:4px 8px;font-weight:800}
+    .muted{color:var(--muted)}
+    .feedback{max-width:260px;white-space:normal;line-height:1.45}
+    .rating{color:#f59e0b;letter-spacing:1px}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:13px}
+    .toolbar .search{flex:1;min-width:220px}
+    .empty{text-align:center;padding:25px;color:var(--muted)}
+    .notice{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;padding:12px;font-size:12px;line-height:1.5;margin-bottom:15px}
+    .success-note{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
+    .danger-note{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+    .modal{
+      position:fixed;inset:0;background:rgba(15,23,42,.65);display:none;align-items:center;
+      justify-content:center;z-index:9000;padding:20px
     }
-    .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-    .btn-success { background: var(--success); } .btn-success:hover { background: #059669; }
-    .btn-danger { background: var(--danger); } .btn-danger:hover { background: #dc2626; }
-    .btn-accent { background: var(--accent); color: #0f172a; } .btn-accent:hover { background: #d97706; }
-    .btn-refresh { background: #475569; color: white; } .btn-refresh:hover { background: #334155; }
+    .modal.show{display:flex}
+    .modal-card{background:#fff;width:100%;max-width:620px;border-radius:16px;padding:24px;max-height:90vh;overflow:auto}
+    .modal-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:16px}
+    .close{border:0;background:#e2e8f0;width:34px;height:34px;border-radius:50%}
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .detail-item{background:#f8fafc;padding:12px;border-radius:9px}
+    .detail-item strong{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+    .detail-item span{font-size:13px;word-break:break-word}
 
-    .table-responsive { width: 100%; overflow-x: auto; margin-top: 1.5rem; border-radius: 8px; border: 1px solid #e2e8f0; }
-    table { width: 100%; border-collapse: collapse; text-align: left; background: white; }
-    th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; font-size: 0.9rem; }
-    th { background: #f8fafc; color: var(--primary); font-weight: 600; }
-    tr:hover { background: #f1f5f9; }
-
-    .badge-rank { background: #f59e0b; color: white; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 12px; font-size: 0.85rem; }
-    .alert-indicator { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
-    .alert-safe { background: #d1fae5; color: #065f46; }
-    .alert-warn { background: #fee2e2; color: #991b1b; }
-    .time-stamp { font-size: 0.8rem; color: #64748b; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+    @media(max-width:900px){
+      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:600px){
+      body{padding:12px}
+      header h1{font-size:22px}
+      .stats-grid,.grid,.grid-2,.detail-grid{grid-template-columns:1fr}
+      .card{padding:16px}
+      .tab{min-width:130px;font-size:12px}
+    }
   </style>
 </head>
+
 <body>
 
-  <!-- LOGIN OVERLAY -->
+  <!-- LOGIN -->
   <div id="login-overlay">
     <div class="login-card">
-      <i class="fa-solid fa-user-lock" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+      <div class="login-icon"><i class="fa-solid fa-user-shield"></i></div>
       <h2>Admin Login</h2>
-      <p>Enter credentials to access admin dashboard</p>
-      <form onsubmit="handleLogin(event)">
+      <p>Sign in to manage the exam configuration and student results.</p>
+      <form id="login-form">
         <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="admin-user" placeholder="Enter username" required>
+          <label for="admin-user">Username</label>
+          <input id="admin-user" type="text" autocomplete="username" placeholder="Admin username" required>
         </div>
         <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="admin-pass" placeholder="Enter password" required>
+          <label for="admin-pass">Password</label>
+          <input id="admin-pass" type="password" autocomplete="current-password" placeholder="Password" required>
         </div>
-        <p id="login-error" style="color: var(--danger); font-size: 0.85rem; display: none; margin-bottom: 1rem;">Invalid username or password!</p>
-        <button type="submit" class="btn" style="width: 100%; justify-content: center;">
+        <div id="login-error" class="error"></div>
+        <button id="login-btn" class="btn" style="width:100%" type="submit">
           <i class="fa-solid fa-right-to-bracket"></i> Login to Panel
         </button>
       </form>
     </div>
   </div>
 
-  <!-- MAIN ADMIN CONTAINER -->
-  <div class="admin-container" id="admin-main">
+  <main id="admin-main" class="container hidden">
     <header>
       <h1><i class="fa-solid fa-gauge-high"></i> Admin Control Room</h1>
       <div class="header-actions">
-        <button onclick="fetchLiveDatabaseRecords()" class="btn btn-refresh" title="Refresh Live Data">
-          <i class="fa-solid fa-rotate"></i> Sync Data
-        </button>
-        <button onclick="logoutAdmin()" class="btn btn-danger" style="padding: 0.5rem 1rem;">
-          <i class="fa-solid fa-power-off"></i> Logout
-        </button>
+        <button id="refresh-btn" class="btn btn-muted"><i class="fa-solid fa-rotate"></i> Sync Data</button>
+        <button id="logout-btn" class="btn btn-danger"><i class="fa-solid fa-power-off"></i> Logout</button>
       </div>
     </header>
 
-    <div class="slide-navigation">
-      <button class="slide-tab-btn active" onclick="switchSlide(1)">
-        <i class="fa-solid fa-plus-minus"></i> Setup & Timer Config
-      </button>
-      <button class="slide-tab-btn" onclick="switchSlide(2)">
-        <i class="fa-solid fa-shield-halved"></i> Security Analytics
-      </button>
-      <button class="slide-tab-btn" onclick="switchSlide(3)">
-        <i class="fa-solid fa-trophy"></i> Leaderboard & Timing
-      </button>
+    <div class="status-bar">
+      <span id="status-dot" class="status-dot"></span>
+      <span id="status-text">Connecting to Firestore...</span>
+      <span class="muted" id="last-sync" style="margin-left:auto"></span>
     </div>
 
-    <!-- SLIDE 1: CONFIGURATION & TIMER -->
-    <div id="slide-1-content" class="admin-slide-content active">
-      <div class="admin-card">
-        <h3><i class="fa-solid fa-sliders"></i> Test & Timer Configuration Settings</h3>
-        <p class="subtitle">Set question randomization, test time duration, and fixed exam availability window.</p>
-        
-        <div class="form-grid">
+    <section class="stats-grid">
+      <div class="stat-card"><div class="label">Total Submissions</div><div id="stat-total" class="value">0</div><div class="sub">Saved in Firestore</div></div>
+      <div class="stat-card"><div class="label">Average Score</div><div id="stat-average" class="value">0</div><div class="sub">Across all submissions</div></div>
+      <div class="stat-card"><div class="label">Security Flags</div><div id="stat-flags" class="value">0</div><div class="sub">Tab/copy violations</div></div>
+      <div class="stat-card"><div class="label">Average Rating</div><div id="stat-rating" class="value">0/5</div><div class="sub">Student feedback</div></div>
+    </section>
+
+    <nav class="tabs">
+      <button class="tab active" data-panel="setup"><i class="fa-solid fa-sliders"></i> Setup & Timer</button>
+      <button class="tab" data-panel="results"><i class="fa-solid fa-trophy"></i> Results & Leaderboard</button>
+      <button class="tab" data-panel="security"><i class="fa-solid fa-shield-halved"></i> Security Analytics</button>
+    </nav>
+
+    <!-- SETUP -->
+    <section id="panel-setup" class="panel active">
+      <div class="card">
+        <h2><i class="fa-solid fa-gear"></i> Test & Timer Configuration</h2>
+        <p class="subtitle">These settings are stored in <b>exam_config/current_test</b> and are read by the student portal.</p>
+
+        <div class="notice">
+          <b>Question file:</b> <code>chapter.html</code>. Make sure it is in the same folder as <code>index.html</code>.
+        </div>
+
+        <div class="grid">
           <div class="form-group">
             <label for="config-total-pool">Total Pool Questions *</label>
-            <input type="number" id="config-total-pool" placeholder="Example: 10" min="1">
+            <input id="config-total-pool" type="number" min="1" placeholder="e.g. 50">
           </div>
           <div class="form-group">
-            <label for="config-student-limit">Student Display Limit (Randomized) *</label>
-            <input type="number" id="config-student-limit" placeholder="Example: 6" min="1">
+            <label for="config-student-limit">Student Display Limit *</label>
+            <input id="config-student-limit" type="number" min="1" placeholder="e.g. 20">
           </div>
           <div class="form-group">
-            <label for="config-test-duration">Per Exam Timer (Minutes) *</label>
-            <input type="number" id="config-test-duration" placeholder="e.g. 30" min="1">
+            <label for="config-duration">Exam Duration (Minutes) *</label>
+            <input id="config-duration" type="number" min="1" placeholder="e.g. 30">
           </div>
         </div>
 
-        <div class="form-grid">
+        <div class="grid-2">
           <div class="form-group">
-            <label for="config-window-start">Overall Test Window Start Time *</label>
-            <input type="datetime-local" id="config-window-start">
+            <label for="config-window-start">Exam Window Start *</label>
+            <input id="config-window-start" type="datetime-local">
           </div>
           <div class="form-group">
-            <label for="config-window-end">Overall Test Window End Time *</label>
-            <input type="datetime-local" id="config-window-end">
+            <label for="config-window-end">Exam Window End *</label>
+            <input id="config-window-end" type="datetime-local">
           </div>
         </div>
 
-        <div style="background: #f1f5f9; padding: 1.25rem; border-radius: 10px; margin-bottom: 1.5rem;">
-          <label style="font-weight: 700; color: var(--primary);">Question Upload Method:</label>
-          <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 0.5rem;">
-            <label style="cursor:pointer; display:flex; align-items:center; gap:6px;">
-              <input type="radio" name="upload-mode" value="form" checked> Live Form
-            </label>
-            <label style="cursor:pointer; display:flex; align-items:center; gap:6px;">
-              <input type="radio" name="upload-mode" value="code"> Custom Code
-            </label>
-            <label style="cursor:pointer; display:flex; align-items:center; gap:6px;">
-              <input type="radio" name="upload-mode" value="msword"> MS Word Parse
-            </label>
+        <div class="radio-box">
+          <label>Question Upload Method</label>
+          <div class="radio-row">
+            <label><input type="radio" name="upload-mode" value="form" checked> Live Form</label>
+            <label><input type="radio" name="upload-mode" value="code"> Custom Code</label>
+            <label><input type="radio" name="upload-mode" value="msword"> MS Word Parse</label>
+          </div>
+          <div class="muted" style="font-size:11px;margin-top:9px">
+            This setting is saved for future upload functionality; the current student portal loads <code>chapter.html</code>.
           </div>
         </div>
 
-        <button type="button" id="save-config-btn" onclick="saveExamSettings()" class="btn btn-success">
-          <i class="fa-solid fa-lock"></i> Save & Apply Configurations
-        </button>
-      </div>
-    </div>
-
-    <!-- SLIDE 2: SECURITY ANALYTICS -->
-    <div id="slide-2-content" class="admin-slide-content">
-      <div class="admin-card">
-        <h3><i class="fa-solid fa-user-shield"></i> Anti-Cheating & Security Analytics Tracker</h3>
-        <p class="subtitle">Live security logs of tab switches, copy/paste attempts, and penalty marks.</p>
-        
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Student Details</th>
-                <th>Submit Time</th>
-                <th>Tab Switches</th>
-                <th>Copy Violations</th>
-                <th>Penalty Marks Deduc.</th>
-              </tr>
-            </thead>
-            <tbody id="analytics-table-body">
-              <tr><td colspan="5" style="text-align:center;">Loading analytics data...</td></tr>
-            </tbody>
-          </table>
+        <div class="actions">
+          <button id="save-config-btn" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Save & Apply</button>
+          <button id="load-config-btn" class="btn btn-light"><i class="fa-solid fa-cloud-arrow-down"></i> Reload Config</button>
         </div>
       </div>
-    </div>
 
-    <!-- SLIDE 3: LEADERBOARD -->
-    <div id="slide-3-content" class="admin-slide-content">
-      <div class="admin-card">
-        <h3><i class="fa-solid fa-trophy"></i> Live Leaderboard & Submission Time Logs</h3>
-        <p class="subtitle">Student scores sorted by performance along with exact submission time.</p>
-        
-        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-          <button onclick="downloadResultsCSV()" class="btn btn-accent"><i class="fa-solid fa-file-excel"></i> Download CSV Report</button>
-          <button onclick="clearAllResults()" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Clear All Records</button>
+      <div class="card">
+        <h2><i class="fa-solid fa-circle-info"></i> Current Exam Status</h2>
+        <div id="exam-status-box" class="notice">Loading...</div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="panel-results" class="panel">
+      <div class="card">
+        <h2><i class="fa-solid fa-trophy"></i> Results & Leaderboard</h2>
+        <p class="subtitle">Scores are sorted highest first. Click “View” for full submission details.</p>
+
+        <div class="toolbar">
+          <input id="result-search" class="search" type="search" placeholder="Search by name or email...">
+          <select id="result-sort" style="width:auto;min-width:150px">
+            <option value="score">Highest Score</option>
+            <option value="latest">Latest Submission</option>
+            <option value="oldest">Oldest Submission</option>
+            <option value="rating">Highest Rating</option>
+          </select>
+          <button id="csv-btn" class="btn btn-accent"><i class="fa-solid fa-file-csv"></i> CSV</button>
+          <button id="clear-btn" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Clear All</button>
         </div>
 
-        <div class="table-responsive">
+        <div class="table-wrap">
           <table>
             <thead>
               <tr>
                 <th>Rank</th>
-                <th>Student Details</th>
+                <th>Student</th>
                 <th>Score</th>
-                <th>Submitted At</th>
-                <th>Feedback</th>
+                <th>Rating</th>
+                <th>Submitted</th>
+                <th>Feedback / Doubt</th>
+                <th>Action</th>
               </tr>
             </thead>
-            <tbody id="leaderboard-table-body">
-              <tr><td colspan="5" style="text-align:center;">Loading leaderboard data...</td></tr>
+            <tbody id="leaderboard-body">
+              <tr><td colspan="7" class="empty">Loading results...</td></tr>
             </tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="panel-security" class="panel">
+      <div class="card">
+        <h2><i class="fa-solid fa-user-shield"></i> Security Analytics</h2>
+        <p class="subtitle">Tab switches, copy/paste violations and applied penalties reported by the student portal.</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Submitted</th>
+                <th>Tab Switches</th>
+                <th>Copy Violations</th>
+                <th>Penalties</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="security-body">
+              <tr><td colspan="6" class="empty">Loading security data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- DETAILS MODAL -->
+  <div id="detail-modal" class="modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 style="color:var(--primary)"><i class="fa-solid fa-file-lines"></i> Submission Details</h2>
+        <button id="close-modal" class="close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="detail-content"></div>
+      <div class="actions" style="margin-top:18px">
+        <button id="delete-one-btn" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete This Record</button>
       </div>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      collection,
+      getDocs,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
+    // Firebase configuration supplied for this project.
     const firebaseConfig = {
       apiKey: "AIzaSyA8XeHrqnYP1FEpwpqUZEdKsVAJGDw2r7o",
       authDomain: "physics-test-series-405c7.firebaseapp.com",
       projectId: "physics-test-series-405c7",
       storageBucket: "physics-test-series-405c7.firebasestorage.app",
       messagingSenderId: "758620061190",
-      appId: "1:758620061190:web:dbbc7759c95b5e7d8b8d87"
+      appId: "1:758620061190:web:b663c02fa5f01c6d8b8d87",
+      measurementId: "G-5CB60388J5"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
     let allStudentResults = [];
+    let selectedRecordId = null;
 
-    window.handleLogin = (e) => {
-      e.preventDefault();
-      const user = document.getElementById('admin-user').value.trim();
-      const pass = document.getElementById('admin-pass').value.trim();
+    const $ = (id) => document.getElementById(id);
 
-      if (user === "saurav" && pass === "saurav@123") {
-        sessionStorage.setItem("admin_logged_in", "true");
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('admin-main').style.display = 'block';
-        loadExamSettings();
-        fetchLiveDatabaseRecords();
-      } else {
-        document.getElementById('login-error').style.display = 'block';
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function toDate(value) {
+      if (!value) return null;
+      try {
+        if (value.toDate) return value.toDate();
+        const d = new Date(value);
+        return Number.isNaN(d.getTime()) ? null : d;
+      } catch {
+        return null;
       }
-    };
+    }
 
-    window.logoutAdmin = () => {
-      sessionStorage.removeItem("admin_logged_in");
-      location.reload();
-    };
-
-    if (sessionStorage.getItem("admin_logged_in") === "true") {
-      document.getElementById('login-overlay').style.display = 'none';
-      document.getElementById('admin-main').style.display = 'block';
-      window.addEventListener('DOMContentLoaded', () => {
-        loadExamSettings();
-        fetchLiveDatabaseRecords();
+    function formatDate(value) {
+      const d = value instanceof Date ? value : toDate(value);
+      if (!d) return "N/A";
+      return d.toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "short"
       });
     }
 
-    window.switchSlide = (slideNum) => {
-      document.querySelectorAll('.admin-slide-content').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.slide-tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`slide-${slideNum}-content`).classList.add('active');
-      if (event && event.currentTarget) event.currentTarget.classList.add('active');
-    };
-
-    async function loadExamSettings() {
-      try {
-        const docRef = doc(db, "exam_config", "current_test");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          document.getElementById('config-total-pool').value = data.totalPool || "";
-          document.getElementById('config-student-limit').value = data.studentLimit || "";
-          document.getElementById('config-test-duration').value = data.durationMinutes || 30;
-          
-          if(data.windowStart) {
-            document.getElementById('config-window-start').value = new Date(data.windowStart).toISOString().slice(0, 16);
-          }
-          if(data.windowEnd) {
-            document.getElementById('config-window-end').value = new Date(data.windowEnd).toISOString().slice(0, 16);
-          }
-
-          if (data.uploadMode) {
-            const radio = document.querySelector(`input[name="upload-mode"][value="${data.uploadMode}"]`);
-            if (radio) radio.checked = true;
-          }
-        }
-      } catch (e) {
-        console.error("Config load error:", e);
-      }
+    function numberValue(value, fallback = 0) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : fallback;
     }
 
-    window.saveExamSettings = async () => {
-      const totalPool = parseInt(document.getElementById('config-total-pool').value);
-      const studentLimit = parseInt(document.getElementById('config-student-limit').value);
-      const durationMinutes = parseInt(document.getElementById('config-test-duration').value);
-      const windowStartVal = document.getElementById('config-window-start').value;
-      const windowEndVal = document.getElementById('config-window-end').value;
-      const uploadMode = document.querySelector('input[name="upload-mode"]:checked').value;
+    function parseScore(value) {
+      if (typeof value === "number") return value;
+      if (typeof value !== "string") return 0;
+      const first = value.split("/")[0];
+      const n = parseFloat(first);
+      return Number.isFinite(n) ? n : 0;
+    }
 
-      if (!totalPool || !studentLimit || !durationMinutes || !windowStartVal || !windowEndVal) {
-        alert("Please fill all configuration & window timing fields.");
+    function parseRating(value) {
+      const n = Number(value);
+      return Number.isFinite(n) && n >= 0 ? Math.min(5, n) : 0;
+    }
+
+    function stars(value) {
+      const rating = Math.round(parseRating(value));
+      return `<span class="rating">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</span>`;
+    }
+
+    function setStatus(message, type = "ok") {
+      $("status-text").textContent = message;
+      $("status-dot").className = "status-dot" + (type === "error" ? " error" : type === "busy" ? " busy" : "");
+    }
+
+    function getUploadMode() {
+      return document.querySelector('input[name="upload-mode"]:checked')?.value || "form";
+    }
+
+    function setUploadMode(value) {
+      const radio = document.querySelector(`input[name="upload-mode"][value="${CSS.escape(value)}"]`);
+      if (radio) radio.checked = true;
+    }
+
+    function dateTimeLocalValue(timestamp) {
+      const d = toDate(timestamp);
+      if (!d) return "";
+      const pad = n => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function updateExamStatus() {
+      const start = $("config-window-start").value;
+      const end = $("config-window-end").value;
+      const duration = $("config-duration").value;
+      const pool = $("config-total-pool").value;
+      const limit = $("config-student-limit").value;
+
+      if (!start || !end) {
+        $("exam-status-box").innerHTML = `<div class="notice">Exam window is not configured.</div>`;
         return;
       }
 
-      const saveBtn = document.getElementById('save-config-btn');
-      saveBtn.disabled = true;
-      saveBtn.innerText = "Saving Settings...";
+      const now = Date.now();
+      const startMs = new Date(start).getTime();
+      const endMs = new Date(end).getTime();
+
+      let status = "Scheduled";
+      let cls = "";
+      if (now < startMs) { status = "Upcoming"; cls = "success-note"; }
+      else if (now >= startMs && now <= endMs) { status = "LIVE NOW"; cls = "success-note"; }
+      else { status = "Ended"; cls = "danger-note"; }
+
+      $("exam-status-box").className = `notice ${cls}`;
+      $("exam-status-box").innerHTML =
+        `<b>Status:</b> ${status}<br>` +
+        `<b>Window:</b> ${escapeHtml(new Date(startMs).toLocaleString("en-IN"))} → ${escapeHtml(new Date(endMs).toLocaleString("en-IN"))}<br>` +
+        `<b>Pool:</b> ${escapeHtml(pool || "—")} &nbsp; | &nbsp; <b>Student Limit:</b> ${escapeHtml(limit || "—")} &nbsp; | &nbsp; <b>Timer:</b> ${escapeHtml(duration || "—")} min`;
+    }
+
+    async function loadExamSettings() {
+      setStatus("Loading exam configuration...", "busy");
+      try {
+        const snap = await getDoc(doc(db, "exam_config", "current_test"));
+
+        if (!snap.exists()) {
+          setStatus("Connected — no exam configuration found", "ok");
+          $("exam-status-box").innerHTML = `<div class="notice">No <b>exam_config/current_test</b> document exists yet. Save the configuration below to create it.</div>`;
+          return;
+        }
+
+        const data = snap.data();
+
+        $("config-total-pool").value = data.totalPool ?? "";
+        $("config-student-limit").value = data.studentLimit ?? data.questionLimit ?? "";
+        $("config-duration").value = data.durationMinutes ?? 30;
+        $("config-window-start").value = dateTimeLocalValue(data.windowStart);
+        $("config-window-end").value = dateTimeLocalValue(data.windowEnd);
+        setUploadMode(data.uploadMode || "form");
+
+        updateExamStatus();
+        setStatus("Firestore connected", "ok");
+      } catch (err) {
+        console.error("Config load error:", err);
+        setStatus("Firestore error: " + (err.code || err.message), "error");
+        $("exam-status-box").innerHTML =
+          `<div class="notice danger-note"><b>Could not load configuration.</b><br>${escapeHtml(err.code || err.message)}</div>`;
+      }
+    }
+
+    async function saveExamSettings() {
+      const totalPool = parseInt($("config-total-pool").value, 10);
+      const studentLimit = parseInt($("config-student-limit").value, 10);
+      const durationMinutes = parseInt($("config-duration").value, 10);
+      const windowStartVal = $("config-window-start").value;
+      const windowEndVal = $("config-window-end").value;
+      const uploadMode = getUploadMode();
+
+      if (!totalPool || totalPool < 1 || !studentLimit || studentLimit < 1 || !durationMinutes || durationMinutes < 1 || !windowStartVal || !windowEndVal) {
+        alert("Please fill all configuration fields correctly.");
+        return;
+      }
+
+      if (studentLimit > totalPool) {
+        alert("Student Display Limit cannot be greater than Total Pool Questions.");
+        return;
+      }
+
+      const startMs = new Date(windowStartVal).getTime();
+      const endMs = new Date(windowEndVal).getTime();
+
+      if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= startMs) {
+        alert("Exam Window End must be later than Exam Window Start.");
+        return;
+      }
+
+      const btn = $("save-config-btn");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+      setStatus("Saving configuration...", "busy");
 
       try {
         await setDoc(doc(db, "exam_config", "current_test"), {
           totalPool,
           studentLimit,
+          questionLimit: studentLimit,
           durationMinutes,
-          windowStart: new Date(windowStartVal).getTime(),
-          windowEnd: new Date(windowEndVal).getTime(),
+          windowStart: startMs,
+          windowEnd: endMs,
           uploadMode,
           updatedAt: new Date()
-        });
-        alert("Configuration & Window settings saved successfully!");
+        }, { merge: true });
+
+        updateExamStatus();
+        setStatus("Configuration saved successfully", "ok");
+        alert("Configuration & exam window saved successfully.");
       } catch (err) {
-        alert("Failed to save configuration: " + err.message);
+        console.error("Save config error:", err);
+        setStatus("Save failed: " + (err.code || err.message), "error");
+        alert("Failed to save configuration:\n\n" + (err.code || err.message));
       } finally {
-        saveBtn.disabled = false;
-        saveBtn.innerText = "Save & Apply Configurations";
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save & Apply`;
       }
-    };
+    }
 
-    window.fetchLiveDatabaseRecords = async () => {
-      const analyticsBody = document.getElementById('analytics-table-body');
-      const leaderboardBody = document.getElementById('leaderboard-table-body');
+    function normalizeResult(docSnap) {
+      const r = docSnap.data() || {};
 
-      analyticsBody.innerHTML = `<tr><td colspan="5" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching records...</td></tr>`;
-      leaderboardBody.innerHTML = `<tr><td colspan="5" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching records...</td></tr>`;
+      const submitted = toDate(r.submittedAt) || toDate(r.timestamp) || new Date(0);
+      const rating = parseRating(r.rating ?? r.selectedRating ?? r.feedbackRating);
+
+      const tabSwitches = numberValue(
+        r.tabSwitches ?? r.tab_switches,
+        0
+      );
+      const copiesAttempted = numberValue(
+        r.copiesAttempted ?? r.copy_paste,
+        0
+      );
+      const penaltiesApplied = numberValue(
+        r.penaltiesApplied,
+        0
+      );
+
+      return {
+        id: docSnap.id,
+        name: r.name || "Anonymous",
+        email: r.email || "No Email",
+        scoreText: r.score ?? "0/0",
+        scoreVal: parseScore(r.score),
+        submittedAt: submitted,
+        submittedAtStr: formatDate(submitted),
+        tabSwitches,
+        copiesAttempted,
+        penaltiesApplied,
+        feedback: r.feedback || "",
+        doubt: r.doubt || r.doubtText || "",
+        rating,
+        correct: numberValue(r.correct ?? r.correctCount, 0),
+        wrong: numberValue(r.wrong ?? r.wrongCount, 0),
+        attempted: numberValue(r.attempted, 0),
+        duration: r.duration || r.timeTaken || "",
+        raw: r
+      };
+    }
+
+    async function fetchLiveDatabaseRecords() {
+      $("leaderboard-body").innerHTML = `<tr><td colspan="7" class="empty"><i class="fa-solid fa-spinner fa-spin"></i> Fetching results...</td></tr>`;
+      $("security-body").innerHTML = `<tr><td colspan="6" class="empty"><i class="fa-solid fa-spinner fa-spin"></i> Fetching security data...</td></tr>`;
+      setStatus("Syncing results from Firestore...", "busy");
 
       try {
         const snap = await getDocs(collection(db, "results"));
-        allStudentResults = [];
+        allStudentResults = snap.docs.map(normalizeResult);
 
-        snap.forEach((docSnap) => {
-          const r = docSnap.data();
-          let scoreVal = 0;
-          if (typeof r.score === 'string') {
-            scoreVal = parseFloat(r.score.split('/')[0]) || 0;
-          } else if (typeof r.score === 'number') {
-            scoreVal = r.score;
-          }
+        renderStats();
+        renderLeaderboard();
+        renderSecurity();
 
-          let dateObj = new Date(0);
-          if (r.submittedAt) {
-            dateObj = r.submittedAt.toDate ? r.submittedAt.toDate() : new Date(r.submittedAt);
-          } else if (r.timestamp) {
-            dateObj = r.timestamp.toDate ? r.timestamp.toDate() : new Date(r.timestamp);
-          }
-
-          const submitTimeFormatted = dateObj.getTime() > 0 ? dateObj.toLocaleString('en-IN', {
-            dateStyle: 'medium',
-            timeStyle: 'short'
-          }) : "N/A";
-
-          allStudentResults.push({
-            id: docSnap.id,
-            name: r.name || "Anonymous",
-            email: r.email || "No Email",
-            scoreText: r.score || "0/0",
-            scoreVal: scoreVal,
-            rawDate: dateObj,
-            tabSwitches: r.tabSwitches !== undefined ? r.tabSwitches : (r.tab_switches || 0),
-            copiesAttempted: r.copiesAttempted !== undefined ? r.copiesAttempted : (r.copy_paste || 0),
-            penaltiesApplied: r.penaltiesApplied || 0,
-            submittedAtStr: submitTimeFormatted,
-            feedback: r.feedback || "None"
-          });
-        });
-
-        allStudentResults.sort((a, b) => b.rawDate - a.rawDate);
-
-        // Render Security Analytics Tab
-        analyticsBody.innerHTML = '';
-        if (allStudentResults.length === 0) {
-          analyticsBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No submissions found.</td></tr>`;
-        } else {
-          allStudentResults.forEach(r => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><strong>${r.name}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">${r.email}</span></td>
-              <td><span class="time-stamp"><i class="fa-regular fa-clock"></i> ${r.submittedAtStr}</span></td>
-              <td><span class="alert-indicator ${r.tabSwitches > 0 ? 'alert-warn' : 'alert-safe'}">${r.tabSwitches} Times</span></td>
-              <td><span class="alert-indicator ${r.copiesAttempted > 0 ? 'alert-warn' : 'alert-safe'}">${r.copiesAttempted} Times</span></td>
-              <td><span class="alert-indicator ${r.penaltiesApplied > 0 ? 'alert-warn' : 'alert-safe'}">-${r.penaltiesApplied} Mark(s)</span></td>
-            `;
-            analyticsBody.appendChild(tr);
-          });
-        }
-
-        // Render Leaderboard
-        const leaderboardData = [...allStudentResults].sort((a, b) => b.scoreVal - a.scoreVal || b.rawDate - a.rawDate);
-        leaderboardBody.innerHTML = '';
-        if (leaderboardData.length === 0) {
-          leaderboardBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No leaderboard records.</td></tr>`;
-        } else {
-          leaderboardData.forEach((r, idx) => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><span class="badge-rank">#${idx + 1}</span></td>
-              <td><strong>${r.name}</strong><br><span style="font-size:0.8rem; color:var(--text-muted);">${r.email}</span></td>
-              <td><strong style="color:var(--primary-light);">${r.scoreText}</strong></td>
-              <td><span class="time-stamp"><i class="fa-regular fa-clock"></i> ${r.submittedAtStr}</span></td>
-              <td>${r.feedback}</td>
-            `;
-            leaderboardBody.appendChild(tr);
-          });
-        }
-
+        $("last-sync").textContent = "Last sync: " + new Date().toLocaleTimeString("en-IN");
+        setStatus(`Firestore connected — ${allStudentResults.length} submission(s)`, "ok");
       } catch (err) {
-        console.error(err);
-        analyticsBody.innerHTML = `<tr><td colspan="5" style="color:var(--danger); text-align:center;">Error loading database data.</td></tr>`;
+        console.error("Results fetch error:", err);
+        setStatus("Firestore error: " + (err.code || err.message), "error");
+        $("leaderboard-body").innerHTML =
+          `<tr><td colspan="7" class="empty" style="color:var(--danger)">Error: ${escapeHtml(err.code || err.message)}</td></tr>`;
+        $("security-body").innerHTML =
+          `<tr><td colspan="6" class="empty" style="color:var(--danger)">Error: ${escapeHtml(err.code || err.message)}</td></tr>`;
       }
-    };
+    }
 
-    window.downloadResultsCSV = () => {
-      if (allStudentResults.length === 0) {
-        alert("No data available to download.");
+    function renderStats() {
+      const total = allStudentResults.length;
+      const average = total ? allStudentResults.reduce((sum, r) => sum + r.scoreVal, 0) / total : 0;
+      const flags = allStudentResults.filter(r => r.tabSwitches > 0 || r.copiesAttempted > 0 || r.penaltiesApplied > 0).length;
+      const rated = allStudentResults.filter(r => r.rating > 0);
+      const avgRating = rated.length ? rated.reduce((sum, r) => sum + r.rating, 0) / rated.length : 0;
+
+      $("stat-total").textContent = total;
+      $("stat-average").textContent = average.toFixed(2);
+      $("stat-flags").textContent = flags;
+      $("stat-rating").textContent = avgRating.toFixed(1) + "/5";
+    }
+
+    function getFilteredResults() {
+      const query = $("result-search").value.trim().toLowerCase();
+      let data = [...allStudentResults];
+
+      if (query) {
+        data = data.filter(r =>
+          r.name.toLowerCase().includes(query) ||
+          r.email.toLowerCase().includes(query)
+        );
+      }
+
+      const sort = $("result-sort").value;
+      if (sort === "score") data.sort((a,b) => b.scoreVal - a.scoreVal || b.submittedAt - a.submittedAt);
+      if (sort === "latest") data.sort((a,b) => b.submittedAt - a.submittedAt);
+      if (sort === "oldest") data.sort((a,b) => a.submittedAt - b.submittedAt);
+      if (sort === "rating") data.sort((a,b) => b.rating - a.rating || b.scoreVal - a.scoreVal);
+
+      return data;
+    }
+
+    function renderLeaderboard() {
+      const body = $("leaderboard-body");
+      const data = getFilteredResults();
+
+      if (!data.length) {
+        body.innerHTML = `<tr><td colspan="7" class="empty">No matching submissions found.</td></tr>`;
         return;
       }
-      let csv = "Rank,Name,Email,Score,Submitted At,Tab Switches,Copy Violations,Penalties Applied\n";
-      allStudentResults.forEach((r, i) => {
-        csv += `${i+1},"${r.name}","${r.email}","${r.scoreText}","${r.submittedAtStr}",${r.tabSwitches},${r.copiesAttempted},-${r.penaltiesApplied}\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.setAttribute('href', url);
-      a.setAttribute('download', `Exam_Report_${new Date().toISOString().slice(0,10)}.csv`);
-      a.click();
-    };
 
-    window.clearAllResults = async () => {
-      if (!confirm("Are you sure you want to permanently delete all student submissions?")) return;
+      body.innerHTML = data.map((r, index) => {
+        const feedbackParts = [];
+        if (r.feedback) feedbackParts.push(`<b>Feedback:</b> ${escapeHtml(r.feedback)}`);
+        if (r.doubt) feedbackParts.push(`<b>Doubt:</b> ${escapeHtml(r.doubt)}`);
+        const feedback = feedbackParts.length ? feedbackParts.join("<br>") : `<span class="muted">None</span>`;
+
+        return `
+          <tr>
+            <td><span class="rank">#${index + 1}</span></td>
+            <td>
+              <strong>${escapeHtml(r.name)}</strong><br>
+              <span class="muted">${escapeHtml(r.email)}</span>
+            </td>
+            <td><strong style="color:var(--primary-light)">${escapeHtml(r.scoreText)}</strong></td>
+            <td>${stars(r.rating)}<br><span class="muted">${r.rating ? r.rating + "/5" : "Not rated"}</span></td>
+            <td>${escapeHtml(r.submittedAtStr)}</td>
+            <td class="feedback">${feedback}</td>
+            <td><button class="btn btn-small btn-light view-btn" data-id="${escapeHtml(r.id)}"><i class="fa-solid fa-eye"></i> View</button></td>
+          </tr>
+        `;
+      }).join("");
+
+      body.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", () => openDetails(btn.dataset.id));
+      });
+    }
+
+    function renderSecurity() {
+      const body = $("security-body");
+
+      if (!allStudentResults.length) {
+        body.innerHTML = `<tr><td colspan="6" class="empty">No submissions found.</td></tr>`;
+        return;
+      }
+
+      const data = [...allStudentResults].sort((a,b) => b.submittedAt - a.submittedAt);
+
+      body.innerHTML = data.map(r => {
+        const flagged = r.tabSwitches > 0 || r.copiesAttempted > 0 || r.penaltiesApplied > 0;
+        return `
+          <tr>
+            <td><strong>${escapeHtml(r.name)}</strong><br><span class="muted">${escapeHtml(r.email)}</span></td>
+            <td>${escapeHtml(r.submittedAtStr)}</td>
+            <td><span class="badge ${r.tabSwitches > 0 ? "warn" : "safe"}">${r.tabSwitches}</span></td>
+            <td><span class="badge ${r.copiesAttempted > 0 ? "warn" : "safe"}">${r.copiesAttempted}</span></td>
+            <td><span class="badge ${r.penaltiesApplied > 0 ? "warn" : "safe"}">${r.penaltiesApplied}</span></td>
+            <td><span class="badge ${flagged ? "warn" : "safe"}">${flagged ? "Review" : "Clean"}</span></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function openDetails(id) {
+      const r = allStudentResults.find(x => x.id === id);
+      if (!r) return;
+
+      selectedRecordId = id;
+
+      $("detail-content").innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-item"><strong>Name</strong><span>${escapeHtml(r.name)}</span></div>
+          <div class="detail-item"><strong>Email</strong><span>${escapeHtml(r.email)}</span></div>
+          <div class="detail-item"><strong>Score</strong><span>${escapeHtml(r.scoreText)}</span></div>
+          <div class="detail-item"><strong>Rating</strong><span>${stars(r.rating)} ${r.rating ? r.rating + "/5" : "Not rated"}</span></div>
+          <div class="detail-item"><strong>Submitted</strong><span>${escapeHtml(r.submittedAtStr)}</span></div>
+          <div class="detail-item"><strong>Tab Switches</strong><span>${r.tabSwitches}</span></div>
+          <div class="detail-item"><strong>Copy Violations</strong><span>${r.copiesAttempted}</span></div>
+          <div class="detail-item"><strong>Penalty Marks</strong><span>${r.penaltiesApplied}</span></div>
+          <div class="detail-item"><strong>Correct</strong><span>${r.correct}</span></div>
+          <div class="detail-item"><strong>Wrong</strong><span>${r.wrong}</span></div>
+          <div class="detail-item"><strong>Attempted</strong><span>${r.attempted}</span></div>
+          <div class="detail-item"><strong>Duration / Time Taken</strong><span>${escapeHtml(r.duration || "N/A")}</span></div>
+        </div>
+
+        <div style="margin-top:14px;background:#f8fafc;border-radius:10px;padding:14px">
+          <strong style="font-size:12px;color:var(--muted);text-transform:uppercase">Feedback</strong>
+          <p style="margin-top:6px;line-height:1.5">${r.feedback ? escapeHtml(r.feedback) : '<span class="muted">No feedback submitted.</span>'}</p>
+        </div>
+
+        <div style="margin-top:10px;background:#f8fafc;border-radius:10px;padding:14px">
+          <strong style="font-size:12px;color:var(--muted);text-transform:uppercase">Doubt / Question</strong>
+          <p style="margin-top:6px;line-height:1.5">${r.doubt ? escapeHtml(r.doubt) : '<span class="muted">No doubt submitted.</span>'}</p>
+        </div>
+      `;
+
+      $("detail-modal").classList.add("show");
+    }
+
+    function closeDetails() {
+      $("detail-modal").classList.remove("show");
+      selectedRecordId = null;
+    }
+
+    function csvEscape(value) {
+      return `"${String(value ?? "").replace(/"/g, '""')}"`;
+    }
+
+    function downloadResultsCSV() {
+      if (!allStudentResults.length) {
+        alert("No result data available.");
+        return;
+      }
+
+      const data = getFilteredResults();
+      const header = [
+        "Rank","Name","Email","Score","Rating","Submitted At",
+        "Tab Switches","Copy Violations","Penalties Applied",
+        "Correct","Wrong","Attempted","Feedback","Doubt"
+      ];
+
+      const rows = data.map((r, i) => [
+        i + 1,
+        r.name,
+        r.email,
+        r.scoreText,
+        r.rating || "",
+        r.submittedAtStr,
+        r.tabSwitches,
+        r.copiesAttempted,
+        r.penaltiesApplied,
+        r.correct,
+        r.wrong,
+        r.attempted,
+        r.feedback,
+        r.doubt
+      ].map(csvEscape).join(","));
+
+      const csv = [header.map(csvEscape).join(","), ...rows].join("\r\n");
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Exam_Report_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    async function deleteOneResult() {
+      if (!selectedRecordId) return;
+
+      const r = allStudentResults.find(x => x.id === selectedRecordId);
+      if (!r) return;
+
+      if (!confirm(`Delete the submission of ${r.name} (${r.email})? This cannot be undone.`)) return;
+
+      try {
+        await deleteDoc(doc(db, "results", selectedRecordId));
+        closeDetails();
+        await fetchLiveDatabaseRecords();
+        alert("Record deleted successfully.");
+      } catch (err) {
+        console.error("Delete error:", err);
+        alert("Failed to delete record:\n\n" + (err.code || err.message));
+      }
+    }
+
+    async function clearAllResults() {
+      if (!allStudentResults.length) {
+        alert("There are no records to delete.");
+        return;
+      }
+
+      const first = confirm(`Delete ALL ${allStudentResults.length} student submissions?`);
+      if (!first) return;
+
+      const second = prompt('Type DELETE to permanently confirm:');
+      if (second !== "DELETE") {
+        alert("Deletion cancelled.");
+        return;
+      }
+
+      setStatus("Deleting all results...", "busy");
+
       try {
         const snap = await getDocs(collection(db, "results"));
-        const deletes = snap.docs.map(d => deleteDoc(doc(db, "results", d.id)));
-        await Promise.all(deletes);
-        alert("All student records cleared successfully!");
-        fetchLiveDatabaseRecords();
+        for (const d of snap.docs) {
+          await deleteDoc(doc(db, "results", d.id));
+        }
+        await fetchLiveDatabaseRecords();
+        alert("All student records cleared successfully.");
       } catch (err) {
-        alert("Failed to clear records: " + err.message);
+        console.error("Clear results error:", err);
+        setStatus("Delete failed: " + (err.code || err.message), "error");
+        alert("Failed to clear records:\n\n" + (err.code || err.message));
       }
-    };
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const user = $("admin-user").value.trim();
+      const pass = $("admin-pass").value;
+
+      // IMPORTANT:
+      // This is the existing local login from the supplied admin portal.
+      // For production, replace it with Firebase Authentication + admin-only Firestore rules.
+      if (user === "saurav" && pass === "saurav@123") {
+        sessionStorage.setItem("admin_logged_in", "true");
+        $("login-overlay").classList.add("hidden");
+        $("admin-main").classList.remove("hidden");
+        $("login-error").style.display = "none";
+        initializeDashboard();
+      } else {
+        $("login-error").textContent = "Invalid username or password.";
+        $("login-error").style.display = "block";
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem("admin_logged_in");
+      location.reload();
+    }
+
+    async function initializeDashboard() {
+      await loadExamSettings();
+      await fetchLiveDatabaseRecords();
+    }
+
+    // Tabs
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+        tab.classList.add("active");
+        $("panel-" + tab.dataset.panel).classList.add("active");
+      });
+    });
+
+    $("login-form").addEventListener("submit", handleLogin);
+    $("logout-btn").addEventListener("click", logoutAdmin);
+    $("refresh-btn").addEventListener("click", fetchLiveDatabaseRecords);
+    $("save-config-btn").addEventListener("click", saveExamSettings);
+    $("load-config-btn").addEventListener("click", loadExamSettings);
+    $("csv-btn").addEventListener("click", downloadResultsCSV);
+    $("clear-btn").addEventListener("click", clearAllResults);
+    $("close-modal").addEventListener("click", closeDetails);
+    $("delete-one-btn").addEventListener("click", deleteOneResult);
+    $("result-search").addEventListener("input", renderLeaderboard);
+    $("result-sort").addEventListener("change", renderLeaderboard);
+    $("config-window-start").addEventListener("change", updateExamStatus);
+    $("config-window-end").addEventListener("change", updateExamStatus);
+    $("config-duration").addEventListener("input", updateExamStatus);
+    $("config-total-pool").addEventListener("input", updateExamStatus);
+    $("config-student-limit").addEventListener("input", updateExamStatus);
+
+    $("detail-modal").addEventListener("click", (e) => {
+      if (e.target === $("detail-modal")) closeDetails();
+    });
+
+    // Restore login session.
+    if (sessionStorage.getItem("admin_logged_in") === "true") {
+      $("login-overlay").classList.add("hidden");
+      $("admin-main").classList.remove("hidden");
+      initializeDashboard();
+    }
   </script>
 </body>
 </html>
