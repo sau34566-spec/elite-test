@@ -1,4 +1,56 @@
-[
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physics Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f5f5f5;
+      color: #111;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+    .question {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    .question-text {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .option {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      margin: 7px 0;
+      line-height: 1.5;
+    }
+    .answer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Physics Questions</h1>
+    <div id="questions"></div>
+  </div>
+
+  <script>
+    const questions = [
   {
     "q": "A unit vector is represented as (0.8î + bĵ + 0.4k̂). Hence the value of ‘b’ must be",
     "options": [
@@ -309,4 +361,33 @@
     ],
     "a": "5"
   }
-]
+];
+
+    const container = document.getElementById("questions");
+
+    questions.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "question";
+
+      const q = document.createElement("div");
+      q.className = "question-text";
+      q.textContent = `${index + 1}. ${item.q}`;
+      card.appendChild(q);
+
+      item.options.forEach((option, optionIndex) => {
+        const opt = document.createElement("div");
+        opt.className = "option";
+        opt.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
+        card.appendChild(opt);
+      });
+
+      const answer = document.createElement("div");
+      answer.className = "answer";
+      answer.textContent = `Correct Answer: ${item.a}`;
+      card.appendChild(answer);
+
+      container.appendChild(card);
+    });
+  </script>
+</body>
+</html>
