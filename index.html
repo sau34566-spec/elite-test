@@ -69,8 +69,9 @@
 
     .form-group { margin-bottom: 1.5rem; position: relative; }
     label { display: block; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-main); margin-bottom: 0.5rem; }
-    input[type="text"], input[type="email"], textarea { width: 100%; padding: 0.85rem 1rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; outline: none; transition: all 0.2s; }
-    input:focus, textarea:focus { border-color: var(--primary-light); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    input[type="text"], input[type="email"], select, textarea { width: 100%; padding: 0.85rem 1rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; outline: none; transition: all 0.2s; background: #fff; color: var(--text-main); }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary-light); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    select { cursor: pointer; appearance: auto; }
 
     .btn { background: var(--primary); color: white; border: none; padding: 0.85rem 1.8rem; font-size: 1rem; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
     .btn:hover { background: #1d4ed8; transform: translateY(-1px); }
@@ -145,6 +146,19 @@
             <i class="fa-solid fa-ban"></i> Access Denied: You have already attempted this test!
           </div>
         </div>
+
+        <div class="form-group">
+          <label for="batch-category">Batch Category *</label>
+          <select id="batch-category" required>
+            <option value="" selected disabled>Select Batch Category</option>
+            <option value="R">R</option>
+            <option value="D">D</option>
+          </select>
+          <div class="error-msg" id="batch-error">
+            <i class="fa-solid fa-circle-exclamation"></i> Please select your batch category.
+          </div>
+        </div>
+
         <div style="text-align: right; margin-top: 2rem;">
           <button type="submit" id="proceed-btn" class="btn">Proceed to Instructions <i class="fa-solid fa-arrow-right"></i></button>
         </div>
@@ -305,6 +319,7 @@
 
     let currentStudentName = "";
     let currentStudentEmail = "";
+    let currentBatchCategory = "";
 
     let finalizedScoreString = "0/0";
     let calculatedScore = 0;
@@ -547,13 +562,16 @@
 
       const nameInput = document.getElementById("student-name").value.trim();
       const emailInput = document.getElementById("student-email").value.trim().toLowerCase();
+      const batchInput = document.getElementById("batch-category").value;
 
       const emailError = document.getElementById("email-error");
       const duplicateError = document.getElementById("duplicate-error");
+      const batchError = document.getElementById("batch-error");
       const proceedBtn = document.getElementById("proceed-btn");
 
       emailError.style.display = "none";
       duplicateError.style.display = "none";
+      batchError.style.display = "none";
 
       if (!nameInput) {
         alert("Please enter your full name.");
@@ -562,6 +580,11 @@
 
       if (!emailInput.endsWith("@gmail.com")) {
         emailError.style.display = "flex";
+        return;
+      }
+
+      if (!batchInput || !["R", "D"].includes(batchInput)) {
+        batchError.style.display = "flex";
         return;
       }
 
@@ -583,6 +606,7 @@
 
         currentStudentName = nameInput;
         currentStudentEmail = emailInput;
+        currentBatchCategory = batchInput;
 
         // Start a fresh security state for a new attempt.
         resetAttemptState();
@@ -1058,6 +1082,7 @@
       const resultPayload = {
         name: currentStudentName,
         email: currentStudentEmail,
+        batchCategory: currentBatchCategory,
 
         score: finalizedScoreString,
         calculatedScore: calculatedScore,
