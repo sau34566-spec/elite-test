@@ -170,7 +170,7 @@
       <h2><i class="fa-solid fa-clipboard-list"></i> Test Instructions</h2>
       <p class="subtitle">Please read all instructions completely before starting.</p>
       <div class="negative-marking-box">
-        <i class="fa-solid fa-triangle-exclamation"></i> Warning: Negative marking is -0.25 marks per wrong answer. Tab switching causes a -1 mark penalty & question shuffle!
+        <i class="fa-solid fa-triangle-exclamation"></i> Warning: Each correct answer carries +4 marks. There is currently no negative marking. Tab-switch security is controlled by the Admin settings.
       </div>
       <ul class="instruction-list">
         <li>
@@ -179,7 +179,7 @@
         </li>
         <li>
           <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary-light);"></i>
-          <span><b>Strict Security:</b> Background/Tab Switch 1st time = Question Change & -1 Mark penalty. 2nd time = Auto Submit!</span>
+          <span><b>Strict Security:</b> Tab-switch limits are controlled by the Admin Panel. Reaching the maximum limit automatically submits the examination. No negative marking is applied currently.</span>
         </li>
       </ul>
       <div class="btn-group">
@@ -281,19 +281,10 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
     import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      addDoc,
-      getDocs,
-      query,
-      where
+      getFirestore, doc, getDoc, collection, addDoc, getDocs, query, where,
+      updateDoc
     } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-    // =========================
-    // FIREBASE CONFIGURATION
-    // =========================
     const firebaseConfig = {
       apiKey: "AIzaSyA8XeHrqnYP1FEpwpqUZEdKsVAJGDw2r7o",
       authDomain: "physics-test-series-405c7.firebaseapp.com",
@@ -307,9 +298,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // =========================
-    // EXAM STATE
-    // =========================
     let questionsList = [];
     let questionPool = [];
     let currentQuestionIndex = 0;
@@ -324,246 +312,150 @@
     let finalizedScoreString = "0/0";
     let calculatedScore = 0;
     let totalScore = 0;
+    let correctCountFinal = 0;
+    let wrongCountFinal = 0;
 
     let isExamActive = false;
     let examConfigData = null;
     let hasSubmitted = false;
+    let performanceShown = false;
+    let resultDocId = null;
+    let resultSaved = false;
 
-    // Security tracking
     let tabSwitches = parseInt(sessionStorage.getItem("tabSwitches") || "0", 10);
     let copiesAttempted = parseInt(sessionStorage.getItem("copiesAttempted") || "0", 10);
-    let penaltiesApplied = parseInt(sessionStorage.getItem("penaltiesApplied") || "0", 10);
+    let refreshes = parseInt(sessionStorage.getItem("refreshes") || "0", 10);
+    let penaltiesApplied = 0; // Negative marking is disabled for now.
 
-    // =========================
-    // SMALL HELPERS
-    // =========================
     function saveSecurityState() {
       sessionStorage.setItem("tabSwitches", String(tabSwitches));
       sessionStorage.setItem("copiesAttempted", String(copiesAttempted));
-      sessionStorage.setItem("penaltiesApplied", String(penaltiesApplied));
+      sessionStorage.setItem("refreshes", String(refreshes));
+      sessionStorage.setItem("penaltiesApplied", "0");
     }
 
     function resetAttemptState() {
       tabSwitches = 0;
       copiesAttempted = 0;
+      refreshes = 0;
       penaltiesApplied = 0;
       saveSecurityState();
-
       selectedAnswers = {};
       selectedRating = 0;
       hasSubmitted = false;
+      performanceShown = false;
+      resultDocId = null;
+      resultSaved = false;
     }
 
     function shuffleArray(array) {
       const result = [...array];
-
       for (let i = result.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [result[i], result[j]] = [result[j], result[i]];
       }
-
       return result;
     }
 
-    function getQuestionText(q) {
-      return q?.question ?? q?.q ?? "";
-    }
+    function getQuestionText(q) { return q?.question ?? q?.q ?? ""; }
+    function getCorrectAnswer(q) { return q?.a ?? q?.correct ?? q?.ans ?? ""; }
 
-    function getCorrectAnswer(q) {
-      return q?.a ?? q?.correct ?? q?.ans ?? "";
-    }
-
-    // =========================
-    // SECURITY / ANTI-COPY
-    // =========================
+    // ---------------- SECURITY ----------------
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden || !isExamActive) return;
 
       tabSwitches++;
       saveSecurityState();
 
-      if (tabSwitches === 1) {
-        penaltiesApplied++;
-        saveSecurityState();
+      const minSwitches = Math.max(1, Number(examConfigData?.minTabSwitches) || 1);
+      const maxSwitches = Math.max(minSwitches, Number(examConfigData?.maxTabSwitches) || 2);
 
-        alert(
-          "SECURITY WARNING 1:\n\n" +
-          "Tab switch/background activity detected.\n" +
-          "Penalty: -1 mark\n" +
-          "Current question has been changed."
-        );
+      if (tabSwitches >= maxSwitches) {
+        alert("SECURITY VIOLATION:\n\nMaximum tab-switch limit reached. Your examination is being submitted.");
+        calculateAndShowResults("auto_submit_tab_switch");
+        return;
+      }
 
+      if (tabSwitches >= minSwitches) {
+        alert("SECURITY WARNING:\n\nTab switch/background activity detected.\nCurrent question has been changed.\nNo negative marking is applied currently.");
         shuffleCurrentQuestion();
-      } else if (tabSwitches >= 2) {
-        alert(
-          "SECURITY VIOLATION:\n\n" +
-          "Multiple tab switches detected.\n" +
-          "Your examination is being submitted."
-        );
-
-        calculateAndShowResults();
       }
     });
 
     document.addEventListener("copy", (e) => {
       if (!isExamActive) return;
-
       e.preventDefault();
       copiesAttempted++;
       saveSecurityState();
-
       alert("Copying test questions is disabled during the examination.");
     });
 
     document.addEventListener("paste", (e) => {
       if (!isExamActive) return;
-
       e.preventDefault();
       copiesAttempted++;
       saveSecurityState();
-
       alert("Pasting content is disabled during the examination.");
     });
 
-    document.addEventListener("contextmenu", (event) => {
-      event.preventDefault();
-    });
-
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
     document.addEventListener("keydown", (e) => {
       if (!isExamActive) return;
-
-      // Ctrl/Cmd + P
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
-        e.preventDefault();
-        alert("Printing is disabled during the examination.");
-        return;
-      }
-
-      // Ctrl/Cmd + C
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "c") {
-        e.preventDefault();
-        return;
-      }
-
-      // Ctrl/Cmd + U
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "u") {
-        e.preventDefault();
-        return;
-      }
-
-      // F12
-      if (e.key === "F12") {
-        e.preventDefault();
-        return;
-      }
-
-      // Ctrl/Cmd + Shift + I/J
-      if (
-        (e.ctrlKey || e.metaKey) &&
-        e.shiftKey &&
-        ["i", "j", "c"].includes(e.key.toLowerCase())
-      ) {
-        e.preventDefault();
-      }
+      if ((e.ctrlKey || e.metaKey) && ["p","c","u"].includes(e.key.toLowerCase())) e.preventDefault();
+      if (e.key === "F12") e.preventDefault();
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i","j","c"].includes(e.key.toLowerCase())) e.preventDefault();
     });
 
-    // =========================
-    // EXAM WINDOW / FIRESTORE CONFIG
-    // =========================
+    window.addEventListener("beforeunload", () => {
+      if (!isExamActive) return;
+      refreshes++;
+      saveSecurityState();
+    });
+
+    // ---------------- CONFIG ----------------
     async function checkOverallExamWindow() {
       try {
-        const docRef = doc(db, "exam_config", "current_test");
-        const snap = await getDoc(docRef);
-
-        if (!snap.exists()) {
-          // No config means no scheduling restriction.
-          examConfigData = {};
-          return true;
-        }
-
+        const snap = await getDoc(doc(db, "exam_config", "current_test"));
+        if (!snap.exists()) { examConfigData = {}; return true; }
         examConfigData = snap.data();
-
         const now = Date.now();
         const start = Number(examConfigData.windowStart || 0);
         const end = Number(examConfigData.windowEnd || Infinity);
-
         if (start && now < start) {
-          showTimeStatusOverlay(
-            "Test has not started yet!",
-            `This test will open at ${new Date(start).toLocaleString("en-IN")}`
-          );
+          showTimeStatusOverlay("Test has not started yet!", `This test will open at ${new Date(start).toLocaleString("en-IN")}`);
           return false;
         }
-
         if (end !== Infinity && now > end) {
-          showTimeStatusOverlay(
-            "Test window is closed",
-            "You can no longer attempt this test."
-          );
+          showTimeStatusOverlay("Test window is closed", "You can no longer attempt this test.");
           return false;
         }
-
         return true;
       } catch (err) {
         console.error("Window Check Error:", err);
-
-        // Keep the page usable if there is no exam_config document.
-        // Firestore rules should still be configured correctly.
         return true;
       }
     }
 
     function showTimeStatusOverlay(title, msg) {
-      document.body.innerHTML = `
-        <div style="
-          position:fixed;
-          inset:0;
-          background:#0f172a;
-          color:#fff;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          flex-direction:column;
-          z-index:99999;
-          text-align:center;
-          padding:20px;
-        ">
-          <i class="fa-solid fa-clock-rotate-left"
-             style="font-size:4rem;color:#ef4444;margin-bottom:1rem;"></i>
-          <h1 style="font-size:2rem;margin-bottom:0.5rem;">${title}</h1>
-          <p style="color:#94a3b8;font-size:1.2rem;">${msg}</p>
-        </div>
-      `;
+      document.body.innerHTML = `<div style="position:fixed;inset:0;background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:99999;text-align:center;padding:20px"><i class="fa-solid fa-clock-rotate-left" style="font-size:4rem;color:#ef4444;margin-bottom:1rem"></i><h1 style="font-size:2rem;margin-bottom:.5rem">${title}</h1><p style="color:#94a3b8;font-size:1.2rem">${msg}</p></div>`;
     }
 
-    // =========================
-    // SLIDE NAVIGATION
-    // =========================
     window.changeSlide = (slideNumber) => {
-      document.querySelectorAll(".slide").forEach((s) => {
-        s.classList.remove("active");
-      });
-
+      document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
       const target = document.getElementById(`slide-${slideNumber}`);
-
-      if (target) {
-        target.classList.add("active");
-      }
+      if (target) target.classList.add("active");
+      if (slideNumber === 4) performanceShown = true;
     };
 
-    // =========================
-    // STUDENT LOGIN / DUPLICATE CHECK
-    // =========================
+    // ---------------- LOGIN ----------------
     window.validateAndNext = async (e) => {
       e.preventDefault();
-
       const isWindowOpen = await checkOverallExamWindow();
       if (!isWindowOpen) return;
 
       const nameInput = document.getElementById("student-name").value.trim();
       const emailInput = document.getElementById("student-email").value.trim().toLowerCase();
       const batchInput = document.getElementById("batch-category").value;
-
       const emailError = document.getElementById("email-error");
       const duplicateError = document.getElementById("duplicate-error");
       const batchError = document.getElementById("batch-error");
@@ -573,583 +465,288 @@
       duplicateError.style.display = "none";
       batchError.style.display = "none";
 
-      if (!nameInput) {
-        alert("Please enter your full name.");
-        return;
-      }
-
-      if (!emailInput.endsWith("@gmail.com")) {
-        emailError.style.display = "flex";
-        return;
-      }
-
-      if (!batchInput || !["R", "D"].includes(batchInput)) {
-        batchError.style.display = "flex";
-        return;
-      }
+      if (!nameInput) return alert("Please enter your full name.");
+      if (!emailInput.endsWith("@gmail.com")) { emailError.style.display = "flex"; return; }
+      if (!["R","D"].includes(batchInput)) { batchError.style.display = "flex"; return; }
 
       proceedBtn.disabled = true;
       proceedBtn.innerText = "Verifying Entry...";
-
       try {
-        const qRef = query(
-          collection(db, "results"),
-          where("email", "==", emailInput)
-        );
-
-        const snap = await getDocs(qRef);
-
-        if (!snap.empty) {
-          duplicateError.style.display = "flex";
-          return;
-        }
-
+        const snap = await getDocs(query(collection(db, "results"), where("email", "==", emailInput)));
+        if (!snap.empty) { duplicateError.style.display = "flex"; return; }
         currentStudentName = nameInput;
         currentStudentEmail = emailInput;
         currentBatchCategory = batchInput;
-
-        // Start a fresh security state for a new attempt.
         resetAttemptState();
-
         window.changeSlide(2);
       } catch (err) {
-        console.error("Duplicate check error:", err);
-        alert(
-          "Network/Firestore error.\n\n" +
-          "Please check your internet connection and try again."
-        );
+        console.error(err);
+        alert("Network/Firestore error.\n\nPlease check your internet connection and try again.");
       } finally {
         proceedBtn.disabled = false;
-        proceedBtn.innerHTML =
-          'Proceed to Instructions <i class="fa-solid fa-arrow-right"></i>';
+        proceedBtn.innerHTML = 'Proceed to Instructions <i class="fa-solid fa-arrow-right"></i>';
       }
     };
 
-    // =========================
-    // LOAD QUESTIONS FROM chapter.html
-    // =========================
+    // ---------------- QUESTIONS ----------------
     window.startTestExam = async () => {
       const startBtn = document.getElementById("start-exam-btn");
-
       startBtn.disabled = true;
       startBtn.innerText = "Loading Dataset...";
-
       try {
-        // IMPORTANT:
-        // The question file is chapter.html.
-        const response = await fetch("chapter.html", {
-          cache: "no-store"
-        });
+        // Always reload the latest admin configuration before starting.
+        const configSnap = await getDoc(doc(db, "exam_config", "current_test"));
+        examConfigData = configSnap.exists() ? configSnap.data() : {};
 
-        if (!response.ok) {
-          throw new Error(
-            `chapter.html could not be loaded. HTTP ${response.status}`
-          );
-        }
-
-        // chapter.html contains a JSON array.
+        const response = await fetch("chapter.html", { cache: "no-store" });
+        if (!response.ok) throw new Error(`chapter.html could not be loaded. HTTP ${response.status}`);
         const fullPool = await response.json();
+        if (!Array.isArray(fullPool) || fullPool.length === 0) throw new Error("chapter.html contains no valid questions.");
 
-        if (!Array.isArray(fullPool) || fullPool.length === 0) {
-          throw new Error("chapter.html contains no valid questions.");
-        }
-
-        // Admin configuration:
-        // totalPool = how many questions are available for random selection.
-        // studentLimit/questionLimit = how many questions a student receives.
-        const configuredPoolSize = Number(
-          examConfigData?.totalPool ?? fullPool.length
-        );
-
-        const poolSize = Math.min(
-          Math.max(1, configuredPoolSize || fullPool.length),
-          fullPool.length
-        );
-
-        // First create the configured random pool.
+        const configuredPoolSize = Number(examConfigData?.totalPool ?? fullPool.length);
+        const poolSize = Math.min(Math.max(1, configuredPoolSize || fullPool.length), fullPool.length);
         questionPool = shuffleArray(fullPool).slice(0, poolSize);
 
-        const configuredStudentLimit = Number(
-          examConfigData?.studentLimit ??
-          examConfigData?.questionLimit ??
-          questionPool.length
-        );
-
-        const studentLimit = Math.min(
-          Math.max(1, configuredStudentLimit || questionPool.length),
-          questionPool.length
-        );
-
-        // Then select the questions shown to this student.
+        const configuredStudentLimit = Number(examConfigData?.studentLimit ?? examConfigData?.questionLimit ?? questionPool.length);
+        const studentLimit = Math.min(Math.max(1, configuredStudentLimit || questionPool.length), questionPool.length);
         questionsList = shuffleArray(questionPool).slice(0, studentLimit);
+        if (!questionsList.length) throw new Error("No questions were selected for this examination.");
 
-        if (questionsList.length === 0) {
-          throw new Error("No questions were selected for this examination.");
-        }
-
-        // Reset exam state.
         currentQuestionIndex = 0;
         selectedAnswers = {};
         hasSubmitted = false;
         isExamActive = true;
+        performanceShown = false;
+        resultDocId = null;
+        resultSaved = false;
 
         window.changeSlide(3);
-
-        startExamTimer(
-          Number(examConfigData?.durationMinutes) || 30
-        );
-
+        startExamTimer(Number(examConfigData?.durationMinutes) || 30);
         loadQuestion(0);
       } catch (error) {
-        console.error("Question Loading Error:", error);
-
-        alert(
-          "Failed to load test questions.\n\n" +
-          "Make sure 'chapter.html' is in the same folder as 'index.html'.\n\n" +
-          `Error: ${error.message}`
-        );
-
+        console.error(error);
+        alert(`Failed to load test questions.\n\nMake sure 'chapter.html' is in the same folder as 'index.html'.\n\nError: ${error.message}`);
         startBtn.disabled = false;
-        startBtn.innerHTML =
-          'Start Examination <i class="fa-solid fa-vial"></i>';
+        startBtn.innerHTML = 'Start Examination <i class="fa-solid fa-vial"></i>';
       }
     };
 
-    // =========================
-    // EXAM TIMER
-    // =========================
     function startExamTimer(durationMins) {
       clearInterval(timerInterval);
-
-      const durationMs = Math.max(1, durationMins) * 60 * 1000;
-      const endTime = Date.now() + durationMs;
-
+      const endTime = Date.now() + Math.max(1, durationMins) * 60 * 1000;
       const updateTimer = () => {
         const remaining = endTime - Date.now();
-
         if (remaining <= 0) {
           clearInterval(timerInterval);
           document.getElementById("timer-display").innerText = "00:00";
-
           if (isExamActive) {
             alert("Time is up! Submitting exam...");
-            calculateAndShowResults();
+            calculateAndShowResults("time_up");
           }
-
           return;
         }
-
-        const mins = Math.floor(remaining / (1000 * 60));
-        const secs = Math.floor((remaining % (1000 * 60)) / 1000);
-
-        document.getElementById("timer-display").innerText =
-          `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+        const mins = Math.floor(remaining / 60000);
+        const secs = Math.floor((remaining % 60000) / 1000);
+        document.getElementById("timer-display").innerText = `${mins}:${secs < 10 ? "0" : ""}${secs}`;
       };
-
       updateTimer();
       timerInterval = setInterval(updateTimer, 1000);
     }
 
-    // =========================
-    // TAB-SWITCH QUESTION CHANGE
-    // =========================
     function shuffleCurrentQuestion() {
       if (questionsList.length > 1) {
         const currentIndex = currentQuestionIndex;
-
-        // Swap the current question with another question.
-        // This avoids the old bug where one question could be duplicated.
-        let replacementIndex = Math.floor(
-          Math.random() * questionsList.length
-        );
-
-        while (replacementIndex === currentIndex) {
-          replacementIndex = Math.floor(
-            Math.random() * questionsList.length
-          );
-        }
-
-        [
-          questionsList[currentIndex],
-          questionsList[replacementIndex]
-        ] = [
-          questionsList[replacementIndex],
-          questionsList[currentIndex]
-        ];
-
-        // Because the question at the current position changed,
-        // remove any previous answer for this position.
+        let replacementIndex = Math.floor(Math.random() * questionsList.length);
+        while (replacementIndex === currentIndex) replacementIndex = Math.floor(Math.random() * questionsList.length);
+        [questionsList[currentIndex], questionsList[replacementIndex]] = [questionsList[replacementIndex], questionsList[currentIndex]];
         delete selectedAnswers[currentIndex];
       }
-
       loadQuestion(currentQuestionIndex);
     }
 
-    // =========================
-    // QUESTION RENDERING
-    // =========================
     function loadQuestion(index) {
       if (!questionsList[index]) return;
-
       currentQuestionIndex = index;
-
-      document.getElementById("question-counter").innerText =
-        `Question ${index + 1} of ${questionsList.length}`;
-
+      document.getElementById("question-counter").innerText = `Question ${index + 1} of ${questionsList.length}`;
       const qData = questionsList[index];
-
-      document.getElementById("q-text").innerText =
-        getQuestionText(qData);
-
+      document.getElementById("q-text").innerText = getQuestionText(qData);
       const optionsBlock = document.getElementById("options-block");
       optionsBlock.innerHTML = "";
-
-      if (!Array.isArray(qData.options) || qData.options.length === 0) {
-        optionsBlock.innerHTML =
-          '<p style="color:#ef4444;">Question options are missing.</p>';
+      if (!Array.isArray(qData.options) || !qData.options.length) {
+        optionsBlock.innerHTML = '<p style="color:#ef4444;">Question options are missing.</p>';
       } else {
         qData.options.forEach((opt, idx) => {
-          const isSelected = selectedAnswers[index] === idx;
-
           const label = document.createElement("label");
-          label.className =
-            `option-label ${isSelected ? "selected" : ""}`;
-
+          label.className = `option-label ${selectedAnswers[index] === idx ? "selected" : ""}`;
           const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = "quiz-opt";
-          radio.value = String(idx);
-          radio.checked = isSelected;
-
-          radio.addEventListener("change", () => {
-            window.selectOption(index, idx);
-          });
-
-          label.appendChild(radio);
-          label.appendChild(document.createTextNode(` ${opt}`));
-
-          optionsBlock.appendChild(label);
+          radio.type = "radio"; radio.name = "quiz-opt"; radio.value = String(idx); radio.checked = selectedAnswers[index] === idx;
+          radio.addEventListener("change", () => window.selectOption(index, idx));
+          label.appendChild(radio); label.appendChild(document.createTextNode(` ${opt}`)); optionsBlock.appendChild(label);
         });
       }
-
-      document.getElementById("btn-prev").style.visibility =
-        index === 0 ? "hidden" : "visible";
-
-      document.getElementById("btn-next").innerHTML =
-        index === questionsList.length - 1
-          ? 'Finish Exam <i class="fa-solid fa-flag-checkered"></i>'
-          : 'Save & Next <i class="fa-solid fa-angle-right"></i>';
+      document.getElementById("btn-prev").style.visibility = index === 0 ? "hidden" : "visible";
+      document.getElementById("btn-next").innerHTML = index === questionsList.length - 1 ? 'Finish Exam <i class="fa-solid fa-flag-checkered"></i>' : 'Save & Next <i class="fa-solid fa-angle-right"></i>';
     }
 
     window.selectOption = (qIdx, optIdx) => {
       selectedAnswers[qIdx] = optIdx;
-
-      document
-        .querySelectorAll(".option-label")
-        .forEach((el, idx) => {
-          if (idx === optIdx) {
-            el.classList.add("selected");
-          } else {
-            el.classList.remove("selected");
-          }
-        });
+      document.querySelectorAll(".option-label").forEach((el, idx) => el.classList.toggle("selected", idx === optIdx));
     };
 
-    // =========================
-    // NEXT / PREVIOUS
-    // =========================
     window.handleNext = () => {
       if (!isExamActive) return;
-
-      if (currentQuestionIndex < questionsList.length - 1) {
-        loadQuestion(currentQuestionIndex + 1);
-      } else {
-        clearInterval(timerInterval);
-        isExamActive = false;
-        calculateAndShowResults();
-      }
+      if (currentQuestionIndex < questionsList.length - 1) loadQuestion(currentQuestionIndex + 1);
+      else { clearInterval(timerInterval); isExamActive = false; calculateAndShowResults("normal_finish"); }
     };
 
     window.handlePrevious = () => {
-      if (!isExamActive) return;
-
-      if (currentQuestionIndex > 0) {
-        loadQuestion(currentQuestionIndex - 1);
-      }
+      if (isExamActive && currentQuestionIndex > 0) loadQuestion(currentQuestionIndex - 1);
     };
 
-    // =========================
-    // CALCULATE RESULTS
-    // =========================
-    function calculateAndShowResults() {
+    // ---------------- RESULTS / AUTOSAVE ----------------
+    function calculateAndShowResults(submissionReason = "normal_finish") {
       clearInterval(timerInterval);
       isExamActive = false;
 
-      let correctCount = 0;
-      let wrongCount = 0;
-
-      const reviewContainer =
-        document.getElementById("review-ledger-container");
-
+      let correctCount = 0, wrongCount = 0;
+      const reviewContainer = document.getElementById("review-ledger-container");
       reviewContainer.innerHTML = "";
 
       questionsList.forEach((q, idx) => {
         const selectedIdx = selectedAnswers[idx];
-
-        const studentSelectionText =
-          selectedIdx !== undefined
-            ? q.options[selectedIdx]
-            : "Not Attempted";
-
+        const studentSelectionText = selectedIdx !== undefined ? q.options[selectedIdx] : "Not Attempted";
         const correctSelectionText = getCorrectAnswer(q);
-
-        const isCorrect =
-          selectedIdx !== undefined &&
-          studentSelectionText === correctSelectionText;
-
-        if (selectedIdx !== undefined) {
-          if (isCorrect) {
-            correctCount++;
-          } else {
-            wrongCount++;
-          }
-        }
+        const isCorrect = selectedIdx !== undefined && studentSelectionText === correctSelectionText;
+        if (selectedIdx !== undefined) isCorrect ? correctCount++ : wrongCount++;
 
         const reviewItem = document.createElement("div");
-
-        reviewItem.className =
-          `review-item ${
-            selectedIdx === undefined
-              ? ""
-              : isCorrect
-                ? "correct-item"
-                : "wrong-item"
-          }`;
-
-        const title = document.createElement("h5");
-        title.innerText =
-          `Q${idx + 1}. ${getQuestionText(q)}`;
-
-        const details = document.createElement("div");
-        details.style.fontSize = "0.85rem";
-        details.style.lineHeight = "1.5";
-
-        const yourChoice = document.createElement("strong");
-        yourChoice.innerText = "Your Choice: ";
-
-        const yourAnswer = document.createElement("span");
-        yourAnswer.innerText = studentSelectionText;
-
-        const br = document.createElement("br");
-
-        const correctLabel = document.createElement("strong");
-        correctLabel.innerText = "Correct Answer: ";
-
-        const correctAnswer = document.createElement("span");
-        correctAnswer.innerText = correctSelectionText;
-        correctAnswer.style.color = "var(--success)";
-        correctAnswer.style.fontWeight = "600";
-
-        details.appendChild(yourChoice);
-        details.appendChild(yourAnswer);
-        details.appendChild(br);
-        details.appendChild(correctLabel);
-        details.appendChild(correctAnswer);
-
-        reviewItem.appendChild(title);
-        reviewItem.appendChild(details);
-
+        reviewItem.className = `review-item ${selectedIdx === undefined ? "" : isCorrect ? "correct-item" : "wrong-item"}`;
+        reviewItem.innerHTML = `<h5>Q${idx + 1}. ${getQuestionText(q)}</h5><div style="font-size:.85rem;line-height:1.5"><strong>Your Choice: </strong><span>${studentSelectionText}</span><br><strong>Correct Answer: </strong><span style="color:var(--success);font-weight:600">${correctSelectionText}</span></div>`;
         reviewContainer.appendChild(reviewItem);
       });
 
-      // Marking:
-      // Correct = +1
-      // Wrong = -0.25
-      // Tab-switch penalty = -1 per penalty event
-      const rawScore =
-        (correctCount * 1) -
-        (wrongCount * 0.25);
+      const marksPerQuestion = 4;
+      calculatedScore = correctCount * marksPerQuestion; // No negative marking currently.
+      totalScore = questionsList.length * marksPerQuestion;
+      finalizedScoreString = `${calculatedScore}/${totalScore}`;
+      correctCountFinal = correctCount;
+      wrongCountFinal = wrongCount;
 
-      const penaltyDeduction =
-        parseInt(
-          sessionStorage.getItem("penaltiesApplied") || "0",
-          10
-        );
-
-      calculatedScore = Math.max(
-        0,
-        rawScore - penaltyDeduction
-      );
-
-      totalScore = questionsList.length;
-
-      finalizedScoreString =
-        `${calculatedScore}/${totalScore}`;
-
-      document.getElementById("res-score").innerText =
-        finalizedScoreString;
-
-      document.getElementById("res-correct").innerText =
-        correctCount;
-
-      document.getElementById("res-wrong").innerText =
-        wrongCount;
-
+      document.getElementById("res-score").innerText = finalizedScoreString;
+      document.getElementById("res-correct").innerText = correctCount;
+      document.getElementById("res-wrong").innerText = wrongCount;
       const attempted = correctCount + wrongCount;
-
-      const accuracy =
-        attempted > 0
-          ? Math.round((correctCount / attempted) * 100)
-          : 0;
-
-      document.getElementById("res-accuracy").innerText =
-        `${accuracy}%`;
-
-      document.getElementById("log-tab-switches").innerText =
-        sessionStorage.getItem("tabSwitches") || "0";
-
-      document.getElementById("log-copy-paste").innerText =
-        sessionStorage.getItem("copiesAttempted") || "0";
-
-      document.getElementById("log-penalty").innerText =
-        `-${penaltyDeduction} Mark(s)`;
+      document.getElementById("res-accuracy").innerText = `${attempted ? Math.round(correctCount / attempted * 100) : 0}%`;
+      document.getElementById("log-tab-switches").innerText = tabSwitches;
+      document.getElementById("log-copy-paste").innerText = copiesAttempted;
+      document.getElementById("log-penalty").innerText = "0 Marks";
 
       window.changeSlide(4);
+      // Save immediately when the Performance slide appears. This protects against refresh/back.
+      savePerformanceDraft(submissionReason);
     }
 
-    // =========================
-    // RATING
-    // =========================
-    document
-      .querySelectorAll("#stars-container i")
-      .forEach((star) => {
-        star.addEventListener("click", (e) => {
-          selectedRating = parseInt(
-            e.currentTarget.getAttribute("data-value"),
-            10
-          );
+    async function savePerformanceDraft(submissionReason = "normal_finish") {
+      if (resultSaved) return;
+      const payload = {
+        name: currentStudentName,
+        email: currentStudentEmail,
+        batchCategory: currentBatchCategory,
+        score: finalizedScoreString,
+        calculatedScore,
+        totalScore,
+        tabSwitches,
+        copiesAttempted,
+        refreshes,
+        penaltiesApplied: 0,
+        rating: selectedRating || 0,
+        doubt: document.getElementById("doubt-input")?.value.trim() || "None",
+        feedback: document.getElementById("feedback-input")?.value.trim() || "None",
+        questionCount: questionsList.length,
+        marksPerQuestion: 4,
+        negativeMarking: 0,
+        submissionStatus: "performance_pending",
+        submissionReason,
+        submittedAt: new Date()
+      };
+      try {
+        const ref = await addDoc(collection(db, "results"), payload);
+        resultDocId = ref.id;
+        resultSaved = true;
+      } catch (err) {
+        console.error("Performance autosave error:", err);
+      }
+    }
 
-          document
-            .querySelectorAll("#stars-container i")
-            .forEach((s, idx) => {
-              if (idx < selectedRating) {
-                s.classList.add("active");
-              } else {
-                s.classList.remove("active");
-              }
-            });
+    // If the student refreshes/back after reaching Performance, the result has already been saved.
+    window.addEventListener("pagehide", () => {
+      if (performanceShown && !resultSaved) savePerformanceDraft("performance_page_exit");
+    });
 
-          document.getElementById("rating-error").style.display =
-            "none";
-        });
+    document.querySelectorAll("#stars-container i").forEach(star => {
+      star.addEventListener("click", e => {
+        selectedRating = parseInt(e.currentTarget.getAttribute("data-value"), 10);
+        document.querySelectorAll("#stars-container i").forEach((s, idx) => s.classList.toggle("active", idx < selectedRating));
+        document.getElementById("rating-error").style.display = "none";
       });
+    });
 
-    // =========================
-    // FINAL SUBMISSION
-    // =========================
     window.submitFinalFeedback = async (e) => {
       e.preventDefault();
-
       if (hasSubmitted) return;
-
-      if (!selectedRating) {
-        document.getElementById("rating-error").style.display =
-          "flex";
-        return;
-      }
-
+      if (!selectedRating) { document.getElementById("rating-error").style.display = "flex"; return; }
       await submitStudentExam();
     };
 
     async function submitStudentExam() {
       if (hasSubmitted) return;
-
-      const submitButton =
-        document.getElementById("submit-all-btn");
-
+      const submitButton = document.getElementById("submit-all-btn");
       hasSubmitted = true;
-
       submitButton.disabled = true;
-      submitButton.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+      submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
 
-      const doubtText =
-        document.getElementById("doubt-input").value.trim();
-
-      const feedbackText =
-        document.getElementById("feedback-input").value.trim();
-
-      const resultPayload = {
+      const payload = {
         name: currentStudentName,
         email: currentStudentEmail,
         batchCategory: currentBatchCategory,
-
         score: finalizedScoreString,
-        calculatedScore: calculatedScore,
-        totalScore: totalScore,
-
-        tabSwitches: parseInt(
-          sessionStorage.getItem("tabSwitches") || "0",
-          10
-        ),
-
-        copiesAttempted: parseInt(
-          sessionStorage.getItem("copiesAttempted") || "0",
-          10
-        ),
-
-        penaltiesApplied: parseInt(
-          sessionStorage.getItem("penaltiesApplied") || "0",
-          10
-        ),
-
+        calculatedScore,
+        totalScore,
+        tabSwitches,
+        copiesAttempted,
+        refreshes,
+        penaltiesApplied: 0,
         rating: selectedRating,
-
-        doubt: doubtText || "None",
-
-        feedback: feedbackText || "None",
-
+        doubt: document.getElementById("doubt-input").value.trim() || "None",
+        feedback: document.getElementById("feedback-input").value.trim() || "None",
         questionCount: questionsList.length,
-
+        marksPerQuestion: 4,
+        negativeMarking: 0,
+        submissionStatus: "submitted",
+        submissionReason: "student_submit",
         submittedAt: new Date()
       };
 
       try {
-        await addDoc(
-          collection(db, "results"),
-          resultPayload
-        );
-
+        if (resultDocId) {
+          await updateDoc(doc(db, "results", resultDocId), payload);
+        } else {
+          const ref = await addDoc(collection(db, "results"), payload);
+          resultDocId = ref.id;
+        }
+        resultSaved = true;
         sessionStorage.clear();
-
-        document
-          .getElementById("success-modal")
-          .classList.add("show");
-
+        document.getElementById("success-modal").classList.add("show");
       } catch (e) {
         console.error("Submission Error:", e);
-
         hasSubmitted = false;
-
         submitButton.disabled = false;
-        submitButton.innerHTML =
-          '<i class="fa-solid fa-cloud-arrow-up"></i> Submit & Complete';
-
-        alert(
-          "Submission Error:\n\n" +
-          e.message +
-          "\n\nPlease do not close the page and try submitting again."
-        );
+        submitButton.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Submit & Complete';
+        alert("Submission Error:\n\n" + e.message + "\n\nPlease try again.");
       }
     }
 
-    // =========================
-    // INITIAL EXAM WINDOW CHECK
-    // =========================
-    window.addEventListener(
-      "DOMContentLoaded",
-      checkOverallExamWindow
-    );
+    window.addEventListener("DOMContentLoaded", checkOverallExamWindow);
   </script>
 </body>
 </html>
