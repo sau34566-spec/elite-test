@@ -122,6 +122,48 @@
     .success-overlay.show { display: flex; }
     .success-popup { background: white; padding: 3rem 2rem; border-radius: 16px; text-align: center; max-width: 450px; width: 90%; }
     .success-popup i { font-size: 4rem; color: var(--success); margin-bottom: 1.5rem; }
+
+    /* Physics notation rendering fix */
+    .vector-symbol {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding-top: 0.12em;
+      margin: 0 0.02em;
+    }
+    .vector-symbol::after {
+      content: "→";
+      position: absolute;
+      left: 50%;
+      top: -0.72em;
+      transform: translateX(-50%);
+      font-size: 0.78em;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .unit-vector {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding-top: 0.08em;
+      margin: 0 0.01em;
+    }
+    .unit-vector::before {
+      content: "ˆ";
+      position: absolute;
+      left: 50%;
+      top: -0.58em;
+      transform: translateX(-50%);
+      font-size: 0.72em;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .question-text, .option-label, .review-item {
+      overflow-wrap: anywhere;
+    }
+
   </style>
 </head>
 <body>
@@ -357,7 +399,36 @@
       return result;
     }
 
+
+    // ---------------- PHYSICS TEXT RENDERER ----------------
+    // The question dataset contains Unicode combining vector/hat marks such as A⃗ and k̂.
+    // Some fonts/browsers display those marks as empty boxes. Convert them to
+    // self-contained HTML/CSS symbols before putting the text into the quiz UI.
+    function escapeHTML(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function physicsToHTML(value) {
+      let s = escapeHTML(value);
+
+      // Vector notation: A⃗, B⃗, C⃗, etc.
+      s = s.replace(/([A-Za-z])⃗/gu, '<span class="vector-symbol">$1</span>');
+
+      // Unit-vector notation: î, ĵ, k̂.
+      s = s.replace(/î/gu, '<span class="unit-vector">i</span>');
+      s = s.replace(/ĵ/gu, '<span class="unit-vector">j</span>');
+      s = s.replace(/k̂/gu, '<span class="unit-vector">k</span>');
+
+      return s;
+    }
+
     function getQuestionText(q) { return q?.question ?? q?.q ?? ""; }
+
     function getCorrectAnswer(q) { return q?.a ?? q?.correct ?? q?.ans ?? ""; }
 
     // ---------------- SECURITY ----------------
@@ -595,7 +666,7 @@
       currentQuestionIndex = index;
       document.getElementById("question-counter").innerText = `Question ${index + 1} of ${questionsList.length}`;
       const qData = questionsList[index];
-      document.getElementById("q-text").innerText = getQuestionText(qData);
+      document.getElementById("q-text").innerHTML = physicsToHTML(getQuestionText(qData));
       const optionsBlock = document.getElementById("options-block");
       optionsBlock.innerHTML = "";
       if (!Array.isArray(qData.options) || !qData.options.length) {
@@ -607,7 +678,7 @@
           const radio = document.createElement("input");
           radio.type = "radio"; radio.name = "quiz-opt"; radio.value = String(idx); radio.checked = selectedAnswers[index] === idx;
           radio.addEventListener("change", () => window.selectOption(index, idx));
-          label.appendChild(radio); label.appendChild(document.createTextNode(` ${opt}`)); optionsBlock.appendChild(label);
+          label.appendChild(radio); const optionText = document.createElement("span"); optionText.innerHTML = physicsToHTML(` ${opt}`); label.appendChild(optionText); optionsBlock.appendChild(label);
         });
       }
       document.getElementById("btn-prev").style.visibility = index === 0 ? "hidden" : "visible";
@@ -647,7 +718,7 @@
 
         const reviewItem = document.createElement("div");
         reviewItem.className = `review-item ${selectedIdx === undefined ? "" : isCorrect ? "correct-item" : "wrong-item"}`;
-        reviewItem.innerHTML = `<h5>Q${idx + 1}. ${getQuestionText(q)}</h5><div style="font-size:.85rem;line-height:1.5"><strong>Your Choice: </strong><span>${studentSelectionText}</span><br><strong>Correct Answer: </strong><span style="color:var(--success);font-weight:600">${correctSelectionText}</span></div>`;
+        reviewItem.innerHTML = `<h5>Q${idx + 1}. ${physicsToHTML(getQuestionText(q))}</h5><div style="font-size:.85rem;line-height:1.5"><strong>Your Choice: </strong><span>${physicsToHTML(studentSelectionText)}</span><br><strong>Correct Answer: </strong><span style="color:var(--success);font-weight:600">${physicsToHTML(correctSelectionText)}</span></div>`;
         reviewContainer.appendChild(reviewItem);
       });
 
