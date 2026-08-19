@@ -1,58 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Physics Questions</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 24px;
-      background: #f5f5f5;
-      color: #111;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
-    .question {
-      background: #fff;
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
-    .question-text {
-      font-size: 18px;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-    .option {
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 7px;
-      margin: 7px 0;
-      line-height: 1.5;
-    }
-    .answer {
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid #eee;
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Physics Questions</h1>
-    <div id="questions"></div>
-  </div>
-
-  <script>
-    const questions = [
+[
   {
-    "q": "A unit vector is represented as (0.8î + bĵ + 0.4k̂). Hence the value of ‘b’ must be",
+    "q": "A unit vector is represented as (0.8î + bĵ + 0.4k̂). Hence the value of  ‘b’ must be",
     "options": [
       "0.4",
       "√0.6",
@@ -189,7 +137,7 @@
       "when either |A| or |B| is zero or A and B are perpendicular to each other",
       "|A| = 1 and |B| = 1"
     ],
-    "a": "when either |A| or |B| is zero or A and B are perpendicular to each other"
+    "a": "when either |A⃗| or |B⃗| is zero or A⃗ and B⃗ are perpendicular to each other"
   },
   {
     "q": "If A is a vector of magnitude 7 unit due north. What is the magnitude and direction of a vector −3A?",
@@ -202,7 +150,7 @@
     "a": "21 units due south"
   },
   {
-    "q": "A steel wire having a radius of 2.0 mm, carrying a load of 4 kg, is hanging from a ceiling. Given that g = 3.1 m s⁻², what will be the tensile stress that would be developed in the wire?",
+    "q": "A steel wire having a radius of 2.0 mm, carrying a load of 4 kg, is hanging from a ceiling. Given that g = 3.1π m s⁻², what will be the tensile stress that would be developed in the wire?",
     "options": [
       "6.2 × 10⁶ N m⁻²",
       "5.2 × 10⁶ N m⁻²",
@@ -292,7 +240,7 @@
     "a": "(2l₂ − l₁) m"
   },
   {
-    "q": "A copper wire of length 3.2 m and a steel wire of length 1.6 m, both of diameter 4 mm, are connected end-to-end. When stretched by a load, the net elongation is found to be 1.3 mm. The load applied is (Y_copper = 1.2 × 10¹¹ N m⁻², Y_steel = 2 × 10¹¹ N m⁻².)",
+    "q": "A copper wire of length 3.2 m and a steel wire of length 1.6 m, both of diameter 4 mm, are connected end-to-end. When stretched by a load, the net elongation is found to be 1.3 mm. The load applied is (Ycopper = 1.2 × 10¹¹ N m⁻², Ysteel = 2 × 10¹¹ N m⁻².)",
     "options": [
       "1.6 × 10² N",
       "1.8 × 10² N",
@@ -312,7 +260,7 @@
     "a": "0.58 cm, 1.42 cm"
   },
   {
-    "q": "Two springs of equal lengths and equal cross-sectional area are made of material whose Young's moduli are in the ratio of 3 : 2. They are suspended and loaded with the same mass. The ratio of force constant of these springs is",
+    "q": "Two springs of equal lengths and equal cross-sectional area are made of material whose Young's moduli are in the ratio of 3 : 2. They are suspended and loaded with the same mass. The ratio of force constant of there spring is",
     "options": [
       "√3 : √2",
       "3 : 2",
@@ -334,7 +282,7 @@
   {
     "q": "The expression of force constant for a spring following Hooke’s law is given by",
     "options": [
-      "k = YA Δl/l",
+      "k = YAΔl/l",
       "k = YA/Δl",
       "k = YA/l",
       "k = YAl/Δl"
@@ -361,33 +309,4 @@
     ],
     "a": "5"
   }
-];
-
-    const container = document.getElementById("questions");
-
-    questions.forEach((item, index) => {
-      const card = document.createElement("div");
-      card.className = "question";
-
-      const q = document.createElement("div");
-      q.className = "question-text";
-      q.textContent = `${index + 1}. ${item.q}`;
-      card.appendChild(q);
-
-      item.options.forEach((option, optionIndex) => {
-        const opt = document.createElement("div");
-        opt.className = "option";
-        opt.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
-        card.appendChild(opt);
-      });
-
-      const answer = document.createElement("div");
-      answer.className = "answer";
-      answer.textContent = `Correct Answer: ${item.a}`;
-      card.appendChild(answer);
-
-      container.appendChild(card);
-    });
-  </script>
-</body>
-</html>
+]
