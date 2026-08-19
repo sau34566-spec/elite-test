@@ -123,7 +123,33 @@
     .success-popup { background: white; padding: 3rem 2rem; border-radius: 16px; text-align: center; max-width: 450px; width: 90%; }
     .success-popup i { font-size: 4rem; color: var(--success); margin-bottom: 1.5rem; }
 
-    /* Physics notation rendering fix */
+    .question-image-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 0 1.5rem 0;
+      width: 100%;
+    }
+    .question-image-wrap img {
+      display: block;
+      max-width: 100%;
+      max-height: 420px;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .subject-badge {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
     .vector-symbol {
       position: relative;
       display: inline-block;
@@ -159,9 +185,6 @@
       font-weight: 700;
       line-height: 1;
       pointer-events: none;
-    }
-    .question-text, .option-label, .review-item {
-      overflow-wrap: anywhere;
     }
 
   </style>
@@ -217,7 +240,7 @@
       <ul class="instruction-list">
         <li>
           <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary-light);"></i>
-          <span>Questions are randomly loaded from total question pool.</span>
+          <span>Questions are randomly selected <b>within each subject</b> and displayed in this order: <b>Chemistry → Physics → Biology</b>.</span>
         </li>
         <li>
           <i class="fa-solid fa-circle-chevron-right" style="color: var(--primary-light);"></i>
@@ -241,6 +264,7 @@
       </div>
       <div id="quiz-body">
         <div class="question-text" id="q-text">Parsing dataset...</div>
+        <div class="question-image-wrap" id="question-image-block" style="display:none;"></div>
         <div class="option-container" id="options-block"></div>
       </div>
       <div class="btn-group">
@@ -399,11 +423,9 @@
       return result;
     }
 
+    function getQuestionText(q) { return q?.question ?? q?.q ?? ""; }
+    function getCorrectAnswer(q) { return q?.a ?? q?.correct ?? q?.ans ?? ""; }
 
-    // ---------------- PHYSICS TEXT RENDERER ----------------
-    // The question dataset contains Unicode combining vector/hat marks such as A⃗ and k̂.
-    // Some fonts/browsers display those marks as empty boxes. Convert them to
-    // self-contained HTML/CSS symbols before putting the text into the quiz UI.
     function escapeHTML(value) {
       return String(value ?? "")
         .replace(/&/g, "&amp;")
@@ -413,23 +435,40 @@
         .replace(/'/g, "&#039;");
     }
 
+    // Keeps Physics notation such as A⃗, B⃗, î, ĵ and k̂ readable
+    // even on browsers/fonts that render combining Unicode marks as boxes.
     function physicsToHTML(value) {
       let s = escapeHTML(value);
-
-      // Vector notation: A⃗, B⃗, C⃗, etc.
       s = s.replace(/([A-Za-z])⃗/gu, '<span class="vector-symbol">$1</span>');
-
-      // Unit-vector notation: î, ĵ, k̂.
       s = s.replace(/î/gu, '<span class="unit-vector">i</span>');
       s = s.replace(/ĵ/gu, '<span class="unit-vector">j</span>');
       s = s.replace(/k̂/gu, '<span class="unit-vector">k</span>');
-
       return s;
     }
 
-    function getQuestionText(q) { return q?.question ?? q?.q ?? ""; }
+    function getSubjectCounts() {
+      return {
+        chemistry: 25,
+        physics: 25,
+        biology: 50
+      };
+    }
 
-    function getCorrectAnswer(q) { return q?.a ?? q?.correct ?? q?.ans ?? ""; }
+    function tagSubjectQuestions(list, subject) {
+      return list.map((q, index) => ({
+        ...q,
+        __subject: subject,
+        __sourceIndex: index
+      }));
+    }
+
+    function sameSubjectIndices(subject) {
+      const result = [];
+      questionsList.forEach((q, idx) => {
+        if (q?.__subject === subject) result.push(idx);
+      });
+      return result;
+    }
 
     // ---------------- SECURITY ----------------
     // Tab-switch behavior:
@@ -573,19 +612,80 @@
         const configSnap = await getDoc(doc(db, "exam_config", "current_test"));
         examConfigData = configSnap.exists() ? configSnap.data() : {};
 
-        const response = await fetch("chapter.html", { cache: "no-store" });
-        if (!response.ok) throw new Error(`chapter.html could not be loaded. HTTP ${response.status}`);
-        const fullPool = await response.json();
-        if (!Array.isArray(fullPool) || fullPool.length === 0) throw new Error("chapter.html contains no valid questions.");
+        // ---------------------------------------------------------
+        // COMBINED SUBJECT TEST
+        // Order is ALWAYS:
+        //   1) Chemistry: 25 randomly selected from question/chemistry.html
+        //   2) Physics:    25 randomly selected from question/physics.html
+        //   3) Biology:    50 randomly selected from question/biology.html
+        //
+        // Randomization happens ONLY inside each subject block.
+        // Therefore tab-switch replacement can safely stay inside the
+        // student's current subject.
+        // ---------------------------------------------------------
+        const subjectCounts = getSubjectCounts();
 
-        const configuredPoolSize = Number(examConfigData?.totalPool ?? fullPool.length);
-        const poolSize = Math.min(Math.max(1, configuredPoolSize || fullPool.length), fullPool.length);
-        questionPool = shuffleArray(fullPool).slice(0, poolSize);
+        const [chemistryResponse, physicsResponse, biologyResponse] =
+          await Promise.all([
+            fetch("question/chemistry.html", { cache: "no-store" }),
+            fetch("question/physics.html", { cache: "no-store" }),
+            fetch("question/biology.html", { cache: "no-store" })
+          ]);
 
-        const configuredStudentLimit = Number(examConfigData?.studentLimit ?? examConfigData?.questionLimit ?? questionPool.length);
-        const studentLimit = Math.min(Math.max(1, configuredStudentLimit || questionPool.length), questionPool.length);
-        questionsList = shuffleArray(questionPool).slice(0, studentLimit);
-        if (!questionsList.length) throw new Error("No questions were selected for this examination.");
+        if (!chemistryResponse.ok) {
+          throw new Error(`question/chemistry.html could not be loaded. HTTP ${chemistryResponse.status}`);
+        }
+        if (!physicsResponse.ok) {
+          throw new Error(`question/physics.html could not be loaded. HTTP ${physicsResponse.status}`);
+        }
+        if (!biologyResponse.ok) {
+          throw new Error(`question/biology.html could not be loaded. HTTP ${biologyResponse.status}`);
+        }
+
+        const [chemistryPool, physicsPool, biologyPool] =
+          await Promise.all([
+            chemistryResponse.json(),
+            physicsResponse.json(),
+            biologyResponse.json()
+          ]);
+
+        if (!Array.isArray(chemistryPool) || chemistryPool.length < subjectCounts.chemistry) {
+          throw new Error(`Chemistry needs at least ${subjectCounts.chemistry} questions, but only ${chemistryPool?.length ?? 0} were found.`);
+        }
+        if (!Array.isArray(physicsPool) || physicsPool.length < subjectCounts.physics) {
+          throw new Error(`Physics needs at least ${subjectCounts.physics} questions, but only ${physicsPool?.length ?? 0} were found.`);
+        }
+        if (!Array.isArray(biologyPool) || biologyPool.length < subjectCounts.biology) {
+          throw new Error(`Biology needs at least ${subjectCounts.biology} questions, but only ${biologyPool?.length ?? 0} were found.`);
+        }
+
+        // Randomly choose the required number FROM EACH SUBJECT,
+        // then concatenate in the fixed exam order.
+        const chemistryQuestions = tagSubjectQuestions(
+          shuffleArray(chemistryPool).slice(0, subjectCounts.chemistry),
+          "chemistry"
+        );
+        const physicsQuestions = tagSubjectQuestions(
+          shuffleArray(physicsPool).slice(0, subjectCounts.physics),
+          "physics"
+        );
+        const biologyQuestions = tagSubjectQuestions(
+          shuffleArray(biologyPool).slice(0, subjectCounts.biology),
+          "biology"
+        );
+
+        questionsList = [
+          ...chemistryQuestions,
+          ...physicsQuestions,
+          ...biologyQuestions
+        ];
+
+        // Keep a combined pool for compatibility with the existing app state.
+        questionPool = [...questionsList];
+
+        if (questionsList.length !== 100) {
+          throw new Error(`Expected 100 questions, but ${questionsList.length} were selected.`);
+        }
 
         currentQuestionIndex = 0;
         selectedAnswers = {};
@@ -600,7 +700,7 @@
         loadQuestion(0);
       } catch (error) {
         console.error(error);
-        alert(`Failed to load test questions.\n\nMake sure 'chapter.html' is in the same folder as 'index.html'.\n\nError: ${error.message}`);
+        alert(`Failed to load test questions.\n\nMake sure the 'question' folder contains chemistry.html, physics.html and biology.html.\n\nError: ${error.message}`);
         startBtn.disabled = false;
         startBtn.innerHTML = 'Start Examination <i class="fa-solid fa-vial"></i>';
       }
@@ -629,26 +729,35 @@
     }
 
     function shuffleCurrentQuestion() {
-      // Always move a different question into the current position.
-      // Keep answers attached to their corresponding questions.
-      if (questionsList.length > 1) {
-        const currentIndex = currentQuestionIndex;
-        let replacementIndex = Math.floor(Math.random() * questionsList.length);
+      // IMPORTANT:
+      // Tab switching only replaces the current question with another question
+      // from the SAME subject block. Chemistry never becomes Physics/Biology,
+      // Physics never becomes Chemistry/Biology, etc.
+      const currentQ = questionsList[currentQuestionIndex];
+      const subject = currentQ?.__subject;
+      if (!subject) {
+        loadQuestion(currentQuestionIndex);
+        return;
+      }
 
-        while (replacementIndex === currentIndex) {
-          replacementIndex = Math.floor(Math.random() * questionsList.length);
-        }
+      const candidates = sameSubjectIndices(subject).filter(
+        idx => idx !== currentQuestionIndex
+      );
 
-        [questionsList[currentIndex], questionsList[replacementIndex]] =
-          [questionsList[replacementIndex], questionsList[currentIndex]];
+      if (candidates.length > 0) {
+        const replacementIndex =
+          candidates[Math.floor(Math.random() * candidates.length)];
 
-        const currentAnswer = selectedAnswers[currentIndex];
+        [questionsList[currentQuestionIndex], questionsList[replacementIndex]] =
+          [questionsList[replacementIndex], questionsList[currentQuestionIndex]];
+
+        const currentAnswer = selectedAnswers[currentQuestionIndex];
         const replacementAnswer = selectedAnswers[replacementIndex];
 
         if (replacementAnswer !== undefined) {
-          selectedAnswers[currentIndex] = replacementAnswer;
+          selectedAnswers[currentQuestionIndex] = replacementAnswer;
         } else {
-          delete selectedAnswers[currentIndex];
+          delete selectedAnswers[currentQuestionIndex];
         }
 
         if (currentAnswer !== undefined) {
@@ -664,25 +773,74 @@
     function loadQuestion(index) {
       if (!questionsList[index]) return;
       currentQuestionIndex = index;
-      document.getElementById("question-counter").innerText = `Question ${index + 1} of ${questionsList.length}`;
+
       const qData = questionsList[index];
-      document.getElementById("q-text").innerHTML = physicsToHTML(getQuestionText(qData));
+      const subjectName = qData.__subject
+        ? qData.__subject.charAt(0).toUpperCase() + qData.__subject.slice(1)
+        : "";
+
+      document.getElementById("question-counter").innerHTML =
+        `<span class="subject-badge">${escapeHTML(subjectName)}</span>Question ${index + 1} of ${questionsList.length}`;
+
+      document.getElementById("q-text").innerHTML =
+        physicsToHTML(getQuestionText(qData));
+
+      // Chemistry/Biology figure questions can carry image or images.
+      const imageBlock = document.getElementById("question-image-block");
+      imageBlock.innerHTML = "";
+      const imageList = Array.isArray(qData.images)
+        ? qData.images
+        : (qData.image ? [qData.image] : []);
+
+      if (imageList.length) {
+        imageBlock.style.display = "flex";
+        imageList.forEach(src => {
+          const img = document.createElement("img");
+          img.src = src;
+          img.alt = "Question figure";
+          img.loading = "eager";
+          imageBlock.appendChild(img);
+        });
+      } else {
+        imageBlock.style.display = "none";
+      }
+
       const optionsBlock = document.getElementById("options-block");
       optionsBlock.innerHTML = "";
+
       if (!Array.isArray(qData.options) || !qData.options.length) {
-        optionsBlock.innerHTML = '<p style="color:#ef4444;">Question options are missing.</p>';
+        optionsBlock.innerHTML =
+          '<p style="color:#ef4444;">Question options are missing.</p>';
       } else {
         qData.options.forEach((opt, idx) => {
           const label = document.createElement("label");
-          label.className = `option-label ${selectedAnswers[index] === idx ? "selected" : ""}`;
+          label.className =
+            `option-label ${selectedAnswers[index] === idx ? "selected" : ""}`;
+
           const radio = document.createElement("input");
-          radio.type = "radio"; radio.name = "quiz-opt"; radio.value = String(idx); radio.checked = selectedAnswers[index] === idx;
+          radio.type = "radio";
+          radio.name = "quiz-opt";
+          radio.value = String(idx);
+          radio.checked = selectedAnswers[index] === idx;
+
           radio.addEventListener("change", () => window.selectOption(index, idx));
-          label.appendChild(radio); const optionText = document.createElement("span"); optionText.innerHTML = physicsToHTML(` ${opt}`); label.appendChild(optionText); optionsBlock.appendChild(label);
+          label.appendChild(radio);
+
+          const optionText = document.createElement("span");
+          optionText.innerHTML = physicsToHTML(` ${opt}`);
+          label.appendChild(optionText);
+
+          optionsBlock.appendChild(label);
         });
       }
-      document.getElementById("btn-prev").style.visibility = index === 0 ? "hidden" : "visible";
-      document.getElementById("btn-next").innerHTML = index === questionsList.length - 1 ? 'Finish Exam <i class="fa-solid fa-flag-checkered"></i>' : 'Save & Next <i class="fa-solid fa-angle-right"></i>';
+
+      document.getElementById("btn-prev").style.visibility =
+        index === 0 ? "hidden" : "visible";
+
+      document.getElementById("btn-next").innerHTML =
+        index === questionsList.length - 1
+          ? 'Finish Exam <i class="fa-solid fa-flag-checkered"></i>'
+          : 'Save & Next <i class="fa-solid fa-angle-right"></i>';
     }
 
     window.selectOption = (qIdx, optIdx) => {
