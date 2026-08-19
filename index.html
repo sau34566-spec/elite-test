@@ -361,14 +361,18 @@
     function getCorrectAnswer(q) { return q?.a ?? q?.correct ?? q?.ans ?? ""; }
 
     // ---------------- SECURITY ----------------
+    // Tab-switch behavior:
+    // 1st switch -> change current question, no negative marking
+    // 2nd switch -> change current question, no negative marking
+    // 3rd switch -> auto-submit the test
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden || !isExamActive) return;
 
       tabSwitches++;
       saveSecurityState();
 
-      const minSwitches = Math.max(1, Number(examConfigData?.minTabSwitches) || 1);
-      const maxSwitches = Math.max(minSwitches, Number(examConfigData?.maxTabSwitches) || 2);
+      const minSwitches = 1;
+      const maxSwitches = 3;
 
       if (tabSwitches >= maxSwitches) {
         alert("SECURITY VIOLATION:\n\nMaximum tab-switch limit reached. Your examination is being submitted.");
@@ -377,7 +381,7 @@
       }
 
       if (tabSwitches >= minSwitches) {
-        alert("SECURITY WARNING:\n\nTab switch/background activity detected.\nCurrent question has been changed.\nNo negative marking is applied currently.");
+        alert(`SECURITY WARNING ${tabSwitches}:\n\nTab switch/background activity detected.\nThe current question has been changed.\nNo negative marking is applied.`);
         shuffleCurrentQuestion();
       }
     });
@@ -554,13 +558,35 @@
     }
 
     function shuffleCurrentQuestion() {
+      // Always move a different question into the current position.
+      // Keep answers attached to their corresponding questions.
       if (questionsList.length > 1) {
         const currentIndex = currentQuestionIndex;
         let replacementIndex = Math.floor(Math.random() * questionsList.length);
-        while (replacementIndex === currentIndex) replacementIndex = Math.floor(Math.random() * questionsList.length);
-        [questionsList[currentIndex], questionsList[replacementIndex]] = [questionsList[replacementIndex], questionsList[currentIndex]];
-        delete selectedAnswers[currentIndex];
+
+        while (replacementIndex === currentIndex) {
+          replacementIndex = Math.floor(Math.random() * questionsList.length);
+        }
+
+        [questionsList[currentIndex], questionsList[replacementIndex]] =
+          [questionsList[replacementIndex], questionsList[currentIndex]];
+
+        const currentAnswer = selectedAnswers[currentIndex];
+        const replacementAnswer = selectedAnswers[replacementIndex];
+
+        if (replacementAnswer !== undefined) {
+          selectedAnswers[currentIndex] = replacementAnswer;
+        } else {
+          delete selectedAnswers[currentIndex];
+        }
+
+        if (currentAnswer !== undefined) {
+          selectedAnswers[replacementIndex] = currentAnswer;
+        } else {
+          delete selectedAnswers[replacementIndex];
+        }
       }
+
       loadQuestion(currentQuestionIndex);
     }
 
