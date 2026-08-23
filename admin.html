@@ -904,6 +904,21 @@
           each subject pool and how many are displayed to a student.
         </div>
 
+
+        <div class="notice success-note">
+          <b>Active student files:</b>
+          <br>
+          Chemistry → <code>question/chemistry.html</code>
+          <br>
+          Physics → <code>question/physics.html</code>
+          <br>
+          Biology → <code>question/biology.html</code>
+          <br><br>
+          Student paper order is fixed as
+          <b>Chemistry → Physics → Biology</b>; questions are randomized
+          independently within each subject.
+        </div>
+
         <!-- SUBJECT CONFIGURATION -->
         <h3
           style="
@@ -1132,6 +1147,52 @@
 
         </div>
 
+
+
+        <!-- SECURITY SETTINGS -->
+        <h3
+          style="
+            color:var(--primary);
+            font-size:16px;
+            margin-top:25px;
+            margin-bottom:12px;
+          "
+        >
+          Security Settings
+        </h3>
+
+        <div class="grid-2">
+
+          <div class="form-group">
+            <label for="config-max-tab-switches">
+              Maximum Tab Switches
+            </label>
+            <input
+              id="config-max-tab-switches"
+              type="number"
+              min="1"
+              max="20"
+              value="3"
+            >
+            <div class="muted" style="font-size:11px;margin-top:6px">
+              Reaching this limit automatically submits the test.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="config-replace-on-switch">
+              Replace Question on Tab Switch
+            </label>
+            <select id="config-replace-on-switch">
+              <option value="yes" selected>Yes</option>
+              <option value="no">No</option>
+            </select>
+            <div class="muted" style="font-size:11px;margin-top:6px">
+              If enabled, the current question is replaced after a violation.
+            </div>
+          </div>
+
+        </div>
 
         <!-- EXAM WINDOW -->
         <h3
@@ -1952,6 +2013,12 @@
                 studentLimit:
                   config.limit,
 
+                poolQuestions:
+                  config.pool,
+
+                displayQuestions:
+                  config.limit,
+
                 updatedAt:
                   new Date()
               }
@@ -2121,6 +2188,15 @@
           "form"
         );
 
+        $("config-max-tab-switches").value =
+          data.security?.maxTabSwitches ??
+          3;
+
+        $("config-replace-on-switch").value =
+          data.security?.replaceQuestionOnSwitch === false
+            ? "no"
+            : "yes";
+
 
         updateExamStatus();
 
@@ -2177,6 +2253,21 @@
 
       const uploadMode =
         getUploadMode();
+
+      const maxTabSwitches =
+        Math.max(
+          1,
+          Math.min(
+            20,
+            parseInt(
+              $("config-max-tab-switches").value,
+              10
+            ) || 3
+          )
+        );
+
+      const replaceQuestionOnSwitch =
+        $("config-replace-on-switch").value === "yes";
 
 
       if (
@@ -2265,6 +2356,11 @@
               endMs,
 
             uploadMode,
+
+            security: {
+              maxTabSwitches,
+              replaceQuestionOnSwitch
+            },
 
             updatedAt:
               new Date()
@@ -2424,6 +2520,35 @@
     }
 
 
+    function formatDurationSeconds(seconds) {
+
+      const total =
+        Math.max(
+          0,
+          Number(seconds) || 0
+        );
+
+      const h =
+        Math.floor(
+          total / 3600
+        );
+
+      const m =
+        Math.floor(
+          (total % 3600) / 60
+        );
+
+      const s =
+        total % 60;
+
+      if (h > 0) {
+        return `${h}h ${m}m ${s}s`;
+      }
+
+      return `${m}m ${s}s`;
+    }
+
+
     /* =========================================================
        NORMALIZE RESULT
     ========================================================== */
@@ -2496,6 +2621,24 @@
           .trim()
           .toUpperCase(),
 
+        studentClass:
+          String(
+            r.studentClass ??
+            r.class ??
+            r.student_class ??
+            ""
+          )
+          .trim(),
+
+        address:
+          String(
+            r.address ??
+            r.studentAddress ??
+            r.student_address ??
+            ""
+          )
+          .trim(),
+
         submissionStatus:
           r.submissionStatus ||
           r.status ||
@@ -2536,7 +2679,13 @@
           numberValue(
             r.correct ??
             r.correctCount,
-            0
+            Number(
+              r.calculatedScore
+            ) > 0
+              ? Math.round(
+                  Number(r.calculatedScore) / 4
+                )
+              : 0
           ),
 
         wrong:
@@ -2549,13 +2698,34 @@
         attempted:
           numberValue(
             r.attempted,
-            0
+            numberValue(
+              r.correct ??
+              r.correctCount,
+              Number(
+                r.calculatedScore
+              ) > 0
+                ? Math.round(
+                    Number(r.calculatedScore) / 4
+                  )
+                : 0
+            ) +
+            numberValue(
+              r.wrong ??
+              r.wrongCount,
+              0
+            )
           ),
 
         duration:
           r.duration ||
           r.timeTaken ||
-          "",
+          (
+            Number(r.timeTakenSeconds) > 0
+              ? formatDurationSeconds(
+                  Number(r.timeTakenSeconds)
+                )
+              : ""
+          ),
 
         raw:
           r
@@ -2962,6 +3132,19 @@
                   <br>
 
                   <span
+                    class="muted"
+                    style="font-size:11px"
+                  >
+                    Class:
+                    ${escapeHtml(
+                      r.studentClass ||
+                      "—"
+                    )}
+                  </span>
+
+                  <br>
+
+                  <span
                     class="badge ${
                       r.batchCategory === "R"
                         ? "safe"
@@ -3263,6 +3446,28 @@
 
 
           <div class="detail-item">
+            <strong>Class</strong>
+            <span>
+              ${escapeHtml(
+                r.studentClass ||
+                "Not set"
+              )}
+            </span>
+          </div>
+
+
+          <div class="detail-item">
+            <strong>Address</strong>
+            <span>
+              ${escapeHtml(
+                r.address ||
+                "Not set"
+              )}
+            </span>
+          </div>
+
+
+          <div class="detail-item">
             <strong>Submission Status</strong>
             <span>
               ${escapeHtml(
@@ -3278,6 +3483,17 @@
               ${escapeHtml(
                 r.scoreText
               )}
+              <small class="muted">
+                ${
+                  r.scoreVal.total
+                    ? `(${Math.round(
+                        r.scoreVal.value /
+                        r.scoreVal.total *
+                        100
+                      )}%)`
+                    : ""
+                }
+              </small>
             </span>
           </div>
 
@@ -3500,6 +3716,8 @@
         "Name",
         "Email",
         "Batch Category",
+        "Class",
+        "Address",
         "Submission Status",
         "Score",
         "Rating",
@@ -3510,6 +3728,7 @@
         "Correct",
         "Wrong",
         "Attempted",
+        "Duration / Time Taken",
         "Feedback",
         "Doubt"
 
@@ -3527,6 +3746,10 @@
             r.email,
 
             r.batchCategory,
+
+            r.studentClass,
+
+            r.address,
 
             r.submissionStatus,
 
@@ -3547,6 +3770,8 @@
             r.wrong,
 
             r.attempted,
+
+            r.duration,
 
             r.feedback,
 
