@@ -801,7 +801,7 @@
 
           <div class="error-msg" id="duplicate-error">
             <i class="fa-solid fa-ban"></i>
-            Access Denied: You have already attempted this test!
+            Access Denied: This Gmail address has already submitted this test!
           </div>
 
         </div>
@@ -821,6 +821,54 @@
           <div class="error-msg" id="batch-error">
             <i class="fa-solid fa-circle-exclamation"></i>
             Please select your batch category.
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="student-class">Class *</label>
+
+          <select id="student-class" required>
+            <option value="" selected disabled>
+              Select Class
+            </option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+
+          <div class="error-msg" id="class-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Please select your class.
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="student-address">Address *</label>
+
+          <textarea
+            id="student-address"
+            rows="3"
+            maxlength="250"
+            placeholder="Enter your address"
+            required
+            style="
+              width:100%;
+              padding:12px 13px;
+              border:2px solid var(--border);
+              border-radius:9px;
+              outline:none;
+              background:#fff;
+              color:var(--text);
+              resize:vertical;
+            "
+          ></textarea>
+
+          <div class="error-msg" id="address-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Please enter your address.
           </div>
 
         </div>
@@ -861,7 +909,7 @@
         <i class="fa-solid fa-triangle-exclamation"></i>
         Warning: Each correct answer carries +4 marks.
         There is currently no negative marking.
-        Tab-switch security is controlled by the Admin settings.
+        Tab-switch security is active during the test.
       </div>
 
       <div id="config-summary" class="config-summary">
@@ -875,6 +923,7 @@
 
       </div>
 
+
       <ul class="instruction-list">
 
         <li>
@@ -884,36 +933,11 @@
           ></i>
 
           <span>
-            हर student का paper independently और securely randomize होगा।
-            Questions और subjects का क्रम दूसरे students से अलग हो सकता है।
+            हर student के लिए questions independently और securely randomize होंगे।
           </span>
         </li>
 
-        <li>
-          <i
-            class="fa-solid fa-circle-chevron-right"
-            style="color:var(--primary-light);"
-          ></i>
 
-          <span>
-            <b>Subject-wise Admin Setup:</b>
-            The Admin Panel controls the total question pool and
-            how many questions from that pool are displayed to students.
-          </span>
-        </li>
-
-        <li>
-          <i
-            class="fa-solid fa-circle-chevron-right"
-            style="color:var(--primary-light);"
-          ></i>
-
-          <span>
-            <b>Strict Security:</b>
-            Tab-switch limits are controlled by the Admin Panel.
-            Reaching the maximum limit automatically submits the examination.
-          </span>
-        </li>
 
       </ul>
 
@@ -1325,6 +1349,10 @@
     let currentStudentName = "";
     let currentStudentEmail = "";
     let currentBatchCategory = "";
+    let currentStudentClass = "";
+    let currentStudentAddress = "";
+
+    let examStartTime = 0;
 
     let finalizedScoreString = "0/0";
 
@@ -1387,6 +1415,12 @@
       }
     };
 
+
+
+    let securityConfig = {
+      maxTabSwitches: 3,
+      replaceQuestionOnSwitch: true
+    };
 
     let tabSwitches =
       parseInt(
@@ -1975,9 +2009,7 @@
           </span>
 
           <span class="config-subject-values">
-            Pool: <b>${cfg.poolQuestions}</b>
-            &nbsp;|&nbsp;
-            Student: <b>${cfg.displayQuestions}</b>
+            Questions: <b>${cfg.displayQuestions}</b>
           </span>
         `;
 
@@ -1989,7 +2021,7 @@
 
         container.innerHTML = `
           <div style="color:#ef4444;font-size:.9rem;">
-            No subjects are currently enabled in the Admin Panel.
+            No questions are currently available for this test.
           </div>
         `;
 
@@ -2104,7 +2136,8 @@
 
 
         const minSwitches = 1;
-        const maxSwitches = 3;
+        const maxSwitches =
+          Number(securityConfig.maxTabSwitches) || 3;
 
 
         if (
@@ -2128,10 +2161,11 @@
           tabSwitches >= minSwitches
         ) {
 
-          // Replace and render the question before showing the warning.
-          // This makes the change reliable even when mobile browsers delay alerts.
+          // Replace only when enabled by the Admin Panel.
           const questionWasReplaced =
-            replaceCurrentQuestion(event.reason);
+            securityConfig.replaceQuestionOnSwitch
+              ? replaceCurrentQuestion(event.reason)
+              : false;
 
           showSecurityNotice(
             `Security warning ${tabSwitches}`,
@@ -2487,6 +2521,21 @@
             )
             .value;
 
+        const classInput =
+          document
+            .getElementById(
+              "student-class"
+            )
+            .value;
+
+        const addressInput =
+          document
+            .getElementById(
+              "student-address"
+            )
+            .value
+            .trim();
+
 
         const emailError =
           document.getElementById(
@@ -2505,6 +2554,16 @@
             "batch-error"
           );
 
+        const classError =
+          document.getElementById(
+            "class-error"
+          );
+
+        const addressError =
+          document.getElementById(
+            "address-error"
+          );
+
 
         const proceedBtn =
           document.getElementById(
@@ -2519,6 +2578,12 @@
           "none";
 
         batchError.style.display =
+          "none";
+
+        classError.style.display =
+          "none";
+
+        addressError.style.display =
           "none";
 
 
@@ -2551,6 +2616,25 @@
         ) {
 
           batchError.style.display =
+            "flex";
+
+          return;
+        }
+
+        if (
+          !["11", "12"]
+            .includes(classInput)
+        ) {
+
+          classError.style.display =
+            "flex";
+
+          return;
+        }
+
+        if (!addressInput) {
+
+          addressError.style.display =
             "flex";
 
           return;
@@ -2598,6 +2682,12 @@
 
           currentBatchCategory =
             batchInput;
+
+          currentStudentClass =
+            classInput;
+
+          currentStudentAddress =
+            addressInput;
 
 
           resetAttemptState();
@@ -2908,8 +2998,39 @@
             examConfigData
           );
 
+          securityConfig = {
+            maxTabSwitches: Math.max(
+              1,
+              Math.min(
+                20,
+                Number(
+                  examConfigData?.security?.maxTabSwitches
+                ) || 3
+              )
+            ),
+            replaceQuestionOnSwitch:
+              examConfigData?.security?.replaceQuestionOnSwitch !== false
+          };
+
 
           renderConfigSummary();
+
+          const maxSwitchEl =
+            document.getElementById("security-max-switches");
+          const replacementEl =
+            document.getElementById("security-replacement-mode");
+
+          if (maxSwitchEl) {
+            maxSwitchEl.textContent =
+              String(securityConfig.maxTabSwitches);
+          }
+
+          if (replacementEl) {
+            replacementEl.textContent =
+              securityConfig.replaceQuestionOnSwitch
+                ? "Enabled"
+                : "Disabled";
+          }
 
 
           /*
@@ -2961,11 +3082,20 @@
             Secure browser randomness greatly reduces matching paper order.
           */
 
-          questionsList = shuffleArray([
+          /*
+            IMPORTANT:
+            Subject order is fixed and NEVER mixed:
+            Chemistry -> Physics -> Biology.
+
+            Randomization still happens independently inside each
+            subject pool, so students receive different questions
+            without mixing the three subjects.
+          */
+          questionsList = [
             ...chemistryQuestions.displayed,
             ...physicsQuestions.displayed,
             ...biologyQuestions.displayed
-          ]);
+          ];
 
 
           /*
@@ -3062,6 +3192,32 @@
             ) || 30;
 
 
+          /*
+            Save the exact start time of this attempt.
+            This is also persisted in sessionStorage so a
+            refresh cannot reset the duration/time-taken data.
+          */
+          examStartTime =
+            Number(
+              sessionStorage.getItem(
+                "examStartTime"
+              ) || 0
+            );
+
+          if (
+            !examStartTime ||
+            examStartTime <= 0
+          ) {
+            examStartTime =
+              Date.now();
+
+            sessionStorage.setItem(
+              "examStartTime",
+              String(examStartTime)
+            );
+          }
+
+
           startExamTimer(
             duration
           );
@@ -3108,6 +3264,67 @@
 
 
     /* =========================================================
+       TIME TAKEN
+    ========================================================== */
+
+    function getTimeTakenSeconds() {
+
+      const started =
+        Number(
+          examStartTime ||
+          sessionStorage.getItem(
+            "examStartTime"
+          ) ||
+          0
+        );
+
+      if (!started) {
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        Math.floor(
+          (Date.now() - started) / 1000
+        )
+      );
+    }
+
+
+    function formatTimeTaken(seconds) {
+
+      const total =
+        Math.max(
+          0,
+          Number(seconds) || 0
+        );
+
+      const hours =
+        Math.floor(
+          total / 3600
+        );
+
+      const minutes =
+        Math.floor(
+          (total % 3600) / 60
+        );
+
+      const secs =
+        total % 60;
+
+      if (hours > 0) {
+        return `${hours}h ${minutes}m ${secs}s`;
+      }
+
+      if (minutes > 0) {
+        return `${minutes}m ${secs}s`;
+      }
+
+      return `${secs}s`;
+    }
+
+
+    /* =========================================================
        TIMER
     ========================================================== */
 
@@ -3120,14 +3337,36 @@
       );
 
 
-      const endTime =
-        Date.now() +
-        Math.max(
-          1,
-          durationMins
-        ) *
-        60 *
-        1000;
+      /*
+        Persist the exact exam start/end time for this attempt.
+        A page refresh therefore cannot restart the full timer.
+      */
+      examStartTime = Number(
+        sessionStorage.getItem("examStartTime") || 0
+      );
+
+      if (!examStartTime) {
+        examStartTime = Date.now();
+        sessionStorage.setItem(
+          "examStartTime",
+          String(examStartTime)
+        );
+      }
+
+      let endTime = Number(
+        sessionStorage.getItem("examEndTime") || 0
+      );
+
+      if (!endTime || endTime <= Date.now()) {
+        endTime =
+          Date.now() +
+          Math.max(1, durationMins) * 60 * 1000;
+
+        sessionStorage.setItem(
+          "examEndTime",
+          String(endTime)
+        );
+      }
 
 
       const updateTimer =
@@ -3960,12 +4199,36 @@
         batchCategory:
           currentBatchCategory,
 
+        studentClass:
+          currentStudentClass,
+
+        address:
+          currentStudentAddress,
+
         score:
           finalizedScoreString,
 
         calculatedScore,
 
         totalScore,
+
+        correct:
+          correctCountFinal,
+
+        wrong:
+          wrongCountFinal,
+
+        attempted:
+          correctCountFinal +
+          wrongCountFinal,
+
+        timeTakenSeconds:
+          getTimeTakenSeconds(),
+
+        duration:
+          formatTimeTaken(
+            getTimeTakenSeconds()
+          ),
 
         tabSwitches,
 
@@ -4045,6 +4308,14 @@
 
         resultSaved =
           true;
+
+        sessionStorage.removeItem(
+          "examStartTime"
+        );
+
+        sessionStorage.removeItem(
+          "examEndTime"
+        );
 
       } catch (err) {
 
@@ -4216,12 +4487,36 @@
         batchCategory:
           currentBatchCategory,
 
+        studentClass:
+          currentStudentClass,
+
+        address:
+          currentStudentAddress,
+
         score:
           finalizedScoreString,
 
         calculatedScore,
 
         totalScore,
+
+        correct:
+          correctCountFinal,
+
+        wrong:
+          wrongCountFinal,
+
+        attempted:
+          correctCountFinal +
+          wrongCountFinal,
+
+        timeTakenSeconds:
+          getTimeTakenSeconds(),
+
+        duration:
+          formatTimeTaken(
+            getTimeTakenSeconds()
+          ),
 
         tabSwitches,
 
@@ -4319,7 +4614,13 @@
           true;
 
 
-        sessionStorage.clear();
+        sessionStorage.removeItem("examEndTime");
+        sessionStorage.removeItem("questionCount");
+        sessionStorage.removeItem("examSubjectConfig");
+        sessionStorage.removeItem("tabSwitches");
+        sessionStorage.removeItem("copiesAttempted");
+        sessionStorage.removeItem("refreshes");
+        sessionStorage.removeItem("penaltiesApplied");
 
 
         document
