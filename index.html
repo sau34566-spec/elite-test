@@ -195,6 +195,35 @@
       gap: 5px;
     }
 
+    .class-unavailable-message {
+      display: none;
+      align-items: flex-start;
+      gap: .75rem;
+      margin-top: .75rem;
+      padding: .9rem 1rem;
+      border: 1px solid #f59e0b;
+      border-left: 5px solid #f59e0b;
+      border-radius: 9px;
+      background: #fffbeb;
+      color: #78350f;
+      font-size: .88rem;
+      line-height: 1.45;
+    }
+
+    .class-unavailable-message i {
+      margin-top: .15rem;
+      color: #d97706;
+      font-size: 1.15rem;
+      flex: 0 0 auto;
+    }
+
+    .class-unavailable-message strong {
+      display: block;
+      margin-bottom: .2rem;
+      color: #92400e;
+      font-size: .92rem;
+    }
+
     .instruction-list {
       list-style: none;
       margin-bottom: 2rem;
@@ -930,6 +959,20 @@
           <div class="error-msg" id="class-error">
             <i class="fa-solid fa-circle-exclamation"></i>
             Please select your class.
+          </div>
+
+          <div
+            class="class-unavailable-message"
+            id="class-unavailable-message"
+            role="alert"
+            aria-live="polite"
+          >
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Exam Not Available for Class 11</strong>
+              This examination has been prepared exclusively for Class 12 students.
+              Please select Class 12 to continue to the instructions and start the test.
+            </div>
           </div>
 
         </div>
@@ -2787,6 +2830,11 @@
             "class-error"
           );
 
+        const classUnavailableMessage =
+          document.getElementById(
+            "class-unavailable-message"
+          );
+
         const addressError =
           document.getElementById(
             "address-error"
@@ -2810,6 +2858,11 @@
 
         classError.style.display =
           "none";
+
+        classUnavailableMessage.style.display =
+          classInput === "11"
+            ? "flex"
+            : "none";
 
         addressError.style.display =
           "none";
@@ -2849,12 +2902,17 @@
           return;
         }
 
-        if (
-          !["11", "12"]
-            .includes(classInput)
-        ) {
+        if (!classInput) {
 
           classError.style.display =
+            "flex";
+
+          return;
+        }
+
+        if (classInput !== "12") {
+
+          classUnavailableMessage.style.display =
             "flex";
 
           return;
@@ -2936,13 +2994,63 @@
         } finally {
 
           proceedBtn.disabled =
-            false;
+            document
+              .getElementById(
+                "student-class"
+              )
+              .value === "11";
 
           proceedBtn.innerHTML =
             'Proceed to Instructions <i class="fa-solid fa-arrow-right"></i>';
         }
 
       };
+
+
+    /* Only Class 12 is eligible for this examination. */
+    const studentClassSelect =
+      document.getElementById(
+        "student-class"
+      );
+
+    const classUnavailableMessage =
+      document.getElementById(
+        "class-unavailable-message"
+      );
+
+    const proceedToInstructionsButton =
+      document.getElementById(
+        "proceed-btn"
+      );
+
+    studentClassSelect.addEventListener(
+      "change",
+      () => {
+
+        const selectedClass =
+          studentClassSelect.value;
+
+        const isClassEleven =
+          selectedClass === "11";
+
+        classUnavailableMessage.style.display =
+          isClassEleven
+            ? "flex"
+            : "none";
+
+        proceedToInstructionsButton.disabled =
+          isClassEleven;
+
+        if (selectedClass === "12") {
+          document
+            .getElementById(
+              "class-error"
+            )
+            .style.display =
+            "none";
+        }
+      }
+    );
 
 
     /* =========================================================
