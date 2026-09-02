@@ -1,0 +1,4911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam Elite | Online Test Series</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --accent: #f59e0b;
+      --bg-dark: #0f172a;
+      --bg-card: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
+        linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.95));
+      z-index: -1;
+    }
+
+    .test-container {
+      background: var(--bg-card);
+      width: 100%;
+      max-width: 650px;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s;
+      background: #fff;
+      color: var(--text-main);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    select {
+      cursor: pointer;
+      appearance: auto;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.85rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .instruction-list {
+      list-style: none;
+      margin-bottom: 2rem;
+      color: var(--text-main);
+    }
+
+    .instruction-list li {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.95rem;
+    }
+
+    .negative-marking-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 4px solid var(--danger);
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      color: #b91c1c;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #f1f5f9;
+      margin-bottom: 1.5rem;
+      gap: 10px;
+    }
+
+    .timer-box {
+      background: #fef3c7;
+      border: 1px solid var(--accent);
+      color: #b45309;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .question-text {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: pan-y;
+    }
+
+    /* Structured question formatting: multiline text and match columns */
+    .question-text,
+    .option-label span {
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+
+    .question-format-line { display: block; white-space: pre-wrap; }
+    .question-format-gap { display: block; height: .65rem; }
+
+    .question-format-heading {
+      margin: .35rem 0 .25rem;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .question-format-statement,
+    .question-format-match-left,
+    .question-format-match-right {
+      padding-left: 1.4rem;
+      text-indent: -1.4rem;
+    }
+
+    .question-format-equation {
+      margin: .35rem 0;
+      padding: .45rem .65rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .72);
+      font-family: "Times New Roman", "Cambria Math", serif;
+      font-size: 1.05em;
+    }
+
+    .match-column-table {
+      display: block;
+      width: 100%;
+      margin: .75rem 0;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .match-column-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .match-column-cell {
+      display: block;
+      min-width: 0;
+      padding: .65rem .75rem;
+      border-bottom: 1px solid #e2e8f0;
+      overflow-wrap: anywhere;
+    }
+
+    .match-column-cell:first-child { border-right: 1px solid #e2e8f0; }
+    .match-column-row:last-child .match-column-cell { border-bottom: 0; }
+
+    .match-column-heading {
+      color: var(--primary);
+      background: #dbeafe;
+      font-weight: 800;
+    }
+
+    .match-column-empty { color: transparent; }
+    .option-label > span { min-width: 0; line-height: 1.45; }
+
+    .dnd-confirmation {
+      margin-top: 1rem;
+      padding: 1rem;
+      border: 2px solid #f59e0b;
+      border-radius: 10px;
+      background: #fffbeb;
+      color: #78350f;
+    }
+
+    .dnd-confirmation label {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+      cursor: pointer;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .dnd-confirmation input {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      flex: 0 0 auto;
+    }
+
+    .dnd-error {
+      display: none;
+      margin-top: .65rem;
+      color: #b91c1c;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    .security-notice {
+      position: fixed;
+      left: 50%;
+      top: max(16px, env(safe-area-inset-top));
+      transform: translateX(-50%) translateY(-20px);
+      z-index: 9999;
+      width: min(92vw, 520px);
+      padding: 1rem;
+      border: 1px solid #fca5a5;
+      border-left: 6px solid #dc2626;
+      border-radius: 12px;
+      background: #fff;
+      color: #7f1d1d;
+      box-shadow: 0 18px 48px rgba(15, 23, 42, .28);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .security-notice.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .security-notice strong {
+      display: block;
+      margin-bottom: .25rem;
+    }
+
+    .option-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      padding: 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .option-label:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .option-label input {
+      margin-right: 12px;
+      margin-top: .2rem;
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .option-label.selected {
+      border-color: var(--primary-light);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .score-board {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    .score-card {
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      border: 1px solid #edf2f7;
+    }
+
+    .score-card h4 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .score-card p {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .security-logs-board {
+      background: #fff5f5;
+      border: 1px solid #feb2b2;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .security-logs-board h4 {
+      color: #c53030;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      text-align: center;
+    }
+
+    .security-item {
+      background: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid #fed7d7;
+    }
+
+    .security-item span {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .security-item b {
+      font-size: 1.1rem;
+      color: #9b2c2c;
+    }
+
+    .review-section {
+      margin-bottom: 2rem;
+      max-height: 350px;
+      overflow-y: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem;
+      background: #f8fafc;
+    }
+
+    .review-item {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #cbd5e1;
+    }
+
+    .review-item.correct-item {
+      border-left-color: var(--success);
+    }
+
+    .review-item.wrong-item {
+      border-left-color: var(--danger);
+    }
+
+    .rating-stars {
+      display: flex;
+      gap: 12px;
+      margin: 1rem 0 1.5rem 0;
+    }
+
+    .rating-stars i {
+      font-size: 2rem;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+
+    .rating-stars i.active {
+      color: var(--accent);
+    }
+
+    .success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .success-overlay.show {
+      display: flex;
+    }
+
+    .success-popup {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+    }
+
+    .success-popup i {
+      font-size: 4rem;
+      color: var(--success);
+      margin-bottom: 1.5rem;
+    }
+
+    .question-image-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 0 1.5rem 0;
+      width: 100%;
+    }
+
+    .question-image-wrap img {
+      display: block;
+      max-width: 100%;
+      max-height: 420px;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .subject-badge {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .vector-symbol {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding-top: 0.12em;
+      margin: 0 0.02em;
+    }
+
+    .vector-symbol::after {
+      content: "→";
+      position: absolute;
+      left: 50%;
+      top: -0.72em;
+      transform: translateX(-50%);
+      font-size: 0.78em;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .unit-vector {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding-top: 0.08em;
+      margin: 0 0.01em;
+    }
+
+    .unit-vector::before {
+      content: "ˆ";
+      position: absolute;
+      left: 50%;
+      top: -0.58em;
+      transform: translateX(-50%);
+      font-size: 0.72em;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .config-summary {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .config-summary-title {
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: .7rem;
+    }
+
+    .config-subject-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: .55rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: .88rem;
+    }
+
+    .config-subject-row:last-child {
+      border-bottom: none;
+    }
+
+    .config-subject-name {
+      font-weight: 700;
+    }
+
+    .config-subject-values {
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* Modern exam workspace */
+    #slide-3 {
+      margin: -1rem;
+    }
+
+    #slide-3 .quiz-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 1rem;
+      margin-bottom: 0;
+      border: 0;
+      border-radius: 14px 14px 0 0;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, .18);
+    }
+
+    #slide-3 #question-counter {
+      color: #e2e8f0 !important;
+      line-height: 1.5;
+    }
+
+    #slide-3 #quiz-body {
+      min-height: 420px;
+      padding: 1.35rem;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 35%);
+      border: 1px solid #e2e8f0;
+      border-top: 0;
+    }
+
+    #slide-3 .question-text {
+      padding: 1rem;
+      border-left: 5px solid var(--primary-light);
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #0f172a;
+      box-shadow: 0 4px 14px rgba(30, 58, 138, .07);
+    }
+
+    #slide-3 .option-label {
+      min-height: 58px;
+      background: #ffffff;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, .05);
+    }
+
+    #slide-3 .option-label.selected {
+      border-color: #2563eb;
+      background: #dbeafe;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    #slide-3 > .btn-group {
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      margin-top: 0;
+      padding: .9rem 1rem calc(.9rem + env(safe-area-inset-bottom));
+      border-top: 1px solid #e2e8f0;
+      border-radius: 0 0 14px 14px;
+      background: rgba(255, 255, 255, .96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 -8px 24px rgba(15, 23, 42, .08);
+    }
+
+    .exam-watermark {
+      position: fixed;
+      right: 10px;
+      bottom: calc(82px + env(safe-area-inset-bottom));
+      z-index: 15;
+      max-width: 72vw;
+      padding: .35rem .55rem;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, .07);
+      color: rgba(15, 23, 42, .38);
+      font-size: .68rem;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @media (max-width: 600px) {
+      .question-format-statement,
+      .question-format-match-left,
+      .question-format-match-right {
+        padding-left: 1.2rem;
+        text-indent: -1.2rem;
+      }
+
+      .question-format-equation {
+        padding: .4rem .5rem;
+        overflow-x: auto;
+      }
+
+      .match-column-cell {
+        padding: .5rem;
+        font-size: .9em;
+      }
+
+      body {
+        align-items: stretch;
+        background: #f8fafc;
+      }
+
+      .test-container {
+        padding: 1rem;
+        border-radius: 0;
+        min-height: 100vh;
+        box-shadow: none;
+      }
+
+      #slide-3 {
+        margin: -1rem;
+      }
+
+      .quiz-header {
+        align-items: flex-start;
+      }
+
+      .timer-box {
+        font-size: .85rem;
+        padding: .45rem .7rem;
+      }
+
+      #slide-3 #quiz-body {
+        min-height: calc(100vh - 148px);
+        padding: 1rem;
+      }
+
+      #slide-3 .question-text {
+        font-size: 1.05rem;
+        padding: .85rem;
+        margin-bottom: 1rem;
+      }
+
+      #slide-3 .option-label {
+        padding: .85rem;
+        min-height: 54px;
+        font-size: .94rem;
+      }
+
+      #slide-3 > .btn-group .btn {
+        padding: .8rem 1rem;
+        font-size: .9rem;
+      }
+
+      .score-board {
+        gap: 8px;
+        padding: 1rem;
+      }
+
+      .security-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="test-container">
+
+    <!-- =========================================================
+         SLIDE 1: LOGIN
+    ========================================================== -->
+    <div class="slide active" id="slide-1">
+
+      <h2 style="justify-content:center; flex-direction:column; text-align:center; gap:10px;">
+        <img
+          src="data:image/png;base64,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"
+          alt="Life Line Teaching Cottage (LLTC) Logo"
+          style="width:100px;height:100px;object-fit:contain;border-radius:50%;display:block;"
+        >
+        <span>Life Line Teaching Cottage (LLTC)</span>
+      </h2>
+
+      <p class="subtitle">
+        Enter your credentials to initialize the test portal
+      </p>
+
+      <form id="login-form" autocomplete="off" onsubmit="validateAndNext(event)">
+
+        <div class="form-group">
+          <label for="student-name">Full Name *</label>
+
+          <input
+            type="text"
+            id="student-name"
+            placeholder="Enter your full name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+
+          <label for="student-email">Gmail Address *</label>
+
+          <input
+            type="email"
+            id="student-email"
+            autocomplete="new-password"
+            required
+          >
+
+          <div class="error-msg" id="email-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Only official @gmail.com addresses are supported.
+          </div>
+
+          <div class="error-msg" id="duplicate-error">
+            <i class="fa-solid fa-ban"></i>
+            Access Denied: This Gmail address has already submitted this test!
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="batch-category">Batch Category *</label>
+
+          <select id="batch-category" required>
+            <option value="" selected disabled>
+              Select Batch Category
+            </option>
+            <option value="R">R</option>
+            <option value="D">D</option>
+          </select>
+
+          <div class="error-msg" id="batch-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Please select your batch category.
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="student-class">Class *</label>
+
+          <select id="student-class" required>
+            <option value="" selected disabled>
+              Select Class
+            </option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+
+          <div class="error-msg" id="class-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Please select your class.
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="student-address">Address *</label>
+
+          <textarea
+            id="student-address"
+            rows="3"
+            maxlength="250"
+            placeholder="Enter your address"
+            required
+            style="
+              width:100%;
+              padding:12px 13px;
+              border:2px solid var(--border);
+              border-radius:9px;
+              outline:none;
+              background:#fff;
+              color:var(--text);
+              resize:vertical;
+            "
+          ></textarea>
+
+          <div class="error-msg" id="address-error">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Please enter your address.
+          </div>
+
+        </div>
+
+        <div style="text-align:right;margin-top:2rem;">
+
+          <button
+            type="submit"
+            id="proceed-btn"
+            class="btn"
+          >
+            Proceed to Instructions
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+
+    <!-- =========================================================
+         SLIDE 2: INSTRUCTIONS
+    ========================================================== -->
+    <div class="slide" id="slide-2">
+
+      <h2>
+        <i class="fa-solid fa-clipboard-list"></i>
+        Test Instructions
+      </h2>
+
+      <p class="subtitle">
+        Please read all instructions completely before starting.
+      </p>
+
+      <div class="negative-marking-box">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        Warning: Each correct answer carries +4 marks.
+        There is currently no negative marking.
+        Tab-switch security is active during the test.
+      </div>
+
+      <div id="config-summary" class="config-summary">
+
+        <div class="config-summary-title">
+          <i class="fa-solid fa-sliders"></i>
+          Current Test Configuration
+        </div>
+
+        <div id="config-summary-content"></div>
+
+      </div>
+
+
+      <ul class="instruction-list">
+
+        <li>
+          <i
+            class="fa-solid fa-circle-chevron-right"
+            style="color:var(--primary-light);"
+          ></i>
+
+          <span>
+            हर student के लिए questions independently और securely randomize होंगे।
+          </span>
+        </li>
+
+
+
+      </ul>
+
+      <div class="dnd-confirmation">
+        <div style="font-weight:800;margin-bottom:.75rem;">
+          ⚠️ महत्वपूर्ण सुरक्षा निर्देश
+        </div>
+        <label for="dnd-confirm-checkbox">
+          <input
+            type="checkbox"
+            id="dnd-confirm-checkbox"
+            onchange="confirmDndReady(this.checked)"
+          >
+          <span>
+            मैंने अपने phone में Do Not Disturb (DND) चालू कर दिया है और
+            DND settings में <b>Calls: None</b> तथा
+            <b>Repeat callers: Off</b> किया है। Notifications और floating
+            notification pop-ups भी बंद हैं।
+          </span>
+        </label>
+        <div class="dnd-error" id="dnd-confirm-error">
+          Test शुरू करने से पहले DND चालू करके ऊपर confirmation चुनना अनिवार्य है।
+        </div>
+        <p style="margin:.75rem 0 0;font-size:.88rem;line-height:1.5;">
+          Test के दौरान call, notification या किसी अन्य interruption के कारण
+          test screen का focus हटने पर उसे security violation माना जाएगा और
+          निर्धारित action लागू होगा। DND ठीक से चालू करने की जिम्मेदारी
+          student की होगी।
+        </p>
+      </div>
+
+      <div class="btn-group">
+
+        <button
+          class="btn btn-secondary"
+          onclick="changeSlide(1)"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          Back
+        </button>
+
+        <button
+          class="btn"
+          id="start-exam-btn"
+          onclick="startTestExam()"
+          disabled
+        >
+          Start Examination
+          <i class="fa-solid fa-vial"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         SLIDE 3: ACTIVE TEST
+    ========================================================== -->
+    <div class="slide" id="slide-3">
+
+      <div class="exam-watermark" id="exam-watermark"></div>
+
+      <div class="quiz-header">
+
+        <span
+          id="question-counter"
+          style="font-weight:600;color:var(--text-muted);"
+        >
+          Question Loading...
+        </span>
+
+        <div class="timer-box">
+
+          <i class="fa-regular fa-clock"></i>
+
+          <span id="timer-display">
+            30:00
+          </span>
+
+        </div>
+
+      </div>
+
+      <div id="quiz-body">
+
+        <div
+          class="question-text"
+          id="q-text"
+        >
+          Parsing dataset...
+        </div>
+
+        <div
+          class="question-image-wrap"
+          id="question-image-block"
+          style="display:none;"
+        ></div>
+
+        <div
+          class="option-container"
+          id="options-block"
+        ></div>
+
+      </div>
+
+      <div class="btn-group">
+
+        <button
+          class="btn btn-secondary"
+          id="btn-prev"
+          onclick="handlePrevious()"
+        >
+          <i class="fa-solid fa-angle-left"></i>
+          Previous
+        </button>
+
+        <button
+          class="btn"
+          id="btn-next"
+          onclick="handleNext()"
+        >
+          Save & Next
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         SLIDE 4: RESULTS
+    ========================================================== -->
+    <div class="slide" id="slide-4">
+
+      <h2>
+        <i class="fa-solid fa-square-poll-horizontal"></i>
+        Performance Dashboard
+      </h2>
+
+      <p class="subtitle">
+        Your metrics and evaluation sheet.
+      </p>
+
+      <div class="score-board">
+
+        <div class="score-card">
+          <h4>Final Score</h4>
+          <p
+            id="res-score"
+            style="color:var(--primary-light);"
+          >
+            0 / 0
+          </p>
+        </div>
+
+        <div class="score-card">
+          <h4>Accuracy</h4>
+          <p
+            id="res-accuracy"
+            style="color:var(--success);"
+          >
+            0%
+          </p>
+        </div>
+
+        <div class="score-card">
+          <h4>Correct Answers</h4>
+          <p
+            id="res-correct"
+            style="color:var(--success);"
+          >
+            0
+          </p>
+        </div>
+
+        <div class="score-card">
+          <h4>Wrong Answers</h4>
+          <p
+            id="res-wrong"
+            style="color:var(--danger);"
+          >
+            0
+          </p>
+        </div>
+
+      </div>
+
+      <div class="security-logs-board">
+
+        <h4>
+          <i class="fa-solid fa-shield-halved"></i>
+          Security Audit Logs
+        </h4>
+
+        <div class="security-grid">
+
+          <div class="security-item">
+            <span>Tab Switches</span>
+            <b id="log-tab-switches">0</b>
+          </div>
+
+          <div class="security-item">
+            <span>Copy/Paste</span>
+            <b id="log-copy-paste">0</b>
+          </div>
+
+          <div class="security-item">
+            <span>Penalties</span>
+            <b id="log-penalty">-0 Marks</b>
+          </div>
+
+        </div>
+
+      </div>
+
+      <label style="margin-bottom:.5rem;display:block;">
+        Evaluation Ledger
+      </label>
+
+      <div
+        class="review-section"
+        id="review-ledger-container"
+      ></div>
+
+      <form
+        id="feedback-form"
+        onsubmit="submitFinalFeedback(event)"
+      >
+
+        <div class="form-group">
+
+          <label>
+            Overall Experience Rating *
+          </label>
+
+          <div
+            class="rating-stars"
+            id="stars-container"
+          >
+
+            <i
+              class="fa-solid fa-star"
+              data-value="1"
+            ></i>
+
+            <i
+              class="fa-solid fa-star"
+              data-value="2"
+            ></i>
+
+            <i
+              class="fa-solid fa-star"
+              data-value="3"
+            ></i>
+
+            <i
+              class="fa-solid fa-star"
+              data-value="4"
+            ></i>
+
+            <i
+              class="fa-solid fa-star"
+              data-value="5"
+            ></i>
+
+          </div>
+
+          <div
+            class="error-msg"
+            id="rating-error"
+          >
+            <i class="fa-solid fa-circle-exclamation"></i>
+            Rating required.
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="doubt-input">
+            Doubts / Queries? (Optional)
+          </label>
+
+          <textarea
+            id="doubt-input"
+            rows="2"
+            placeholder="Describe doubt..."
+          ></textarea>
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="feedback-input">
+            Feedback (Optional)
+          </label>
+
+          <textarea
+            id="feedback-input"
+            rows="2"
+            placeholder="Your feedback..."
+          ></textarea>
+
+        </div>
+
+        <button
+          type="submit"
+          id="submit-all-btn"
+          class="btn"
+          style="width:100%;justify-content:center;"
+        >
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          Submit & Complete
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       SUCCESS MODAL
+  ========================================================== -->
+  <div
+    class="success-overlay"
+    id="success-modal"
+  >
+
+    <div class="success-popup">
+
+      <i class="fa-solid fa-circle-check"></i>
+
+      <h3>
+        Test Submitted Successfully!
+      </h3>
+
+      <p>
+        Your performance metrics and proctored security log
+        have been securely synced to the Admin Panel.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       FIREBASE + APPLICATION
+  ========================================================== -->
+  <script src="security.js"></script>
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      getDocs,
+      query,
+      where,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+
+    /* =========================================================
+       FIREBASE CONFIG
+    ========================================================== */
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA8XeHrqnYP1FEpwpqUZEdKsVAJGDw2r7o",
+      authDomain: "physics-test-series-405c7.firebaseapp.com",
+      projectId: "physics-test-series-405c7",
+      storageBucket: "physics-test-series-405c7.firebasestorage.app",
+      messagingSenderId: "758620061190",
+      appId: "1:758620061190:web:b663c02fa5f01c6d8b8d87",
+      measurementId: "G-5CB60388J5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+
+    /* =========================================================
+       GLOBAL STATE
+    ========================================================== */
+
+    let questionsList = [];
+    let questionPool = [];
+    let reserveQuestionsBySubject = {};
+    let usedQuestionIds = new Set();
+
+    let currentQuestionIndex = 0;
+
+    let selectedAnswers = {};
+
+    let timerInterval = null;
+
+    let selectedRating = 0;
+
+    let currentStudentName = "";
+    let currentStudentEmail = "";
+    let currentBatchCategory = "";
+    let currentStudentClass = "";
+    let currentStudentAddress = "";
+
+    let examStartTime = 0;
+
+    let finalizedScoreString = "0/0";
+
+    let calculatedScore = 0;
+    let totalScore = 0;
+
+    let correctCountFinal = 0;
+    let wrongCountFinal = 0;
+
+    let isExamActive = false;
+
+    let examConfigData = null;
+
+    let hasSubmitted = false;
+
+    let performanceShown = false;
+
+    let resultDocId = null;
+
+    let resultSaved = false;
+
+
+    /*
+      Subject-wise configuration.
+
+      Example:
+
+      subjectSettings: {
+        chemistry: {
+          poolQuestions: 30,
+          displayQuestions: 25
+        },
+
+        physics: {
+          poolQuestions: 30,
+          displayQuestions: 25
+        },
+
+        biology: {
+          poolQuestions: 60,
+          displayQuestions: 50
+        }
+      }
+    */
+
+    let subjectConfig = {
+      chemistry: {
+        poolQuestions: 25,
+        displayQuestions: 25
+      },
+
+      physics: {
+        poolQuestions: 25,
+        displayQuestions: 25
+      },
+
+      biology: {
+        poolQuestions: 50,
+        displayQuestions: 50
+      }
+    };
+
+
+
+    let securityConfig = {
+      maxTabSwitches: 3,
+      replaceQuestionOnSwitch: true
+    };
+
+    let tabSwitches =
+      parseInt(
+        sessionStorage.getItem("tabSwitches") || "0",
+        10
+      );
+
+    let copiesAttempted =
+      parseInt(
+        sessionStorage.getItem("copiesAttempted") || "0",
+        10
+      );
+
+    let refreshes =
+      parseInt(
+        sessionStorage.getItem("refreshes") || "0",
+        10
+      );
+
+    let penaltiesApplied = 0;
+
+    let securityEvents = [];
+
+
+    /* =========================================================
+       SECURITY STATE
+    ========================================================== */
+
+    function saveSecurityState() {
+
+      sessionStorage.setItem(
+        "tabSwitches",
+        String(tabSwitches)
+      );
+
+      sessionStorage.setItem(
+        "copiesAttempted",
+        String(copiesAttempted)
+      );
+
+      sessionStorage.setItem(
+        "refreshes",
+        String(refreshes)
+      );
+
+      sessionStorage.setItem(
+        "penaltiesApplied",
+        "0"
+      );
+    }
+
+
+    function resetAttemptState() {
+
+      tabSwitches = 0;
+      copiesAttempted = 0;
+      refreshes = 0;
+      penaltiesApplied = 0;
+
+      securityEvents = [];
+
+      saveSecurityState();
+
+      selectedAnswers = {};
+
+      reserveQuestionsBySubject = {};
+
+      usedQuestionIds = new Set();
+
+      selectedRating = 0;
+
+      hasSubmitted = false;
+
+      performanceShown = false;
+
+      resultDocId = null;
+
+      resultSaved = false;
+    }
+
+
+    /* =========================================================
+       ARRAY SHUFFLE
+    ========================================================== */
+
+    function shuffleArray(array) {
+
+      const result = [...array];
+
+      for (
+        let i = result.length - 1;
+        i > 0;
+        i--
+      ) {
+
+        let j;
+
+        if (window.crypto?.getRandomValues) {
+          const randomValue = new Uint32Array(1);
+          window.crypto.getRandomValues(randomValue);
+          j = randomValue[0] % (i + 1);
+        } else {
+          j = Math.floor(Math.random() * (i + 1));
+        }
+
+        [
+          result[i],
+          result[j]
+        ] = [
+          result[j],
+          result[i]
+        ];
+      }
+
+      return result;
+    }
+
+
+    /* =========================================================
+       QUESTION HELPERS
+    ========================================================== */
+
+    function getQuestionText(q) {
+
+      return q?.question ??
+             q?.q ??
+             "";
+    }
+
+
+    function getCorrectAnswer(q) {
+
+      return q?.a ??
+             q?.correct ??
+             q?.ans ??
+             "";
+    }
+
+
+    function escapeHTML(value) {
+
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+
+    /*
+      Keeps Physics notation such as:
+
+      A⃗
+      B⃗
+      î
+      ĵ
+      k̂
+
+      readable.
+    */
+
+    function physicsInlineToHTML(value) {
+
+      let s = escapeHTML(value);
+
+      s = s.replace(
+        /([A-Za-z])⃗/gu,
+        '<span class="vector-symbol">$1</span>'
+      );
+
+      s = s.replace(
+        /î/gu,
+        '<span class="unit-vector">i</span>'
+      );
+
+      s = s.replace(
+        /ĵ/gu,
+        '<span class="unit-vector">j</span>'
+      );
+
+      s = s.replace(
+        /k̂/gu,
+        '<span class="unit-vector">k</span>'
+      );
+
+      return s;
+    }
+
+
+    function formatNormalQuestion(value) {
+
+      return value
+        .split("\n")
+        .map(rawLine => {
+
+          const line = rawLine.trim();
+
+          if (!line) {
+            return '<span class="question-format-gap" aria-hidden="true"></span>';
+          }
+
+          let className = "question-format-line";
+
+          if (
+            /^(List|Column)[-\s]?(I|II)\b/i.test(line) ||
+            /^Choose the correct/i.test(line)
+          ) {
+            className += " question-format-heading";
+          } else if (
+            /^(I|II|III|IV|V|VI|VII|VIII|IX|X)[.)]\s+/.test(line)
+          ) {
+            className += " question-format-statement";
+          } else if (/^[A-R][.)]\s+/.test(line)) {
+            className += " question-format-match-left";
+          } else if (
+            /^(i|ii|iii|iv|v|vi|vii|viii|ix|x)[.)]\s+/.test(line)
+          ) {
+            className += " question-format-match-right";
+          } else if (/[→⇌⟶]/u.test(line)) {
+            className += " question-format-equation";
+          }
+
+          return `<span class="${className}">${physicsInlineToHTML(line)}</span>`;
+        })
+        .join("");
+    }
+
+
+    function formatMatchColumns(value) {
+
+      const lines = value
+        .split("\n")
+        .map(line => line.trim());
+
+      const columnOneIndex = lines.findIndex(line =>
+        /^(Column|List)[-\s]?I$/i.test(line)
+      );
+
+      const columnTwoIndex = lines.findIndex((line, index) =>
+        index > columnOneIndex &&
+        /^(Column|List)[-\s]?II$/i.test(line)
+      );
+
+      if (
+        columnOneIndex === -1 ||
+        columnTwoIndex === -1 ||
+        columnTwoIndex <= columnOneIndex
+      ) {
+        return formatNormalQuestion(value);
+      }
+
+      const introduction = lines
+        .slice(0, columnOneIndex)
+        .filter(Boolean);
+
+      const leftItems = lines
+        .slice(columnOneIndex + 1, columnTwoIndex)
+        .filter(Boolean);
+
+      const rightItems = lines
+        .slice(columnTwoIndex + 1)
+        .filter(Boolean);
+
+      if (!leftItems.length || !rightItems.length) {
+        return formatNormalQuestion(value);
+      }
+
+      const output = introduction.map(line =>
+        `<span class="question-format-line">${physicsInlineToHTML(line)}</span>`
+      );
+
+      output.push('<span class="match-column-table">');
+      output.push(
+        '<span class="match-column-row">' +
+          '<span class="match-column-cell match-column-heading">' +
+            physicsInlineToHTML(lines[columnOneIndex]) +
+          '</span>' +
+          '<span class="match-column-cell match-column-heading">' +
+            physicsInlineToHTML(lines[columnTwoIndex]) +
+          '</span>' +
+        '</span>'
+      );
+
+      const rowCount = Math.max(leftItems.length, rightItems.length);
+
+      for (let index = 0; index < rowCount; index += 1) {
+
+        const leftItem = leftItems[index] || "";
+        const rightItem = rightItems[index] || "";
+
+        output.push(
+          '<span class="match-column-row">' +
+            `<span class="match-column-cell${leftItem ? "" : " match-column-empty"}">` +
+              physicsInlineToHTML(leftItem || "—") +
+            '</span>' +
+            `<span class="match-column-cell${rightItem ? "" : " match-column-empty"}">` +
+              physicsInlineToHTML(rightItem || "—") +
+            '</span>' +
+          '</span>'
+        );
+      }
+
+      output.push('</span>');
+
+      return output.join("");
+    }
+
+
+    function physicsToHTML(value) {
+
+      const normalizedText = String(value ?? "")
+        .replace(/\r\n?/g, "\n");
+
+      const hasColumnOne =
+        /^(Column|List)[-\s]?I$/im.test(normalizedText);
+
+      const hasColumnTwo =
+        /^(Column|List)[-\s]?II$/im.test(normalizedText);
+
+      if (hasColumnOne && hasColumnTwo) {
+        return formatMatchColumns(normalizedText);
+      }
+
+      return formatNormalQuestion(normalizedText);
+    }
+
+
+    /* =========================================================
+       SUBJECT HELPERS
+    ========================================================== */
+
+    const SUBJECT_FILES = {
+      chemistry: "question/chemistry.html",
+      physics: "question/physics.html",
+      biology: "question/biology.html"
+    };
+
+
+    const SUBJECT_LABELS = {
+      chemistry: "Chemistry",
+      physics: "Physics",
+      biology: "Biology"
+    };
+
+
+    /*
+      This function reads the Admin Panel configuration.
+
+      Primary expected format:
+
+      subjectSettings: {
+        chemistry: {
+          poolQuestions: 25,
+          displayQuestions: 25
+        },
+        physics: {
+          poolQuestions: 30,
+          displayQuestions: 25
+        },
+        biology: {
+          poolQuestions: 60,
+          displayQuestions: 50
+        }
+      }
+
+      It also supports alternate property names so that
+      minor naming differences in admin.html do not break index.html.
+    */
+
+    function extractSubjectSettings(rawSettings, subject) {
+
+      if (!rawSettings || typeof rawSettings !== "object") {
+        return null;
+      }
+
+      const possibleKeys = [
+        subject,
+        subject.toLowerCase(),
+        subject.toUpperCase(),
+        subject.charAt(0).toUpperCase() + subject.slice(1)
+      ];
+
+      let data = null;
+
+      for (const key of possibleKeys) {
+
+        if (
+          rawSettings[key] &&
+          typeof rawSettings[key] === "object"
+        ) {
+
+          data = rawSettings[key];
+          break;
+        }
+      }
+
+      if (!data) {
+        return null;
+      }
+
+      const poolCandidates = [
+        data.poolQuestions,
+        data.totalPoolQuestions,
+        data.poolQuestion,
+        data.pool,
+        data.totalPool,
+        data.questionPool,
+        data.questionPoolLimit
+      ];
+
+      const displayCandidates = [
+        data.displayQuestions,
+        data.studentDisplayQuestions,
+        data.studentDisplayLimit,
+        data.displayQuestion,
+        data.display,
+        data.studentLimit,
+        data.questionLimit,
+        data.limit
+      ];
+
+      let pool = null;
+      let display = null;
+
+      for (const value of poolCandidates) {
+
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          Number.isFinite(Number(value))
+        ) {
+
+          pool = Number(value);
+          break;
+        }
+      }
+
+      for (const value of displayCandidates) {
+
+        if (
+          value !== undefined &&
+          value !== null &&
+          value !== "" &&
+          Number.isFinite(Number(value))
+        ) {
+
+          display = Number(value);
+          break;
+        }
+      }
+
+      if (
+        pool === null &&
+        display === null
+      ) {
+        return null;
+      }
+
+      return {
+        poolQuestions:
+          pool !== null
+            ? Math.max(0, Math.floor(pool))
+            : null,
+
+        displayQuestions:
+          display !== null
+            ? Math.max(0, Math.floor(display))
+            : null
+      };
+    }
+
+
+    function readAdminSubjectSettings(config) {
+
+      /*
+        Possible main containers.
+      */
+
+      const containers = [
+        config?.subjectSettings,
+        config?.subjects,
+        config?.subjectConfig,
+        config?.questionSettings,
+        config?.questionConfig
+      ];
+
+      let foundContainer = null;
+
+      for (const container of containers) {
+
+        if (
+          container &&
+          typeof container === "object"
+        ) {
+
+          foundContainer = container;
+          break;
+        }
+      }
+
+
+      const nextConfig = {
+        chemistry: {
+          ...subjectConfig.chemistry
+        },
+
+        physics: {
+          ...subjectConfig.physics
+        },
+
+        biology: {
+          ...subjectConfig.biology
+        }
+      };
+
+
+      for (const subject of [
+        "chemistry",
+        "physics",
+        "biology"
+      ]) {
+
+        let setting = null;
+
+        if (foundContainer) {
+          setting =
+            extractSubjectSettings(
+              foundContainer,
+              subject
+            );
+        }
+
+
+        /*
+          Also support direct fields such as:
+
+          chemistryPoolQuestions
+          chemistryDisplayQuestions
+        */
+
+        if (!setting) {
+
+          const directPoolKeys = [
+            `${subject}PoolQuestions`,
+            `${subject}TotalPoolQuestions`,
+            `${subject}Pool`
+          ];
+
+          const directDisplayKeys = [
+            `${subject}DisplayQuestions`,
+            `${subject}StudentDisplayQuestions`,
+            `${subject}DisplayLimit`,
+            `${subject}StudentLimit`
+          ];
+
+          let directPool = null;
+          let directDisplay = null;
+
+          for (const key of directPoolKeys) {
+
+            if (
+              config?.[key] !== undefined &&
+              Number.isFinite(Number(config[key]))
+            ) {
+
+              directPool =
+                Number(config[key]);
+
+              break;
+            }
+          }
+
+          for (const key of directDisplayKeys) {
+
+            if (
+              config?.[key] !== undefined &&
+              Number.isFinite(Number(config[key]))
+            ) {
+
+              directDisplay =
+                Number(config[key]);
+
+              break;
+            }
+          }
+
+          if (
+            directPool !== null ||
+            directDisplay !== null
+          ) {
+
+            setting = {
+              poolQuestions: directPool,
+              displayQuestions: directDisplay
+            };
+          }
+        }
+
+
+        if (setting) {
+
+          if (
+            setting.poolQuestions !== null &&
+            Number.isFinite(
+              Number(setting.poolQuestions)
+            )
+          ) {
+
+            nextConfig[subject].poolQuestions =
+              Math.max(
+                0,
+                Math.floor(
+                  Number(setting.poolQuestions)
+                )
+              );
+          }
+
+
+          if (
+            setting.displayQuestions !== null &&
+            Number.isFinite(
+              Number(setting.displayQuestions)
+            )
+          ) {
+
+            nextConfig[subject].displayQuestions =
+              Math.max(
+                0,
+                Math.floor(
+                  Number(setting.displayQuestions)
+                )
+              );
+          }
+        }
+      }
+
+
+      /*
+        Make sure display cannot be greater than pool.
+
+        If admin accidentally sets:
+
+        Pool = 20
+        Display = 25
+
+        then display is automatically reduced to 20.
+      */
+
+      for (const subject of [
+        "chemistry",
+        "physics",
+        "biology"
+      ]) {
+
+        const configItem =
+          nextConfig[subject];
+
+        if (
+          configItem.displayQuestions >
+          configItem.poolQuestions
+        ) {
+
+          configItem.displayQuestions =
+            configItem.poolQuestions;
+        }
+      }
+
+
+      subjectConfig = nextConfig;
+
+      return subjectConfig;
+    }
+
+
+    /* =========================================================
+       CONFIG SUMMARY ON INSTRUCTION PAGE
+    ========================================================== */
+
+    function renderConfigSummary() {
+
+      const container =
+        document.getElementById(
+          "config-summary-content"
+        );
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      const subjects = [
+        "chemistry",
+        "physics",
+        "biology"
+      ];
+
+      let totalDisplay = 0;
+
+      subjects.forEach(subject => {
+
+        const cfg =
+          subjectConfig[subject];
+
+        if (
+          !cfg ||
+          cfg.displayQuestions <= 0
+        ) {
+          return;
+        }
+
+        totalDisplay +=
+          cfg.displayQuestions;
+
+        const row =
+          document.createElement("div");
+
+        row.className =
+          "config-subject-row";
+
+        row.innerHTML = `
+          <span class="config-subject-name">
+            ${SUBJECT_LABELS[subject]}
+          </span>
+
+          <span class="config-subject-values">
+            Questions: <b>${cfg.displayQuestions}</b>
+          </span>
+        `;
+
+        container.appendChild(row);
+      });
+
+
+      if (!container.children.length) {
+
+        container.innerHTML = `
+          <div style="color:#ef4444;font-size:.9rem;">
+            No questions are currently available for this test.
+          </div>
+        `;
+
+        return;
+      }
+
+
+      const totalRow =
+        document.createElement("div");
+
+      totalRow.style.cssText =
+        "margin-top:.7rem;padding-top:.7rem;border-top:2px solid #cbd5e1;font-weight:700;font-size:.9rem;display:flex;justify-content:space-between;";
+
+      totalRow.innerHTML = `
+        <span>Total Questions</span>
+        <span>${totalDisplay}</span>
+      `;
+
+      container.appendChild(totalRow);
+    }
+
+
+    /* =========================================================
+       SUBJECT QUESTION TAGGING
+    ========================================================== */
+
+    function tagSubjectQuestions(
+      list,
+      subject
+    ) {
+
+      return list.map(
+        (q, index) => ({
+          ...q,
+          __subject: subject,
+          __sourceIndex: index
+        })
+      );
+    }
+
+
+    function sameSubjectIndices(subject) {
+
+      const result = [];
+
+      questionsList.forEach(
+        (q, idx) => {
+
+          if (
+            q?.__subject === subject
+          ) {
+            result.push(idx);
+          }
+        }
+      );
+
+      return result;
+    }
+
+
+    /* =========================================================
+       SECURITY
+    ========================================================== */
+
+    let securityNoticeTimer = null;
+
+    function showSecurityNotice(title, message) {
+      let notice = document.getElementById("security-notice");
+
+      if (!notice) {
+        notice = document.createElement("div");
+        notice.id = "security-notice";
+        notice.className = "security-notice";
+        notice.setAttribute("role", "alert");
+        document.body.appendChild(notice);
+      }
+
+      notice.innerHTML =
+        `<strong>${escapeHTML(title)}</strong>` +
+        `<span>${escapeHTML(message)}</span>`;
+
+      notice.classList.add("show");
+      window.clearTimeout(securityNoticeTimer);
+      securityNoticeTimer = window.setTimeout(
+        () => notice.classList.remove("show"),
+        5000
+      );
+    }
+
+    /*
+      Tab-switch behavior:
+
+      1st switch
+        -> current question changes
+
+      2nd switch
+        -> current question changes
+
+      3rd switch
+        -> exam automatically submitted
+    */
+
+    function handleEnvironmentViolation(event) {
+
+        if (!isExamActive || hasSubmitted) return;
+
+        securityEvents.push(event);
+
+        tabSwitches++;
+
+        saveSecurityState();
+
+
+        const minSwitches = 1;
+        const maxSwitches =
+          Number(securityConfig.maxTabSwitches) || 3;
+
+
+        if (
+          tabSwitches >= maxSwitches
+        ) {
+
+          showSecurityNotice(
+            "Security limit reached",
+            "Your examination is being submitted automatically."
+          );
+
+          calculateAndShowResults(
+            "auto_submit_tab_switch"
+          );
+
+          return;
+        }
+
+
+        if (
+          tabSwitches >= minSwitches
+        ) {
+
+          // Replace only when enabled by the Admin Panel.
+          const questionWasReplaced =
+            securityConfig.replaceQuestionOnSwitch
+              ? replaceCurrentQuestion(event.reason)
+              : false;
+
+          showSecurityNotice(
+            `Security warning ${tabSwitches}`,
+            questionWasReplaced
+              ? "Suspicious activity detected. The current question was replaced randomly."
+              : "Suspicious activity detected and recorded."
+          );
+
+        }
+
+    }
+
+
+    document.addEventListener(
+      "copy",
+      (e) => {
+
+        if (!isExamActive) return;
+
+        e.preventDefault();
+
+        copiesAttempted++;
+
+        securityEvents.push({
+          reason: "COPY_ATTEMPT",
+          severity: "suspicious",
+          time: Date.now()
+        });
+
+        saveSecurityState();
+
+        alert(
+          "Copying test questions is disabled during the examination."
+        );
+      }
+    );
+
+
+    document.addEventListener(
+      "paste",
+      (e) => {
+
+        if (!isExamActive) return;
+
+        e.preventDefault();
+
+        copiesAttempted++;
+
+        saveSecurityState();
+
+        alert(
+          "Pasting content is disabled during the examination."
+        );
+      }
+    );
+
+
+    document.addEventListener(
+      "contextmenu",
+      (event) =>
+        event.preventDefault()
+    );
+
+
+    document.addEventListener(
+      "keydown",
+      (e) => {
+
+        if (!isExamActive) return;
+
+
+        if (
+          (e.ctrlKey || e.metaKey) &&
+          ["p", "c", "u"]
+            .includes(
+              e.key.toLowerCase()
+            )
+        ) {
+
+          e.preventDefault();
+        }
+
+
+        if (e.key === "F12") {
+          e.preventDefault();
+        }
+
+
+        if (
+          (e.ctrlKey || e.metaKey) &&
+          e.shiftKey &&
+          ["i", "j", "c"]
+            .includes(
+              e.key.toLowerCase()
+            )
+        ) {
+
+          e.preventDefault();
+        }
+
+      }
+    );
+
+
+    window.addEventListener(
+      "beforeunload",
+      () => {
+
+        if (!isExamActive) return;
+
+        refreshes++;
+
+        saveSecurityState();
+      }
+    );
+
+
+    /* =========================================================
+       EXAM WINDOW CONFIG
+    ========================================================== */
+
+    async function checkOverallExamWindow() {
+
+      try {
+
+        const snap =
+          await getDoc(
+            doc(
+              db,
+              "exam_config",
+              "current_test"
+            )
+          );
+
+
+        if (!snap.exists()) {
+
+          examConfigData = {};
+
+          readAdminSubjectSettings(
+            examConfigData
+          );
+
+          renderConfigSummary();
+
+          return true;
+        }
+
+
+        examConfigData =
+          snap.data();
+
+
+        readAdminSubjectSettings(
+          examConfigData
+        );
+
+        renderConfigSummary();
+
+
+        const now = Date.now();
+
+        const start =
+          Number(
+            examConfigData.windowStart ||
+            0
+          );
+
+        const end =
+          Number(
+            examConfigData.windowEnd ||
+            Infinity
+          );
+
+
+        if (
+          start &&
+          now < start
+        ) {
+
+          showTimeStatusOverlay(
+            "Test has not started yet!",
+            `This test will open at ${new Date(start).toLocaleString("en-IN")}`
+          );
+
+          return false;
+        }
+
+
+        if (
+          end !== Infinity &&
+          now > end
+        ) {
+
+          showTimeStatusOverlay(
+            "Test window is closed",
+            "You can no longer attempt this test."
+          );
+
+          return false;
+        }
+
+
+        return true;
+
+      } catch (err) {
+
+        console.error(
+          "Window Check Error:",
+          err
+        );
+
+        return true;
+      }
+    }
+
+
+    function showTimeStatusOverlay(
+      title,
+      msg
+    ) {
+
+      document.body.innerHTML = `
+        <div
+          style="
+            position:fixed;
+            inset:0;
+            background:#0f172a;
+            color:#fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-direction:column;
+            z-index:99999;
+            text-align:center;
+            padding:20px;
+          "
+        >
+
+          <i
+            class="fa-solid fa-clock-rotate-left"
+            style="
+              font-size:4rem;
+              color:#ef4444;
+              margin-bottom:1rem;
+            "
+          ></i>
+
+          <h1
+            style="
+              font-size:2rem;
+              margin-bottom:.5rem;
+            "
+          >
+            ${escapeHTML(title)}
+          </h1>
+
+          <p
+            style="
+              color:#94a3b8;
+              font-size:1.2rem;
+            "
+          >
+            ${escapeHTML(msg)}
+          </p>
+
+        </div>
+      `;
+    }
+
+
+    /* =========================================================
+       SLIDES
+    ========================================================== */
+
+    window.changeSlide =
+      (slideNumber) => {
+
+        document
+          .querySelectorAll(".slide")
+          .forEach(
+            s =>
+              s.classList.remove(
+                "active"
+              )
+          );
+
+
+        const target =
+          document.getElementById(
+            `slide-${slideNumber}`
+          );
+
+
+        if (target) {
+          target.classList.add(
+            "active"
+          );
+        }
+
+
+        if (
+          slideNumber === 4
+        ) {
+
+          performanceShown = true;
+        }
+      };
+
+
+    /* =========================================================
+       LOGIN
+    ========================================================== */
+
+    window.validateAndNext =
+      async (e) => {
+
+        e.preventDefault();
+
+
+        const isWindowOpen =
+          await checkOverallExamWindow();
+
+
+        if (!isWindowOpen) {
+          return;
+        }
+
+
+        const nameInput =
+          document
+            .getElementById(
+              "student-name"
+            )
+            .value
+            .trim();
+
+
+        const emailInput =
+          document
+            .getElementById(
+              "student-email"
+            )
+            .value
+            .trim()
+            .toLowerCase();
+
+
+        const batchInput =
+          document
+            .getElementById(
+              "batch-category"
+            )
+            .value;
+
+        const classInput =
+          document
+            .getElementById(
+              "student-class"
+            )
+            .value;
+
+        const addressInput =
+          document
+            .getElementById(
+              "student-address"
+            )
+            .value
+            .trim();
+
+
+        const emailError =
+          document.getElementById(
+            "email-error"
+          );
+
+
+        const duplicateError =
+          document.getElementById(
+            "duplicate-error"
+          );
+
+
+        const batchError =
+          document.getElementById(
+            "batch-error"
+          );
+
+        const classError =
+          document.getElementById(
+            "class-error"
+          );
+
+        const addressError =
+          document.getElementById(
+            "address-error"
+          );
+
+
+        const proceedBtn =
+          document.getElementById(
+            "proceed-btn"
+          );
+
+
+        emailError.style.display =
+          "none";
+
+        duplicateError.style.display =
+          "none";
+
+        batchError.style.display =
+          "none";
+
+        classError.style.display =
+          "none";
+
+        addressError.style.display =
+          "none";
+
+
+        if (!nameInput) {
+
+          alert(
+            "Please enter your full name."
+          );
+
+          return;
+        }
+
+
+        if (
+          !emailInput.endsWith(
+            "@gmail.com"
+          )
+        ) {
+
+          emailError.style.display =
+            "flex";
+
+          return;
+        }
+
+
+        if (
+          !["R", "D"]
+            .includes(batchInput)
+        ) {
+
+          batchError.style.display =
+            "flex";
+
+          return;
+        }
+
+        if (
+          !["11", "12"]
+            .includes(classInput)
+        ) {
+
+          classError.style.display =
+            "flex";
+
+          return;
+        }
+
+        if (!addressInput) {
+
+          addressError.style.display =
+            "flex";
+
+          return;
+        }
+
+
+        proceedBtn.disabled = true;
+
+        proceedBtn.innerText =
+          "Verifying Entry...";
+
+
+        try {
+
+          const snap =
+            await getDocs(
+              query(
+                collection(
+                  db,
+                  "results"
+                ),
+                where(
+                  "email",
+                  "==",
+                  emailInput
+                )
+              )
+            );
+
+
+          if (!snap.empty) {
+
+            duplicateError.style.display =
+              "flex";
+
+            return;
+          }
+
+
+          currentStudentName =
+            nameInput;
+
+          currentStudentEmail =
+            emailInput;
+
+          currentBatchCategory =
+            batchInput;
+
+          currentStudentClass =
+            classInput;
+
+          currentStudentAddress =
+            addressInput;
+
+
+          resetAttemptState();
+
+
+          window.changeSlide(2);
+
+
+        } catch (err) {
+
+          console.error(err);
+
+          alert(
+            "Network/Firestore error.\n\n" +
+            "Please check your internet connection and try again."
+          );
+
+        } finally {
+
+          proceedBtn.disabled =
+            false;
+
+          proceedBtn.innerHTML =
+            'Proceed to Instructions <i class="fa-solid fa-arrow-right"></i>';
+        }
+
+      };
+
+
+    /* =========================================================
+       LOAD QUESTIONS
+    ========================================================== */
+
+    async function loadSubjectQuestions(
+      subject
+    ) {
+
+      const file =
+        SUBJECT_FILES[subject];
+
+      const cfg =
+        subjectConfig[subject];
+
+
+      if (!cfg) {
+        return {
+          displayed: [],
+          reserve: [],
+          all: []
+        };
+      }
+
+
+      const poolLimit =
+        Number(
+          cfg.poolQuestions
+        );
+
+
+      const displayLimit =
+        Number(
+          cfg.displayQuestions
+        );
+
+
+      /*
+        Subject disabled.
+      */
+
+      if (
+        displayLimit <= 0 ||
+        poolLimit <= 0
+      ) {
+
+        return {
+          displayed: [],
+          reserve: [],
+          all: []
+        };
+      }
+
+
+      /*
+        Display cannot exceed pool.
+      */
+
+      if (
+        displayLimit > poolLimit
+      ) {
+
+        throw new Error(
+          `${SUBJECT_LABELS[subject]}: Student Display Questions cannot be greater than Total Pool Questions.`
+        );
+      }
+
+
+      const response =
+        await fetch(
+          file,
+          {
+            cache: "no-store"
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          `${file} could not be loaded. HTTP ${response.status}`
+        );
+      }
+
+
+      const sourceQuestions =
+        await response.json();
+
+
+      if (
+        !Array.isArray(
+          sourceQuestions
+        )
+      ) {
+
+        throw new Error(
+          `${file} does not contain a valid question array.`
+        );
+      }
+
+
+      if (
+        sourceQuestions.length <
+        poolLimit
+      ) {
+
+        throw new Error(
+          `${SUBJECT_LABELS[subject]} needs ${poolLimit} questions in the pool, but only ${sourceQuestions.length} were found in ${file}.`
+        );
+      }
+
+
+      /* Two warnings can replace questions before the third violation submits. */
+      const requiredSecurityReserve = 2;
+
+      if (
+        sourceQuestions.length <
+        displayLimit + requiredSecurityReserve
+      ) {
+        throw new Error(
+          `${SUBJECT_LABELS[subject]} needs at least ${displayLimit + requiredSecurityReserve} source questions: ${displayLimit} for the paper and ${requiredSecurityReserve} unused security replacements.`
+        );
+      }
+
+
+      /*
+        STEP 1:
+        Randomly select TOTAL POOL questions.
+
+        Example:
+        Admin:
+        Pool = 30
+
+        Source file:
+        100 questions
+
+        We randomly choose 30.
+      */
+
+      const taggedSource =
+        sourceQuestions.map(
+          (question, sourceIndex) => ({
+            ...question,
+            options: Array.isArray(question.options)
+              ? shuffleArray(question.options)
+              : question.options,
+            __subject: subject,
+            __sourceIndex: sourceIndex,
+            __questionId: `${subject}:${sourceIndex}`
+          })
+        );
+
+
+      const selectedPool =
+        shuffleArray(
+          taggedSource
+        ).slice(
+          0,
+          poolLimit
+        );
+
+
+      /*
+        STEP 2:
+        Randomly select DISPLAY LIMIT questions
+        from that selected pool.
+
+        Example:
+
+        Pool = 30
+        Display = 25
+
+        30 random pool questions
+        ↓
+        25 questions shown to student
+      */
+
+      const displayedQuestions =
+        shuffleArray(
+          selectedPool
+        ).slice(
+          0,
+          displayLimit
+        );
+
+
+      const displayedIds =
+        new Set(
+          displayedQuestions.map(
+            question => question.__questionId
+          )
+        );
+
+
+      /*
+        Security replacements come from questions that are not already
+        present in this student's paper. This changes the current question
+        in-place and never calls Save & Next.
+      */
+      const reserveQuestions =
+        shuffleArray(
+          taggedSource.filter(
+            question =>
+              !displayedIds.has(
+                question.__questionId
+              )
+          )
+        );
+
+
+      return {
+        displayed: displayedQuestions,
+        reserve: reserveQuestions,
+        all: taggedSource
+      };
+    }
+
+
+    /* =========================================================
+       START EXAM
+    ========================================================== */
+
+    window.startTestExam =
+      async () => {
+
+        const dndCheckbox = document.getElementById("dnd-confirm-checkbox");
+        const dndError = document.getElementById("dnd-confirm-error");
+
+        if (!dndCheckbox?.checked) {
+          if (dndError) dndError.style.display = "block";
+          dndCheckbox?.focus();
+          return;
+        }
+
+        const startBtn =
+          document.getElementById(
+            "start-exam-btn"
+          );
+
+
+        startBtn.disabled = true;
+
+        startBtn.innerText =
+          "Loading Dataset...";
+
+        // Fullscreen must be requested from the student's button press.
+        // Unsupported or blocked fullscreen does not stop the test.
+        await window.ExamSecurityGuard?.requestFullscreen();
+
+
+        try {
+
+          /*
+            ALWAYS reload the latest Admin configuration
+            immediately before starting the test.
+          */
+
+          const configSnap =
+            await getDoc(
+              doc(
+                db,
+                "exam_config",
+                "current_test"
+              )
+            );
+
+
+          examConfigData =
+            configSnap.exists()
+              ? configSnap.data()
+              : {};
+
+
+          /*
+            Read subject-wise settings
+            from Admin Panel.
+          */
+
+          readAdminSubjectSettings(
+            examConfigData
+          );
+
+          securityConfig = {
+            maxTabSwitches: Math.max(
+              1,
+              Math.min(
+                20,
+                Number(
+                  examConfigData?.security?.maxTabSwitches
+                ) || 3
+              )
+            ),
+            replaceQuestionOnSwitch:
+              examConfigData?.security?.replaceQuestionOnSwitch !== false
+          };
+
+
+          renderConfigSummary();
+
+          const maxSwitchEl =
+            document.getElementById("security-max-switches");
+          const replacementEl =
+            document.getElementById("security-replacement-mode");
+
+          if (maxSwitchEl) {
+            maxSwitchEl.textContent =
+              String(securityConfig.maxTabSwitches);
+          }
+
+          if (replacementEl) {
+            replacementEl.textContent =
+              securityConfig.replaceQuestionOnSwitch
+                ? "Enabled"
+                : "Disabled";
+          }
+
+
+          /*
+            Load subjects separately.
+
+            Order is fixed:
+
+            Chemistry
+            Physics
+            Biology
+          */
+
+          const chemistryQuestions =
+            await loadSubjectQuestions(
+              "chemistry"
+            );
+
+
+          const physicsQuestions =
+            await loadSubjectQuestions(
+              "physics"
+            );
+
+
+          const biologyQuestions =
+            await loadSubjectQuestions(
+              "biology"
+            );
+
+
+          /*
+            At least one question should exist.
+          */
+
+          if (
+            chemistryQuestions.displayed.length === 0 &&
+            physicsQuestions.displayed.length === 0 &&
+            biologyQuestions.displayed.length === 0
+          ) {
+
+            throw new Error(
+              "No questions are enabled. Please check the subject-wise Test Setup in the Admin Panel."
+            );
+          }
+
+
+          /*
+            Independently randomize the complete paper for this attempt.
+            Secure browser randomness greatly reduces matching paper order.
+          */
+
+          /*
+            IMPORTANT:
+            Subject order is fixed and NEVER mixed:
+            Chemistry -> Physics -> Biology.
+
+            Randomization still happens independently inside each
+            subject pool, so students receive different questions
+            without mixing the three subjects.
+          */
+          questionsList = [
+            ...chemistryQuestions.displayed,
+            ...physicsQuestions.displayed,
+            ...biologyQuestions.displayed
+          ];
+
+
+          /*
+            Keep combined pool for compatibility.
+          */
+
+          questionPool =
+            [
+              ...chemistryQuestions.all,
+              ...physicsQuestions.all,
+              ...biologyQuestions.all
+            ];
+
+
+          reserveQuestionsBySubject = {
+            chemistry: chemistryQuestions.reserve,
+            physics: physicsQuestions.reserve,
+            biology: biologyQuestions.reserve
+          };
+
+
+          usedQuestionIds =
+            new Set(
+              questionsList.map(
+                question => question.__questionId
+              )
+            );
+
+
+          currentQuestionIndex = 0;
+
+          selectedAnswers = {};
+
+          hasSubmitted = false;
+
+          isExamActive = true;
+
+          window.ExamSecurityGuard?.start({
+            active: () => isExamActive && !hasSubmitted,
+            onViolation: handleEnvironmentViolation
+          });
+
+          performanceShown = false;
+
+          resultDocId = null;
+
+          resultSaved = false;
+
+
+          /*
+            Save actual question configuration
+            used for this attempt.
+          */
+
+          sessionStorage.setItem(
+            "examSubjectConfig",
+            JSON.stringify(
+              subjectConfig
+            )
+          );
+
+
+          /*
+            Save actual total question count.
+          */
+
+          sessionStorage.setItem(
+            "questionCount",
+            String(
+              questionsList.length
+            )
+          );
+
+
+          window.changeSlide(3);
+
+          const watermark = document.getElementById("exam-watermark");
+          if (watermark) {
+            watermark.textContent =
+              `${currentStudentName} • ${currentStudentEmail}`;
+          }
+
+
+          /*
+            Admin controlled duration.
+
+            If no duration is found,
+            fallback = 30 minutes.
+          */
+
+          const duration =
+            Number(
+              examConfigData?.durationMinutes
+            ) || 30;
+
+
+          /*
+            Save the exact start time of this attempt.
+            This is also persisted in sessionStorage so a
+            refresh cannot reset the duration/time-taken data.
+          */
+          examStartTime =
+            Number(
+              sessionStorage.getItem(
+                "examStartTime"
+              ) || 0
+            );
+
+          if (
+            !examStartTime ||
+            examStartTime <= 0
+          ) {
+            examStartTime =
+              Date.now();
+
+            sessionStorage.setItem(
+              "examStartTime",
+              String(examStartTime)
+            );
+          }
+
+
+          startExamTimer(
+            duration
+          );
+
+
+          loadQuestion(0);
+
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+
+
+          alert(
+            "Failed to load test questions.\n\n" +
+            "Please make sure the 'question' folder contains:\n" +
+            "• chemistry.html\n" +
+            "• physics.html\n" +
+            "• biology.html\n\n" +
+            "Also check the subject-wise Test Setup in Admin Panel.\n\n" +
+            "Error: " +
+            error.message
+          );
+
+
+          startBtn.disabled =
+            false;
+
+          startBtn.innerHTML =
+            'Start Examination <i class="fa-solid fa-vial"></i>';
+        }
+      };
+
+
+    window.confirmDndReady =
+      (checked) => {
+        const startBtn = document.getElementById("start-exam-btn");
+        const error = document.getElementById("dnd-confirm-error");
+        if (startBtn) startBtn.disabled = !checked;
+        if (error && checked) error.style.display = "none";
+      };
+
+
+    /* =========================================================
+       TIME TAKEN
+    ========================================================== */
+
+    function getTimeTakenSeconds() {
+
+      const started =
+        Number(
+          examStartTime ||
+          sessionStorage.getItem(
+            "examStartTime"
+          ) ||
+          0
+        );
+
+      if (!started) {
+        return 0;
+      }
+
+      return Math.max(
+        0,
+        Math.floor(
+          (Date.now() - started) / 1000
+        )
+      );
+    }
+
+
+    function formatTimeTaken(seconds) {
+
+      const total =
+        Math.max(
+          0,
+          Number(seconds) || 0
+        );
+
+      const hours =
+        Math.floor(
+          total / 3600
+        );
+
+      const minutes =
+        Math.floor(
+          (total % 3600) / 60
+        );
+
+      const secs =
+        total % 60;
+
+      if (hours > 0) {
+        return `${hours}h ${minutes}m ${secs}s`;
+      }
+
+      if (minutes > 0) {
+        return `${minutes}m ${secs}s`;
+      }
+
+      return `${secs}s`;
+    }
+
+
+    /* =========================================================
+       TIMER
+    ========================================================== */
+
+    function startExamTimer(
+      durationMins
+    ) {
+
+      clearInterval(
+        timerInterval
+      );
+
+
+      /*
+        Persist the exact exam start/end time for this attempt.
+        A page refresh therefore cannot restart the full timer.
+      */
+      examStartTime = Number(
+        sessionStorage.getItem("examStartTime") || 0
+      );
+
+      if (!examStartTime) {
+        examStartTime = Date.now();
+        sessionStorage.setItem(
+          "examStartTime",
+          String(examStartTime)
+        );
+      }
+
+      let endTime = Number(
+        sessionStorage.getItem("examEndTime") || 0
+      );
+
+      if (!endTime || endTime <= Date.now()) {
+        endTime =
+          Date.now() +
+          Math.max(1, durationMins) * 60 * 1000;
+
+        sessionStorage.setItem(
+          "examEndTime",
+          String(endTime)
+        );
+      }
+
+
+      const updateTimer =
+        () => {
+
+          const remaining =
+            endTime -
+            Date.now();
+
+
+          if (
+            remaining <= 0
+          ) {
+
+            clearInterval(
+              timerInterval
+            );
+
+
+            document
+              .getElementById(
+                "timer-display"
+              )
+              .innerText =
+              "00:00";
+
+
+            if (
+              isExamActive
+            ) {
+
+              alert(
+                "Time is up! Submitting exam..."
+              );
+
+
+              calculateAndShowResults(
+                "time_up"
+              );
+            }
+
+
+            return;
+          }
+
+
+          const mins =
+            Math.floor(
+              remaining /
+              60000
+            );
+
+
+          const secs =
+            Math.floor(
+              (remaining %
+                60000) /
+              1000
+            );
+
+
+          document
+            .getElementById(
+              "timer-display"
+            )
+            .innerText =
+            `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+        };
+
+
+      updateTimer();
+
+
+      timerInterval =
+        setInterval(
+          updateTimer,
+          1000
+        );
+    }
+
+
+    /* =========================================================
+       SECURITY QUESTION REPLACEMENT
+    ========================================================== */
+
+    function replaceCurrentQuestion(reason = "SECURITY_VIOLATION") {
+
+      const currentQuestion =
+        questionsList[currentQuestionIndex];
+
+      const subject =
+        currentQuestion?.__subject;
+
+      if (!subject) return false;
+
+
+      const reserve =
+        reserveQuestionsBySubject[subject] || [];
+
+      let replacement = null;
+
+
+      /*
+        Pull a never-before-shown question from the same subject.
+        The index does not change, so this can never behave like Save & Next.
+      */
+      while (reserve.length && !replacement) {
+        const candidate = reserve.shift();
+
+        if (
+          candidate?.__questionId &&
+          !usedQuestionIds.has(candidate.__questionId)
+        ) {
+          replacement = candidate;
+        }
+      }
+
+
+      if (!replacement) {
+        console.warn(
+          "No unused reserve question is available for",
+          subject
+        );
+        return false;
+      }
+
+
+      questionsList[currentQuestionIndex] = replacement;
+      usedQuestionIds.add(replacement.__questionId);
+
+      // An answer selected for the removed question must never carry over.
+      delete selectedAnswers[currentQuestionIndex];
+
+
+      securityEvents.push({
+        reason: "QUESTION_REPLACED",
+        sourceReason: reason,
+        subject,
+        removedQuestionId: currentQuestion.__questionId || null,
+        replacementQuestionId: replacement.__questionId,
+        questionNumber: currentQuestionIndex + 1,
+        time: Date.now()
+      });
+
+
+      loadQuestion(currentQuestionIndex);
+      return true;
+    }
+
+
+    /* =========================================================
+       LOAD CURRENT QUESTION
+    ========================================================== */
+
+    function loadQuestion(
+      index
+    ) {
+
+      if (
+        !questionsList[index]
+      ) {
+        return;
+      }
+
+
+      currentQuestionIndex =
+        index;
+
+
+      const qData =
+        questionsList[index];
+
+
+      const subjectName =
+        qData.__subject
+          ? qData.__subject
+              .charAt(0)
+              .toUpperCase() +
+            qData.__subject
+              .slice(1)
+          : "";
+
+
+      document
+        .getElementById(
+          "question-counter"
+        )
+        .innerHTML =
+        `
+          <span class="subject-badge">
+            ${escapeHTML(subjectName)}
+          </span>
+
+          Question
+          ${index + 1}
+          of
+          ${questionsList.length}
+        `;
+
+
+      document
+        .getElementById(
+          "q-text"
+        )
+        .innerHTML =
+        physicsToHTML(
+          getQuestionText(
+            qData
+          )
+        );
+
+
+      /*
+        Images
+      */
+
+      const imageBlock =
+        document.getElementById(
+          "question-image-block"
+        );
+
+
+      imageBlock.innerHTML =
+        "";
+
+
+      const imageList =
+        Array.isArray(
+          qData.images
+        )
+          ? qData.images
+          : (
+              qData.image
+                ? [qData.image]
+                : []
+            );
+
+
+      if (
+        imageList.length
+      ) {
+
+        imageBlock.style.display =
+          "flex";
+
+
+        imageList.forEach(
+          src => {
+
+            const img =
+              document.createElement(
+                "img"
+              );
+
+
+            img.src =
+              src;
+
+            img.alt =
+              "Question figure";
+
+            img.loading =
+              "eager";
+
+
+            imageBlock.appendChild(
+              img
+            );
+          }
+        );
+
+      } else {
+
+        imageBlock.style.display =
+          "none";
+      }
+
+
+      /*
+        Options
+      */
+
+      const optionsBlock =
+        document.getElementById(
+          "options-block"
+        );
+
+
+      optionsBlock.innerHTML =
+        "";
+
+
+      if (
+        !Array.isArray(
+          qData.options
+        ) ||
+        !qData.options.length
+      ) {
+
+        optionsBlock.innerHTML =
+          `
+            <p style="color:#ef4444;">
+              Question options are missing.
+            </p>
+          `;
+
+      } else {
+
+        qData.options.forEach(
+          (
+            opt,
+            idx
+          ) => {
+
+            const label =
+              document.createElement(
+                "label"
+              );
+
+
+            label.className =
+              `option-label ${
+                selectedAnswers[index] === idx
+                  ? "selected"
+                  : ""
+              }`;
+
+
+            const radio =
+              document.createElement(
+                "input"
+              );
+
+
+            radio.type =
+              "radio";
+
+            radio.name =
+              "quiz-opt";
+
+            radio.value =
+              String(idx);
+
+            radio.checked =
+              selectedAnswers[index] ===
+              idx;
+
+
+            radio.addEventListener(
+              "change",
+              () =>
+                window.selectOption(
+                  index,
+                  idx
+                )
+            );
+
+
+            label.appendChild(
+              radio
+            );
+
+
+            const optionText =
+              document.createElement(
+                "span"
+              );
+
+
+            optionText.innerHTML =
+              physicsToHTML(
+                ` ${opt}`
+              );
+
+
+            label.appendChild(
+              optionText
+            );
+
+
+            optionsBlock.appendChild(
+              label
+            );
+          }
+        );
+      }
+
+
+      /*
+        Previous button
+      */
+
+      document
+        .getElementById(
+          "btn-prev"
+        )
+        .style.visibility =
+        index === 0
+          ? "hidden"
+          : "visible";
+
+
+      /*
+        Next button
+      */
+
+      document
+        .getElementById(
+          "btn-next"
+        )
+        .innerHTML =
+        index ===
+        questionsList.length - 1
+
+          ? 'Finish Exam <i class="fa-solid fa-flag-checkered"></i>'
+
+          : 'Save & Next <i class="fa-solid fa-angle-right"></i>';
+    }
+
+
+    /* =========================================================
+       SELECT OPTION
+    ========================================================== */
+
+    window.selectOption =
+      (
+        qIdx,
+        optIdx
+      ) => {
+
+        selectedAnswers[
+          qIdx
+        ] =
+          optIdx;
+
+
+        document
+          .querySelectorAll(
+            ".option-label"
+          )
+          .forEach(
+            (
+              el,
+              idx
+            ) => {
+
+              el.classList.toggle(
+                "selected",
+                idx === optIdx
+              );
+            }
+          );
+      };
+
+
+    /* =========================================================
+       NEXT
+    ========================================================== */
+
+    window.handleNext =
+      () => {
+
+        if (
+          !isExamActive
+        ) {
+          return;
+        }
+
+
+        if (
+          currentQuestionIndex <
+          questionsList.length - 1
+        ) {
+
+          loadQuestion(
+            currentQuestionIndex + 1
+          );
+
+        } else {
+
+          clearInterval(
+            timerInterval
+          );
+
+          isExamActive =
+            false;
+
+
+          calculateAndShowResults(
+            "normal_finish"
+          );
+        }
+      };
+
+
+    /* =========================================================
+       PREVIOUS
+    ========================================================== */
+
+    window.handlePrevious =
+      () => {
+
+        if (
+          isExamActive &&
+          currentQuestionIndex > 0
+        ) {
+
+          loadQuestion(
+            currentQuestionIndex - 1
+          );
+        }
+      };
+
+
+    /* =========================================================
+       RESULTS
+    ========================================================== */
+
+    async function exitExamFullscreen() {
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      } catch (error) {
+        console.warn("Fullscreen exit was blocked by the browser:", error);
+      }
+    }
+
+
+    function finishExamEnvironment() {
+      // Stop first, otherwise fullscreen exit itself could be counted.
+      window.ExamSecurityGuard?.stop();
+      void exitExamFullscreen();
+
+      window.clearTimeout(securityNoticeTimer);
+      document.getElementById("security-notice")?.classList.remove("show");
+
+      const dndCheckbox = document.getElementById("dnd-confirm-checkbox");
+      const startBtn = document.getElementById("start-exam-btn");
+      if (dndCheckbox) dndCheckbox.checked = false;
+      if (startBtn) startBtn.disabled = true;
+    }
+
+    function calculateAndShowResults(
+      submissionReason =
+        "normal_finish"
+    ) {
+
+      clearInterval(
+        timerInterval
+      );
+
+
+      isExamActive =
+        false;
+
+      finishExamEnvironment();
+
+
+      let correctCount = 0;
+
+      let wrongCount = 0;
+
+
+      const reviewContainer =
+        document.getElementById(
+          "review-ledger-container"
+        );
+
+
+      reviewContainer.innerHTML =
+        "";
+
+
+      questionsList.forEach(
+        (
+          q,
+          idx
+        ) => {
+
+          const selectedIdx =
+            selectedAnswers[idx];
+
+
+          const studentSelectionText =
+            selectedIdx !== undefined
+              ? q.options[selectedIdx]
+              : "Not Attempted";
+
+
+          const correctSelectionText =
+            getCorrectAnswer(q);
+
+
+          const isCorrect =
+            selectedIdx !== undefined &&
+            studentSelectionText ===
+            correctSelectionText;
+
+
+          if (
+            selectedIdx !== undefined
+          ) {
+
+            if (isCorrect) {
+
+              correctCount++;
+
+            } else {
+
+              wrongCount++;
+            }
+          }
+
+
+          const reviewItem =
+            document.createElement(
+              "div"
+            );
+
+
+          reviewItem.className =
+            `review-item ${
+              selectedIdx === undefined
+                ? ""
+                : isCorrect
+                  ? "correct-item"
+                  : "wrong-item"
+            }`;
+
+
+          reviewItem.innerHTML =
+            `
+              <h5>
+                Q${idx + 1}.
+                ${physicsToHTML(
+                  getQuestionText(q)
+                )}
+              </h5>
+
+              <div
+                style="
+                  font-size:.85rem;
+                  line-height:1.5;
+                "
+              >
+
+                <strong>
+                  Your Choice:
+                </strong>
+
+                <span>
+                  ${physicsToHTML(
+                    studentSelectionText
+                  )}
+                </span>
+
+                <br>
+
+                <strong>
+                  Correct Answer:
+                </strong>
+
+                <span
+                  style="
+                    color:var(--success);
+                    font-weight:600;
+                  "
+                >
+                  ${physicsToHTML(
+                    correctSelectionText
+                  )}
+                </span>
+
+              </div>
+            `;
+
+
+          reviewContainer.appendChild(
+            reviewItem
+          );
+        }
+      );
+
+
+      /*
+        Marks:
+
+        Correct = +4
+        Wrong = 0
+        Not attempted = 0
+
+        No negative marking.
+      */
+
+      const marksPerQuestion =
+        4;
+
+
+      calculatedScore =
+        correctCount *
+        marksPerQuestion;
+
+
+      totalScore =
+        questionsList.length *
+        marksPerQuestion;
+
+
+      finalizedScoreString =
+        `${calculatedScore}/${totalScore}`;
+
+
+      correctCountFinal =
+        correctCount;
+
+
+      wrongCountFinal =
+        wrongCount;
+
+
+      document
+        .getElementById(
+          "res-score"
+        )
+        .innerText =
+        finalizedScoreString;
+
+
+      document
+        .getElementById(
+          "res-correct"
+        )
+        .innerText =
+        correctCount;
+
+
+      document
+        .getElementById(
+          "res-wrong"
+        )
+        .innerText =
+        wrongCount;
+
+
+      const attempted =
+        correctCount +
+        wrongCount;
+
+
+      document
+        .getElementById(
+          "res-accuracy"
+        )
+        .innerText =
+        `${
+          attempted
+            ? Math.round(
+                correctCount /
+                attempted *
+                100
+              )
+            : 0
+        }%`;
+
+
+      document
+        .getElementById(
+          "log-tab-switches"
+        )
+        .innerText =
+        tabSwitches;
+
+
+      document
+        .getElementById(
+          "log-copy-paste"
+        )
+        .innerText =
+        copiesAttempted;
+
+
+      document
+        .getElementById(
+          "log-penalty"
+        )
+        .innerText =
+        "0 Marks";
+
+
+      window.changeSlide(4);
+
+
+      /*
+        Save immediately when Performance slide appears.
+      */
+
+      savePerformanceDraft(
+        submissionReason
+      );
+    }
+
+
+    /* =========================================================
+       SAVE PERFORMANCE DRAFT
+    ========================================================== */
+
+    async function savePerformanceDraft(
+      submissionReason =
+        "normal_finish"
+    ) {
+
+      if (
+        resultSaved
+      ) {
+        return;
+      }
+
+
+      const payload = {
+
+        name:
+          currentStudentName,
+
+        email:
+          currentStudentEmail,
+
+        batchCategory:
+          currentBatchCategory,
+
+        studentClass:
+          currentStudentClass,
+
+        address:
+          currentStudentAddress,
+
+        score:
+          finalizedScoreString,
+
+        calculatedScore,
+
+        totalScore,
+
+        correct:
+          correctCountFinal,
+
+        wrong:
+          wrongCountFinal,
+
+        attempted:
+          correctCountFinal +
+          wrongCountFinal,
+
+        timeTakenSeconds:
+          getTimeTakenSeconds(),
+
+        duration:
+          formatTimeTaken(
+            getTimeTakenSeconds()
+          ),
+
+        tabSwitches,
+
+        copiesAttempted,
+
+        refreshes,
+
+        penaltiesApplied: 0,
+
+        securityEvents,
+
+        rating:
+          selectedRating || 0,
+
+        doubt:
+          document
+            .getElementById(
+              "doubt-input"
+            )
+            ?.value
+            .trim() ||
+          "None",
+
+        feedback:
+          document
+            .getElementById(
+              "feedback-input"
+            )
+            ?.value
+            .trim() ||
+          "None",
+
+        questionCount:
+          questionsList.length,
+
+        marksPerQuestion:
+          4,
+
+        negativeMarking:
+          0,
+
+        // The complete result is saved automatically as soon as the exam ends.
+        // Rating/feedback can still update this same document afterwards.
+        submissionStatus:
+          "submitted",
+
+        submissionReason,
+
+        /*
+          Save the exact subject settings
+          used for this student.
+        */
+
+        subjectSettings:
+          subjectConfig,
+
+        submittedAt:
+          new Date()
+      };
+
+
+      try {
+
+        const ref =
+          await addDoc(
+            collection(
+              db,
+              "results"
+            ),
+            payload
+          );
+
+
+        resultDocId =
+          ref.id;
+
+
+        resultSaved =
+          true;
+
+        sessionStorage.removeItem(
+          "examStartTime"
+        );
+
+        sessionStorage.removeItem(
+          "examEndTime"
+        );
+
+      } catch (err) {
+
+        console.error(
+          "Performance autosave error:",
+          err
+        );
+      }
+    }
+
+
+    /* =========================================================
+       PAGE EXIT
+    ========================================================== */
+
+    window.addEventListener(
+      "pagehide",
+      () => {
+
+        if (
+          performanceShown &&
+          !resultSaved
+        ) {
+
+          savePerformanceDraft(
+            "performance_page_exit"
+          );
+        }
+      }
+    );
+
+
+    /* =========================================================
+       RATING
+    ========================================================== */
+
+    document
+      .querySelectorAll(
+        "#stars-container i"
+      )
+      .forEach(
+        star => {
+
+          star.addEventListener(
+            "click",
+            e => {
+
+              selectedRating =
+                parseInt(
+                  e.currentTarget
+                    .getAttribute(
+                      "data-value"
+                    ),
+                  10
+                );
+
+
+              document
+                .querySelectorAll(
+                  "#stars-container i"
+                )
+                .forEach(
+                  (
+                    s,
+                    idx
+                  ) => {
+
+                    s.classList.toggle(
+                      "active",
+                      idx <
+                      selectedRating
+                    );
+                  }
+                );
+
+
+              document
+                .getElementById(
+                  "rating-error"
+                )
+                .style.display =
+                "none";
+            }
+          );
+        }
+      );
+
+
+    /* =========================================================
+       FINAL FEEDBACK
+    ========================================================== */
+
+    window.submitFinalFeedback =
+      async (e) => {
+
+        e.preventDefault();
+
+
+        if (
+          hasSubmitted
+        ) {
+          return;
+        }
+
+
+        if (
+          !selectedRating
+        ) {
+
+          document
+            .getElementById(
+              "rating-error"
+            )
+            .style.display =
+            "flex";
+
+          return;
+        }
+
+
+        await submitStudentExam();
+      };
+
+
+    /* =========================================================
+       FINAL SUBMISSION
+    ========================================================== */
+
+    async function submitStudentExam() {
+
+      if (
+        hasSubmitted
+      ) {
+        return;
+      }
+
+
+      const submitButton =
+        document.getElementById(
+          "submit-all-btn"
+        );
+
+
+      hasSubmitted =
+        true;
+
+      finishExamEnvironment();
+
+
+      submitButton.disabled =
+        true;
+
+
+      submitButton.innerHTML =
+        `
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Submitting...
+        `;
+
+
+      const payload = {
+
+        name:
+          currentStudentName,
+
+        email:
+          currentStudentEmail,
+
+        batchCategory:
+          currentBatchCategory,
+
+        studentClass:
+          currentStudentClass,
+
+        address:
+          currentStudentAddress,
+
+        score:
+          finalizedScoreString,
+
+        calculatedScore,
+
+        totalScore,
+
+        correct:
+          correctCountFinal,
+
+        wrong:
+          wrongCountFinal,
+
+        attempted:
+          correctCountFinal +
+          wrongCountFinal,
+
+        timeTakenSeconds:
+          getTimeTakenSeconds(),
+
+        duration:
+          formatTimeTaken(
+            getTimeTakenSeconds()
+          ),
+
+        tabSwitches,
+
+        copiesAttempted,
+
+        refreshes,
+
+        penaltiesApplied:
+          0,
+
+        securityEvents,
+
+        rating:
+          selectedRating,
+
+        doubt:
+          document
+            .getElementById(
+              "doubt-input"
+            )
+            .value
+            .trim() ||
+          "None",
+
+        feedback:
+          document
+            .getElementById(
+              "feedback-input"
+            )
+            .value
+            .trim() ||
+          "None",
+
+        questionCount:
+          questionsList.length,
+
+        marksPerQuestion:
+          4,
+
+        negativeMarking:
+          0,
+
+        /*
+          Save the exact configuration
+          used for this attempt.
+        */
+
+        subjectSettings:
+          subjectConfig,
+
+        submissionStatus:
+          "submitted",
+
+        submissionReason:
+          "student_submit",
+
+        submittedAt:
+          new Date()
+      };
+
+
+      try {
+
+        if (
+          resultDocId
+        ) {
+
+          await updateDoc(
+            doc(
+              db,
+              "results",
+              resultDocId
+            ),
+            payload
+          );
+
+        } else {
+
+          const ref =
+            await addDoc(
+              collection(
+                db,
+                "results"
+              ),
+              payload
+            );
+
+
+          resultDocId =
+            ref.id;
+        }
+
+
+        resultSaved =
+          true;
+
+
+        sessionStorage.removeItem("examEndTime");
+        sessionStorage.removeItem("questionCount");
+        sessionStorage.removeItem("examSubjectConfig");
+        sessionStorage.removeItem("tabSwitches");
+        sessionStorage.removeItem("copiesAttempted");
+        sessionStorage.removeItem("refreshes");
+        sessionStorage.removeItem("penaltiesApplied");
+
+
+        document
+          .getElementById(
+            "success-modal"
+          )
+          .classList.add(
+            "show"
+          );
+
+
+      } catch (e) {
+
+        console.error(
+          "Submission Error:",
+          e
+        );
+
+
+        hasSubmitted =
+          false;
+
+
+        submitButton.disabled =
+          false;
+
+
+        submitButton.innerHTML =
+          `
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            Submit & Complete
+          `;
+
+
+        alert(
+          "Submission Error:\n\n" +
+          e.message +
+          "\n\nPlease try again."
+        );
+      }
+    }
+
+
+    /* =========================================================
+       INITIAL PAGE LOAD
+    ========================================================== */
+
+    window.addEventListener(
+      "DOMContentLoaded",
+      async () => {
+
+        await checkOverallExamWindow();
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
