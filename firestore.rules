@@ -1,0 +1,16 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Exam configuration
+    match /exam_config/{document} {
+      allow read, write: if true;
+    }
+
+    // Student results
+    match /results/{document} {
+      allow read, write: if true;
+    }
+  }
+}
