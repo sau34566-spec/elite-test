@@ -378,7 +378,7 @@
     /* SUBJECT CONFIGURATION */
     .subject-config-grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:15px;
       margin-top:15px
     }
@@ -401,6 +401,24 @@
 
     .subject-card.biology{
       border-top:4px solid #f59e0b
+    }
+
+    .subject-card.maths{
+      border-top:4px solid #7c3aed;
+    }
+
+    .subject-enabled{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:0 0 14px;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .subject-enabled input{
+      width:auto;
+      margin:0;
     }
 
     .subject-title{
@@ -673,6 +691,12 @@
       word-break:break-word
     }
 
+    @media(max-width:1100px){
+      .subject-config-grid{
+        grid-template-columns:repeat(2,1fr)
+      }
+    }
+
     @media(max-width:900px){
       .stats-grid{
         grid-template-columns:repeat(2,1fr)
@@ -682,14 +706,15 @@
         grid-template-columns:1fr 1fr
       }
 
-      .subject-config-grid{
-        grid-template-columns:1fr
-      }
     }
 
     @media(max-width:600px){
       body{
         padding:12px
+      }
+
+      .subject-config-grid{
+        grid-template-columns:1fr
       }
 
       header h1{
@@ -888,37 +913,6 @@
           <b>exam_config/current_test</b>.
         </p>
 
-        <div class="notice">
-          <b>Student question files:</b>
-          <br>
-          Physics → <code>question/physics.html</code>
-          <br>
-          Chemistry → <code>question/chemistry.html</code>
-          <br>
-          Biology → <code>question/biology.html</code>
-          <br><br>
-
-          <b>Important:</b>
-          Questions themselves are not changed by this panel.
-          This panel only controls how many questions are taken from
-          each subject pool and how many are displayed to a student.
-        </div>
-
-
-        <div class="notice success-note">
-          <b>Active student files:</b>
-          <br>
-          Chemistry → <code>question/chemistry.html</code>
-          <br>
-          Physics → <code>question/physics.html</code>
-          <br>
-          Biology → <code>question/biology.html</code>
-          <br><br>
-          Student paper order is fixed as
-          <b>Chemistry → Physics → Biology</b>; questions are randomized
-          independently within each subject.
-        </div>
-
         <!-- SUBJECT CONFIGURATION -->
         <h3
           style="
@@ -946,6 +940,8 @@
               </div>
               Physics
             </div>
+
+            <label class="subject-enabled"><input id="physics-enabled" type="checkbox" checked> Include in this exam</label>
 
             <div class="form-group">
               <label for="physics-pool">
@@ -995,6 +991,8 @@
               Chemistry
             </div>
 
+            <label class="subject-enabled"><input id="chemistry-enabled" type="checkbox" checked> Include in this exam</label>
+
             <div class="form-group">
               <label for="chemistry-pool">
                 Total Pool Questions
@@ -1043,6 +1041,8 @@
               Biology
             </div>
 
+            <label class="subject-enabled"><input id="biology-enabled" type="checkbox" checked> Include in this exam</label>
+
             <div class="form-group">
               <label for="biology-pool">
                 Total Pool Questions
@@ -1080,6 +1080,26 @@
 
           </div>
 
+          <!-- MATHEMATICS -->
+          <div class="subject-card maths">
+            <div class="subject-title">
+              <div class="subject-icon"><i class="fa-solid fa-square-root-variable"></i></div>
+              Maths
+            </div>
+            <label class="subject-enabled"><input id="maths-enabled" type="checkbox"> Include in this exam</label>
+            <div class="form-group">
+              <label for="maths-pool">Total Pool Questions</label>
+              <input id="maths-pool" type="number" min="1" placeholder="e.g. 30">
+            </div>
+            <div class="form-group">
+              <label for="maths-limit">Student Display Limit</label>
+              <input id="maths-limit" type="number" min="1" placeholder="e.g. 25">
+            </div>
+            <button id="save-maths-btn" class="btn btn-success subject-save" data-subject="maths">
+              <i class="fa-solid fa-floppy-disk"></i> Save Maths
+            </button>
+          </div>
+
         </div>
 
         <!-- SAVED CONFIGURATION -->
@@ -1113,6 +1133,11 @@
               </span>
             </div>
 
+            <div class="subject-status">
+              <strong>Maths</strong>
+              <span id="saved-maths">Not configured</span>
+            </div>
+
           </div>
 
         </div>
@@ -1130,7 +1155,7 @@
           Exam Timer
         </h3>
 
-        <div class="grid">
+        <div class="grid-2">
 
           <div class="form-group">
             <label for="config-duration">
@@ -1145,6 +1170,47 @@
             >
           </div>
 
+          <div class="form-group">
+            <label for="config-question-order">Question Order *</label>
+            <select id="config-question-order">
+              <option value="random">Random</option>
+              <option value="sequence">Sequence</option>
+            </select>
+          </div>
+
+        </div>
+
+        <h3 style="color:var(--primary);font-size:16px;margin-top:25px;margin-bottom:12px;">Student Access & Institute Details</h3>
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="config-class-mode">Allowed Class *</label>
+            <select id="config-class-mode">
+              <option value="11">Class 11</option>
+              <option value="12" selected>Class 12</option>
+              <option value="both">Class 11 & 12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="config-centre-code">Examination Centre Code *</label>
+            <input id="config-centre-code" type="text" maxlength="30" placeholder="e.g. LLTC2026">
+          </div>
+          <div class="form-group">
+            <label for="config-institute-name">Institute Name *</label>
+            <input id="config-institute-name" type="text" maxlength="120" placeholder="Institute name">
+          </div>
+          <div class="form-group">
+            <label for="config-institute-short-address">Short Address *</label>
+            <input id="config-institute-short-address" type="text" maxlength="160" placeholder="Shown on student portal">
+          </div>
+          <div class="form-group">
+            <label for="config-institute-full-address">Full Address *</label>
+            <textarea id="config-institute-full-address" rows="3" maxlength="400" placeholder="Used in downloaded results"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="config-institute-logo">Institute Logo</label>
+            <input id="config-institute-logo" type="file" accept="image/png,image/jpeg,image/webp">
+            <div class="muted" style="font-size:11px;margin-top:6px">Image is resized before saving.</div>
+          </div>
         </div>
 
 
@@ -1618,6 +1684,8 @@
 
     let selectedRecordId = null;
 
+    let currentExamConfig = {};
+
 
     const $ = (id) =>
       document.getElementById(id);
@@ -1830,7 +1898,8 @@
     const SUBJECTS = [
       "physics",
       "chemistry",
-      "biology"
+      "biology",
+      "maths"
     ];
 
 
@@ -1848,9 +1917,13 @@
           10
         );
 
+      const enabled =
+        $(`${subject}-enabled`)?.checked === true;
+
       return {
         pool,
-        limit
+        limit,
+        enabled
       };
     }
 
@@ -1869,6 +1942,13 @@
         config?.limit ??
         config?.studentLimit ??
         "";
+
+      const enabled =
+        config?.enabled !== false && Boolean(pool && limit);
+
+      if ($(`${subject}-enabled`)) {
+        $(`${subject}-enabled`).checked = enabled;
+      }
 
       $(`${subject}-pool`).value =
         pool;
@@ -1895,10 +1975,14 @@
 
       if (!element) return;
 
-      if (
-        !pool ||
-        !limit
-      ) {
+      const isEnabled = $(`${subject}-enabled`)?.checked === true;
+
+      if (!isEnabled) {
+        element.textContent = "Disabled";
+        return;
+      }
+
+      if (!pool || !limit) {
 
         element.textContent =
           "Not configured";
@@ -1921,6 +2005,16 @@
 
       const config =
         getSubjectConfig(subject);
+
+      if (!config.enabled) {
+        await setDoc(doc(db, "exam_config", "current_test"), {
+          subjects: { [subject]: { enabled:false, pool:0, limit:0, totalPool:0, studentLimit:0, poolQuestions:0, displayQuestions:0, updatedAt:new Date() } },
+          updatedAt:new Date()
+        }, { merge:true });
+        updateSavedSubjectDisplay(subject, 0, 0);
+        setStatus(`${capitalize(subject)} disabled for this exam`, "ok");
+        return;
+      }
 
       if (
         !Number.isFinite(config.pool) ||
@@ -2019,6 +2113,9 @@
                 displayQuestions:
                   config.limit,
 
+                enabled:
+                  true,
+
                 updatedAt:
                   new Date()
               }
@@ -2090,6 +2187,33 @@
           .slice(1);
     }
 
+    function resizeLogo(file) {
+      return new Promise((resolve, reject) => {
+        if (!file.type.startsWith("image/")) return reject(new Error("Please select a valid image."));
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Logo could not be read."));
+        reader.onload = () => {
+          const image = new Image();
+          image.onerror = () => reject(new Error("Logo could not be processed."));
+          image.onload = () => {
+            const size = 320;
+            const canvas = document.createElement("canvas");
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, size, size);
+            const scale = Math.min(size / image.width, size / image.height);
+            const width = image.width * scale;
+            const height = image.height * scale;
+            ctx.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+            resolve(canvas.toDataURL("image/webp", 0.82));
+          };
+          image.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
 
     /* =========================================================
        LOAD EXAM SETTINGS
@@ -2136,6 +2260,8 @@
         const data =
           snap.data();
 
+        currentExamConfig = data;
+
 
         /*
           -------------------------------------------------------
@@ -2172,6 +2298,13 @@
         $("config-duration").value =
           data.durationMinutes ??
           30;
+
+        $("config-question-order").value = data.questionOrder === "sequence" ? "sequence" : "random";
+        $("config-class-mode").value = ["11", "12", "both"].includes(data.allowedClass) ? data.allowedClass : "12";
+        $("config-centre-code").value = data.centreCode || "";
+        $("config-institute-name").value = data.institute?.name || "Life Line Teaching Cottage (LLTC)";
+        $("config-institute-short-address").value = data.institute?.shortAddress || "";
+        $("config-institute-full-address").value = data.institute?.fullAddress || "";
 
         $("config-window-start").value =
           dateTimeLocalValue(
@@ -2269,6 +2402,51 @@
       const replaceQuestionOnSwitch =
         $("config-replace-on-switch").value === "yes";
 
+      const questionOrder = $("config-question-order").value;
+      const allowedClass = $("config-class-mode").value;
+      const centreCode = $("config-centre-code").value.trim().toUpperCase();
+      const instituteName = $("config-institute-name").value.trim();
+      const instituteShortAddress = $("config-institute-short-address").value.trim();
+      const instituteFullAddress = $("config-institute-full-address").value.trim();
+
+      if (!centreCode || !instituteName || !instituteShortAddress || !instituteFullAddress) {
+        alert("Please complete centre code and all institute details.");
+        return;
+      }
+
+      const subjects = {};
+      for (const subject of SUBJECTS) {
+        const item = getSubjectConfig(subject);
+        if (!item.enabled) {
+          subjects[subject] = { enabled:false, pool:0, limit:0, totalPool:0, studentLimit:0, poolQuestions:0, displayQuestions:0 };
+          continue;
+        }
+        if (!Number.isFinite(item.pool) || item.pool < 1 || !Number.isFinite(item.limit) || item.limit < 1 || item.limit > item.pool) {
+          alert(`${capitalize(subject)}: enter valid pool and display limits.`);
+          return;
+        }
+        subjects[subject] = {
+          enabled:true,
+          pool:item.pool,
+          limit:item.limit,
+          totalPool:item.pool,
+          studentLimit:item.limit,
+          poolQuestions:item.pool,
+          displayQuestions:item.limit
+        };
+      }
+
+      let logoDataUrl = currentExamConfig?.institute?.logoDataUrl || "";
+      const logoFile = $("config-institute-logo").files?.[0];
+      if (logoFile) {
+        try {
+          logoDataUrl = await resizeLogo(logoFile);
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+      }
+
 
       if (
         !durationMinutes ||
@@ -2349,6 +2527,21 @@
 
             durationMinutes,
 
+            questionOrder,
+
+            allowedClass,
+
+            centreCode,
+
+            institute: {
+              name: instituteName,
+              shortAddress: instituteShortAddress,
+              fullAddress: instituteFullAddress,
+              logoDataUrl
+            },
+
+            subjects,
+
             windowStart:
               startMs,
 
@@ -2385,6 +2578,20 @@
         alert(
           "Timer & exam window saved successfully."
         );
+
+        currentExamConfig = {
+          ...currentExamConfig,
+          durationMinutes,
+          questionOrder,
+          allowedClass,
+          centreCode,
+          institute: {
+            name: instituteName,
+            shortAddress: instituteShortAddress,
+            fullAddress: instituteFullAddress,
+            logoDataUrl
+          }
+        };
 
 
       } catch (err) {
@@ -2638,6 +2845,15 @@
             ""
           )
           .trim(),
+
+        centreCode:
+          String(r.centreCode || "").trim(),
+
+        instituteName:
+          String(r.institute?.name || "").trim(),
+
+        instituteFullAddress:
+          String(r.institute?.fullAddress || "").trim(),
 
         submissionStatus:
           r.submissionStatus ||
@@ -3718,6 +3934,9 @@
         "Batch Category",
         "Class",
         "Address",
+        "Centre Code",
+        "Institute Name",
+        "Institute Full Address",
         "Submission Status",
         "Score",
         "Rating",
@@ -3750,6 +3969,12 @@
             r.studentClass,
 
             r.address,
+
+            r.centreCode,
+
+            r.instituteName,
+
+            r.instituteFullAddress,
 
             r.submissionStatus,
 
@@ -4296,6 +4521,15 @@
         () =>
           saveSubjectConfig(
             "biology"
+          )
+      );
+
+    $("save-maths-btn")
+      .addEventListener(
+        "click",
+        () =>
+          saveSubjectConfig(
+            "maths"
           )
       );
 
