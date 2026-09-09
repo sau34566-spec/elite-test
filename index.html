@@ -618,6 +618,17 @@
       border-radius: 8px;
     }
 
+    .question-image-error {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      background: #fef2f2;
+      color: #991b1b;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
     .subject-badge {
       display: inline-block;
       margin-right: 8px;
@@ -3960,6 +3971,125 @@
        LOAD CURRENT QUESTION
     ========================================================== */
 
+    function getQuestionMedia(qData) {
+      const value =
+        qData.images ??
+        qData.image ??
+        qData.imageUrl ??
+        qData.image_url ??
+        qData.img ??
+        qData.figures ??
+        qData.figure ??
+        qData.figureUrl ??
+        qData.diagram ??
+        qData.diagramUrl ??
+        [];
+
+      return (Array.isArray(value) ? value : [value])
+        .map(item => {
+          if (typeof item === "string") {
+            return { src: item, alt: "Question figure" };
+          }
+
+          if (item && typeof item === "object") {
+            return {
+              src:
+                item.src ??
+                item.url ??
+                item.path ??
+                item.image ??
+                "",
+              alt:
+                item.alt ??
+                item.title ??
+                "Question figure"
+            };
+          }
+
+          return null;
+        })
+        .filter(item => item && String(item.src).trim());
+    }
+
+    function getQuestionImageCandidates(source) {
+      const src = String(source || "").trim();
+
+      if (
+        !src ||
+        /^(?:https?:|data:|blob:|\/)/i.test(src)
+      ) {
+        return src ? [src] : [];
+      }
+
+      const clean = src.replace(/^\.\//, "");
+
+      if (clean.startsWith("question/")) {
+        return [clean];
+      }
+
+      // Question JSON files and their asset folders live inside /question.
+      // Keep the original path as a fallback for older/root-level datasets.
+      return [
+        "question/" + clean,
+        clean
+      ];
+    }
+
+    function renderQuestionMedia(qData, imageBlock) {
+      const media = getQuestionMedia(qData);
+      imageBlock.innerHTML = "";
+
+      if (!media.length) {
+        imageBlock.style.display = "none";
+        return;
+      }
+
+      imageBlock.style.display = "flex";
+      let pending = media.length;
+      let loaded = 0;
+
+      media.forEach(item => {
+        const img = document.createElement("img");
+        const candidates = getQuestionImageCandidates(item.src);
+        let candidateIndex = 0;
+
+        img.alt = String(item.alt || "Question figure");
+        img.loading = "eager";
+
+        img.addEventListener("load", () => {
+          loaded += 1;
+        }, { once: true });
+
+        img.addEventListener("error", function tryNextSource() {
+          candidateIndex += 1;
+
+          if (candidateIndex < candidates.length) {
+            img.src = candidates[candidateIndex];
+            return;
+          }
+
+          pending -= 1;
+          img.remove();
+
+          if (!loaded && pending === 0) {
+            const error = document.createElement("div");
+            error.className = "question-image-error";
+            error.textContent =
+              "Question figure could not be loaded. Please contact the examiner.";
+            imageBlock.appendChild(error);
+          }
+
+          console.error(
+            "Question figure is missing:",
+            item.src
+          );
+        });
+
+        imageBlock.appendChild(img);
+        img.src = candidates[0];
+      });
+    }
+
     function loadQuestion(
       index
     ) {
@@ -4028,60 +4158,10 @@
         );
 
 
-      imageBlock.innerHTML =
-        "";
-
-
-      const imageList =
-        Array.isArray(
-          qData.images
-        )
-          ? qData.images
-          : (
-              qData.image
-                ? [qData.image]
-                : []
-            );
-
-
-      if (
-        imageList.length
-      ) {
-
-        imageBlock.style.display =
-          "flex";
-
-
-        imageList.forEach(
-          src => {
-
-            const img =
-              document.createElement(
-                "img"
-              );
-
-
-            img.src =
-              src;
-
-            img.alt =
-              "Question figure";
-
-            img.loading =
-              "eager";
-
-
-            imageBlock.appendChild(
-              img
-            );
-          }
-        );
-
-      } else {
-
-        imageBlock.style.display =
-          "none";
-      }
+      renderQuestionMedia(
+        qData,
+        imageBlock
+      );
 
 
       /*
