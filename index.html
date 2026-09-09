@@ -3214,14 +3214,32 @@
       }
 
 
+      const rawQuestionText =
+        (await response.text()).replace(/^\uFEFF/, "").trim();
+
+      let parsedQuestionData;
+
+      try {
+        parsedQuestionData = JSON.parse(rawQuestionText);
+      } catch (parseError) {
+        /* Recover a common accidental upload format: [] followed by the real array. */
+        if (rawQuestionText.startsWith("[][")) {
+          parsedQuestionData = JSON.parse(rawQuestionText.slice(2));
+        } else {
+          throw parseError;
+        }
+      }
+
       const sourceQuestions =
-        await response.json();
+        Array.isArray(parsedQuestionData)
+          ? parsedQuestionData
+          : Array.isArray(parsedQuestionData?.questions)
+            ? parsedQuestionData.questions
+            : null;
 
 
       if (
-        !Array.isArray(
-          sourceQuestions
-        )
+        !Array.isArray(sourceQuestions)
       ) {
 
         throw new Error(
