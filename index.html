@@ -3199,7 +3199,7 @@
 
       const response =
         await fetch(
-          file,
+          `${file}?examData=${Date.now()}`,
           {
             cache: "no-store"
           }
@@ -3217,17 +3217,15 @@
       const rawQuestionText =
         (await response.text()).replace(/^\uFEFF/, "").trim();
 
+      const normalizedQuestionText =
+        rawQuestionText.replace(/^\[\]\s*(?=\[)/, "");
+
       let parsedQuestionData;
 
       try {
-        parsedQuestionData = JSON.parse(rawQuestionText);
+        parsedQuestionData = JSON.parse(normalizedQuestionText);
       } catch (parseError) {
-        /* Recover a common accidental upload format: [] followed by the real array. */
-        if (rawQuestionText.startsWith("[][")) {
-          parsedQuestionData = JSON.parse(rawQuestionText.slice(2));
-        } else {
-          throw parseError;
-        }
+        throw new Error(`${file} contains invalid JSON: ${parseError.message}`);
       }
 
       const sourceQuestions =
@@ -3678,7 +3676,8 @@
             "Please make sure the 'question' folder contains:\n" +
             "• chemistry.html\n" +
             "• physics.html\n" +
-            "• biology.html\n\n" +
+            "• biology.html\n" +
+            "• maths.html\n\n" +
             "Also check the subject-wise Test Setup in Admin Panel.\n\n" +
             "Error: " +
             error.message
