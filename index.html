@@ -629,6 +629,108 @@
       text-align: center;
     }
 
+    .question-passage {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      border-left: 4px solid var(--primary-light);
+      border-radius: 8px;
+      background: #eff6ff;
+      line-height: 1.65;
+    }
+
+    .question-table-scroll {
+      width: 100%;
+      margin: 1rem 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .question-table {
+      width: 100%;
+      min-width: 420px;
+      border-collapse: collapse;
+      background: white;
+      font-size: 0.92rem;
+    }
+
+    .question-table th,
+    .question-table td {
+      padding: 0.7rem;
+      border: 1px solid #94a3b8;
+      text-align: left;
+      vertical-align: top;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .question-table th {
+      background: #e2e8f0;
+      font-weight: 700;
+    }
+
+    .option-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+
+    .option-content img {
+      max-width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .report-action {
+      width: 100%;
+      justify-content: center;
+      margin: 0 0 1.5rem;
+    }
+
+    .rating-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.88);
+    }
+
+    .rating-overlay.show {
+      display: flex;
+    }
+
+    .rating-popup {
+      width: min(520px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .rating-popup h3 {
+      margin-bottom: 0.35rem;
+      color: var(--primary);
+    }
+
+    @media (max-width: 520px) {
+      .question-table {
+        min-width: 360px;
+        font-size: 0.82rem;
+      }
+
+      .question-table th,
+      .question-table td {
+        padding: 0.55rem;
+      }
+    }
+
     .subject-badge {
       display: inline-block;
       margin-right: 8px;
@@ -1317,6 +1419,41 @@
         class="review-section"
         id="review-ledger-container"
       ></div>
+      <p id="result-save-status" role="status" aria-live="polite">Saving your result...</p>
+      <button type="button" class="btn" onclick="retryResultSave()">Retry Result Save</button>
+      <button type="button" class="btn" onclick="showRating()">Rate Test</button>
+
+      <button
+        type="button"
+        id="download-report-btn"
+        class="btn report-action"
+        onclick="downloadStudentReport()"
+      >
+        <i class="fa-solid fa-file-pdf"></i>
+        Download Complete Report (PDF)
+      </button>
+
+    </div>
+
+  </div>
+
+  <div
+    class="rating-overlay"
+    id="rating-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="rating-modal-title"
+  >
+    <div class="rating-popup">
+      <button type="button" class="btn" onclick="closeRating()" aria-label="Close rating dialog">Close</button>
+
+      <h3 id="rating-modal-title">
+        Rate Your Test Experience
+      </h3>
+
+      <p class="subtitle">
+        Your test is already submitted. This step only updates your rating and feedback.
+      </p>
 
       <form
         id="feedback-form"
@@ -1403,10 +1540,10 @@
           type="submit"
           id="submit-all-btn"
           class="btn"
-          style="width:100%;justify-content:center;"
+          style="width:100%;justify-content:center;display:none;"
         >
           <i class="fa-solid fa-cloud-arrow-up"></i>
-          Submit & Complete
+          Submit Rating
         </button>
 
       </form>
@@ -1429,12 +1566,12 @@
       <i class="fa-solid fa-circle-check"></i>
 
       <h3>
-        Test Submitted Successfully!
+        Rating Submitted Successfully!
       </h3>
 
       <p>
-        Your performance metrics and proctored security log
-        have been securely synced to the Admin Panel.
+        Your test result was already saved. Your rating and feedback
+        have now been updated successfully.
       </p>
 
     </div>
@@ -1446,6 +1583,21 @@
        FIREBASE + APPLICATION
   ========================================================== -->
   <script src="security.js"></script>
+  <script src="question-bank.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"], ["$", "$"]],
+        displayMath: [["\\[", "\\]"], ["$$", "$$"]]
+      },
+      options: {
+        skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script type="module">
 
     import {
@@ -1458,6 +1610,7 @@
       getDoc,
       collection,
       addDoc,
+      setDoc,
       getDocs,
       query,
       where,
@@ -1528,6 +1681,11 @@
     let resultDocId = null;
 
     let resultSaved = false;
+
+    let answerDetails = [];
+    let resultSavePromise = null;
+    let frozenResultPayload = null;
+    let examFinishedAt = null;
 
 
     /*
@@ -1659,6 +1817,11 @@
       resultDocId = null;
 
       resultSaved = false;
+
+      answerDetails = [];
+      resultSavePromise = null;
+      frozenResultPayload = null;
+      examFinishedAt = null;
     }
 
 
@@ -1703,21 +1866,10 @@
        QUESTION HELPERS
     ========================================================== */
 
-    function getQuestionText(q) {
-
-      return q?.question ??
-             q?.q ??
-             "";
-    }
+    const getQuestionText = QuestionBank.getQuestionText;
 
 
-    function getCorrectAnswer(q) {
-
-      return q?.a ??
-             q?.correct ??
-             q?.ans ??
-             "";
-    }
+    const getCorrectAnswer = QuestionBank.getCorrectAnswer;
 
 
     function escapeHTML(value) {
@@ -1729,6 +1881,24 @@
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
+
+
+    const coerceContentText = QuestionBank.coerceContentText;
+
+
+    const getOptionText = QuestionBank.getOptionText;
+
+
+    const normalizeQuestionRecord = QuestionBank.normalizeQuestionRecord;
+
+
+    const getSelectedAnswerText = QuestionBank.getSelectedAnswerText;
+
+
+    const isQuestionAnswered = QuestionBank.isQuestionAnswered;
+
+
+    const isQuestionAnswerCorrect = QuestionBank.isQuestionAnswerCorrect;
 
 
     /*
@@ -1906,6 +2076,157 @@
       }
 
       return formatNormalQuestion(normalizedText);
+    }
+
+
+    function normalizeTableRows(tableData) {
+      if (!tableData) return null;
+
+      if (Array.isArray(tableData)) {
+        return {
+          headers: [],
+          rows: tableData.map(row =>
+            Array.isArray(row)
+              ? row
+              : row && typeof row === "object"
+                ? Object.values(row)
+                : [row]
+          )
+        };
+      }
+
+      if (typeof tableData !== "object") return null;
+
+      const headers =
+        tableData.headers ??
+        tableData.columns ??
+        tableData.headings ??
+        [];
+
+      const rows =
+        tableData.rows ??
+        tableData.data ??
+        tableData.items ??
+        null;
+
+      if (Array.isArray(rows)) {
+        return {
+          headers:
+            Array.isArray(headers)
+              ? headers
+              : Object.values(headers || {}),
+          rows: rows.map(row =>
+            Array.isArray(row)
+              ? row
+              : row && typeof row === "object"
+                ? Object.values(row)
+                : [row]
+          )
+        };
+      }
+
+      const left =
+        tableData.columnI ??
+        tableData.listI ??
+        tableData.left ??
+        tableData.a;
+
+      const right =
+        tableData.columnII ??
+        tableData.listII ??
+        tableData.right ??
+        tableData.b;
+
+      if (Array.isArray(left) || Array.isArray(right)) {
+        const leftItems = Array.isArray(left) ? left : [];
+        const rightItems = Array.isArray(right) ? right : [];
+        const length = Math.max(leftItems.length, rightItems.length);
+
+        return {
+          headers: ["Column I", "Column II"],
+          rows: Array.from({ length }, (_, index) => [
+            leftItems[index] ?? "",
+            rightItems[index] ?? ""
+          ])
+        };
+      }
+
+      return null;
+    }
+
+
+    function renderQuestionTable(tableData) {
+      const table = normalizeTableRows(tableData);
+
+      if (!table || !table.rows.length) return "";
+
+      const columnCount = Math.max(
+        table.headers.length,
+        ...table.rows.map(row => row.length)
+      );
+
+      const headers =
+        table.headers.length
+          ? table.headers
+          : Array.from(
+              { length: columnCount },
+              (_, index) => "Column " + (index + 1)
+            );
+
+      return (
+        '<div class="question-table-scroll">' +
+          '<table class="question-table">' +
+            '<thead><tr>' +
+              headers.map(value =>
+                "<th>" + physicsToHTML(getOptionText(value)) + "</th>"
+              ).join("") +
+            '</tr></thead>' +
+            '<tbody>' +
+              table.rows.map(row =>
+                '<tr>' +
+                  Array.from({ length: columnCount }, (_, index) =>
+                    "<td>" +
+                    physicsToHTML(getOptionText(row[index] ?? "")) +
+                    "</td>"
+                  ).join("") +
+                '</tr>'
+              ).join("") +
+            '</tbody>' +
+          '</table>' +
+        '</div>'
+      );
+    }
+
+
+    function renderQuestionBody(question) {
+      const passage =
+        question.__passage
+          ? '<div class="question-passage">' +
+            physicsToHTML(question.__passage) +
+            '</div>'
+          : "";
+
+      return (
+        passage +
+        "<div>" +
+        physicsToHTML(getQuestionText(question)) +
+        "</div>" +
+        renderQuestionTable(question.__table)
+      );
+    }
+
+
+    function typesetQuestionMath() {
+      if (window.MathJax?.typesetPromise) {
+        window.MathJax
+          .typesetPromise([
+            document.getElementById("q-text"),
+            document.getElementById("options-block")
+          ])
+          .catch(error =>
+            console.warn("Equation rendering warning:", error)
+          );
+      }
     }
 
 
@@ -3145,6 +3466,8 @@
        LOAD QUESTIONS
     ========================================================== */
 
+    const parseQuestionDocument = QuestionBank.parseQuestionDocument;
+
     async function loadSubjectQuestions(
       subject
     ) {
@@ -3208,53 +3531,20 @@
       }
 
 
-      const response =
-        await fetch(
-          `${file}?examData=${Date.now()}`,
-          {
-            cache: "no-store"
-          }
-        );
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          `${file} could not be loaded. HTTP ${response.status}`
-        );
-      }
-
-
-      const rawQuestionText =
-        (await response.text()).replace(/^\uFEFF/, "").trim();
-
-      const normalizedQuestionText =
-        rawQuestionText.replace(/^\[\]\s*(?=\[)/, "");
-
+      // An explicitly published admin bank overrides the repository file.
+      // Missing/unpublished banks preserve the existing repository workflow.
+      const bankSnapshot = await getDoc(doc(db, "exam_config", "question_bank_" + subject));
       let parsedQuestionData;
-
-      try {
-        parsedQuestionData = JSON.parse(normalizedQuestionText);
-      } catch (parseError) {
-        throw new Error(`${file} contains invalid JSON: ${parseError.message}`);
+      if (bankSnapshot.exists() && bankSnapshot.data().active === true) {
+        parsedQuestionData = parseQuestionDocument(bankSnapshot.data().json, subject + " uploaded bank");
+      } else {
+        const response = await fetch(`${file}?examData=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) throw new Error(file + " could not be loaded. HTTP " + response.status);
+        parsedQuestionData = parseQuestionDocument(await response.text(), file);
       }
-
-      const sourceQuestions =
-        Array.isArray(parsedQuestionData)
-          ? parsedQuestionData
-          : Array.isArray(parsedQuestionData?.questions)
-            ? parsedQuestionData.questions
-            : null;
+      const sourceQuestions = QuestionBank.validateBank(parsedQuestionData);
 
 
-      if (
-        !Array.isArray(sourceQuestions)
-      ) {
-
-        throw new Error(
-          `${file} does not contain a valid question array.`
-        );
-      }
 
 
       if (
@@ -3297,15 +3587,28 @@
 
       const taggedSource =
         sourceQuestions.map(
-          (question, sourceIndex) => ({
-            ...question,
-            options: Array.isArray(question.options)
-              ? (examConfigData?.questionOrder === "sequence" ? [...question.options] : shuffleArray(question.options))
-              : question.options,
-            __subject: subject,
-            __sourceIndex: sourceIndex,
-            __questionId: `${subject}:${sourceIndex}`
-          })
+          (question, sourceIndex) => {
+            const optionPairs =
+              question.options.map((option, index) => ({
+                option,
+                media: question.__optionMedia[index] || []
+              }));
+
+            const orderedPairs =
+              question.__answerMode === "single" &&
+              examConfigData?.questionOrder !== "sequence"
+                ? shuffleArray(optionPairs)
+                : optionPairs;
+
+            return {
+              ...question,
+              options: orderedPairs.map(item => item.option),
+              __optionMedia: orderedPairs.map(item => item.media),
+              __subject: subject,
+              __sourceIndex: sourceIndex,
+              __questionId: `${subject}:${sourceIndex}`
+            };
+          }
         );
 
 
@@ -3592,6 +3895,9 @@
           resultDocId = null;
 
           resultSaved = false;
+          resultSavePromise = null;
+          frozenResultPayload = null;
+          examFinishedAt = null;
 
 
           /*
@@ -3735,7 +4041,7 @@
       return Math.max(
         0,
         Math.floor(
-          (Date.now() - started) / 1000
+          ((examFinishedAt || Date.now()) - started) / 1000
         )
       );
     }
@@ -3971,48 +4277,11 @@
        LOAD CURRENT QUESTION
     ========================================================== */
 
-    function getQuestionMedia(qData) {
-      const value =
-        qData.images ??
-        qData.image ??
-        qData.imageUrl ??
-        qData.image_url ??
-        qData.img ??
-        qData.figures ??
-        qData.figure ??
-        qData.figureUrl ??
-        qData.diagram ??
-        qData.diagramUrl ??
-        [];
-
-      return (Array.isArray(value) ? value : [value])
-        .map(item => {
-          if (typeof item === "string") {
-            return { src: item, alt: "Question figure" };
-          }
-
-          if (item && typeof item === "object") {
-            return {
-              src:
-                item.src ??
-                item.url ??
-                item.path ??
-                item.image ??
-                "",
-              alt:
-                item.alt ??
-                item.title ??
-                "Question figure"
-            };
-          }
-
-          return null;
-        })
-        .filter(item => item && String(item.src).trim());
-    }
+    const getQuestionMedia = QuestionBank.getQuestionMedia;
 
     function getQuestionImageCandidates(source) {
       const src = String(source || "").trim();
+      if (/^[a-z][a-z0-9+.-]*:/i.test(src) && !/^(?:https?:|blob:|data:image\/(?:png|jpeg|gif|webp|svg\+xml)[;,])/i.test(src)) return [];
 
       if (
         !src ||
@@ -4141,10 +4410,8 @@
           "q-text"
         )
         .innerHTML =
-        physicsToHTML(
-          getQuestionText(
-            qData
-          )
+        renderQuestionBody(
+          qData
         );
 
 
@@ -4178,21 +4445,28 @@
         "";
 
 
-      if (
-        !Array.isArray(
-          qData.options
-        ) ||
-        !qData.options.length
-      ) {
+      if (qData.__answerMode === "text") {
+        const answerInput =
+          document.createElement("input");
 
-        optionsBlock.innerHTML =
-          `
-            <p style="color:#ef4444;">
-              Question options are missing.
-            </p>
-          `;
+        answerInput.type =
+          /numeric|integer|decimal/.test(
+            String(qData.type || qData.questionType || "").toLowerCase()
+          )
+            ? "number"
+            : "text";
 
-      } else {
+        answerInput.className = "form-control";
+        answerInput.step = "any";
+        answerInput.placeholder = "Type your answer";
+        answerInput.value = String(selectedAnswers[index] ?? "");
+        answerInput.autocomplete = "off";
+        answerInput.addEventListener("input", event => {
+          selectedAnswers[index] = event.target.value;
+        });
+        optionsBlock.appendChild(answerInput);
+
+      } else if (Array.isArray(qData.options) && qData.options.length) {
 
         qData.options.forEach(
           (
@@ -4208,7 +4482,14 @@
 
             label.className =
               `option-label ${
-                selectedAnswers[index] === idx
+                (
+                  qData.__answerMode === "multiple"
+                    ? (
+                        Array.isArray(selectedAnswers[index]) &&
+                        selectedAnswers[index].includes(idx)
+                      )
+                    : selectedAnswers[index] === idx
+                )
                   ? "selected"
                   : ""
               }`;
@@ -4221,7 +4502,9 @@
 
 
             radio.type =
-              "radio";
+              qData.__answerMode === "multiple"
+                ? "checkbox"
+                : "radio";
 
             radio.name =
               "quiz-opt";
@@ -4230,8 +4513,12 @@
               String(idx);
 
             radio.checked =
-              selectedAnswers[index] ===
-              idx;
+              qData.__answerMode === "multiple"
+                ? (
+                    Array.isArray(selectedAnswers[index]) &&
+                    selectedAnswers[index].includes(idx)
+                  )
+                : selectedAnswers[index] === idx;
 
 
             radio.addEventListener(
@@ -4249,20 +4536,51 @@
             );
 
 
-            const optionText =
+            const optionContent =
               document.createElement(
                 "span"
               );
 
+            optionContent.className =
+              "option-content";
+
+            const optionText =
+              document.createElement("span");
 
             optionText.innerHTML =
               physicsToHTML(
                 ` ${opt}`
               );
 
+            optionContent.appendChild(
+              optionText
+            );
+
+            const mediaItems =
+              qData.__optionMedia?.[idx] || [];
+
+            mediaItems.forEach(item => {
+              const img = document.createElement("img");
+              const candidates =
+                getQuestionImageCandidates(item.src);
+              let candidateIndex = 0;
+
+              img.alt = item.alt || "Answer option figure";
+              img.addEventListener("error", () => {
+                candidateIndex += 1;
+                if (candidateIndex < candidates.length) {
+                  img.src = candidates[candidateIndex];
+                } else {
+                  img.alt = "Figure unavailable: " + item.src;
+                  img.style.minHeight = "40px";
+                }
+              });
+              img.src = candidates[0];
+              optionContent.appendChild(img);
+            });
 
             label.appendChild(
-              optionText
+              optionContent
             );
 
 
@@ -4271,7 +4589,13 @@
             );
           }
         );
+
+      } else {
+        optionsBlock.innerHTML =
+          '<p style="color:#ef4444;">Question options are missing.</p>';
       }
+
+      typesetQuestionMath();
 
 
       /*
@@ -4316,9 +4640,30 @@
         optIdx
       ) => {
 
-        selectedAnswers[
-          qIdx
-        ] =
+        const question =
+          questionsList[qIdx];
+
+        if (question.__answerMode === "multiple") {
+          const selected =
+            Array.isArray(selectedAnswers[qIdx])
+              ? [...selectedAnswers[qIdx]]
+              : [];
+
+          const existingIndex =
+            selected.indexOf(optIdx);
+
+          if (existingIndex >= 0) {
+            selected.splice(existingIndex, 1);
+          } else {
+            selected.push(optIdx);
+          }
+
+          selectedAnswers[qIdx] = selected;
+          loadQuestion(qIdx);
+          return;
+        }
+
+        selectedAnswers[qIdx] =
           optIdx;
 
 
@@ -4435,6 +4780,8 @@
       submissionReason =
         "normal_finish"
     ) {
+      if (examFinishedAt !== null) return;
+      examFinishedAt = Date.now();
 
       clearInterval(
         timerInterval
@@ -4450,6 +4797,8 @@
       let correctCount = 0;
 
       let wrongCount = 0;
+
+      answerDetails = [];
 
 
       const reviewContainer =
@@ -4473,23 +4822,32 @@
 
 
           const studentSelectionText =
-            selectedIdx !== undefined
-              ? q.options[selectedIdx]
-              : "Not Attempted";
+            getSelectedAnswerText(
+              q,
+              selectedIdx
+            );
 
 
           const correctSelectionText =
             getCorrectAnswer(q);
 
 
+          const answered =
+            isQuestionAnswered(
+              q,
+              selectedIdx
+            );
+
+
           const isCorrect =
-            selectedIdx !== undefined &&
-            studentSelectionText ===
-            correctSelectionText;
+            isQuestionAnswerCorrect(
+              q,
+              selectedIdx
+            );
 
 
           if (
-            selectedIdx !== undefined
+            answered
           ) {
 
             if (isCorrect) {
@@ -4511,7 +4869,7 @@
 
           reviewItem.className =
             `review-item ${
-              selectedIdx === undefined
+              !answered
                 ? ""
                 : isCorrect
                   ? "correct-item"
@@ -4566,9 +4924,28 @@
             `;
 
 
-          reviewContainer.appendChild(
-            reviewItem
-          );
+          answerDetails.push({
+            number: idx + 1,
+            id: q.id ?? q.__questionId ?? idx + 1,
+            subject: q.__subject || "",
+            type: q.type || q.questionType || q.__answerMode,
+            question: getQuestionText(q),
+            passage: q.__passage || "",
+            table: q.__table || null,
+            options: [...q.options],
+            optionMedia: q.__optionMedia || [],
+            selectedIndices: q.__answerMode === "text" ? [] : (Array.isArray(selectedAnswers[idx]) ? [...selectedAnswers[idx]] : answered ? [selectedAnswers[idx]] : []),
+            selectedAnswer: studentSelectionText,
+            correctAnswer: correctSelectionText,
+            attempted: answered,
+            isCorrect,
+            media: getQuestionMedia(q).map(item => item.src)
+          });
+
+
+          const completeReview = buildReportCard(answerDetails[answerDetails.length - 1]);
+          completeReview.style.width = "100%";
+          reviewContainer.appendChild(completeReview);
         }
       );
 
@@ -4679,6 +5056,7 @@
 
 
       window.changeSlide(4);
+      window.MathJax?.startup?.promise?.then(() => window.MathJax.typesetPromise([reviewContainer])).catch(console.warn);
 
 
       /*
@@ -4695,7 +5073,15 @@
        SAVE PERFORMANCE DRAFT
     ========================================================== */
 
-    async function savePerformanceDraft(
+    function savePerformanceDraft(reason = "normal_finish") {
+      if (resultSaved) return Promise.resolve(true);
+      if (resultSavePromise) return resultSavePromise;
+      resultSavePromise = persistPerformanceResult(reason)
+        .finally(() => { resultSavePromise = null; });
+      return resultSavePromise;
+    }
+
+    async function persistPerformanceResult(
       submissionReason =
         "normal_finish"
     ) {
@@ -4707,7 +5093,7 @@
       }
 
 
-      const payload = {
+      const payload = frozenResultPayload || {
 
         name:
           currentStudentName,
@@ -4789,6 +5175,12 @@
         questionCount:
           questionsList.length,
 
+        // JSON avoids Firestore's restriction on nested arrays (tables/media).
+        answerDetailsJson: JSON.stringify(answerDetails, (key, value) =>
+          typeof value === "string" && value.startsWith("data:image/")
+            ? "[Embedded figure available in student PDF]" : value),
+
+
         marksPerQuestion:
           4,
 
@@ -4815,24 +5207,17 @@
       };
 
 
+      frozenResultPayload = payload;
+      document.getElementById("result-save-status").textContent = "Saving your result... Please keep this page open.";
       try {
-
-        const ref =
-          await addDoc(
-            collection(
-              db,
-              "results"
-            ),
-            payload
-          );
-
-
-        resultDocId =
-          ref.id;
+        // Allocate once, reuse on retries; concurrent callers share one promise.
+        if (!resultDocId) resultDocId = doc(collection(db, "results")).id;
+        await setDoc(doc(db, "results", resultDocId), payload);
 
 
         resultSaved =
           true;
+        document.getElementById("result-save-status").textContent = "Test submitted. Your result is saved; rating is optional and will not change your score.";
 
         sessionStorage.removeItem(
           "examStartTime"
@@ -4841,13 +5226,16 @@
         sessionStorage.removeItem(
           "examEndTime"
         );
+        return true;
 
       } catch (err) {
+        document.getElementById("result-save-status").textContent = "Result could not be saved. Keep this page open, reconnect, then click Retry Result Save.";
 
         console.error(
           "Performance autosave error:",
           err
         );
+        return false;
       }
     }
 
@@ -4873,6 +5261,320 @@
     );
 
 
+    function getReportImageSource(source) {
+      return getQuestionImageCandidates(source)[0] || "";
+    }
+
+
+    function buildReportCard(detail) {
+      const card = document.createElement("section");
+      card.style.cssText =
+        "width:900px;padding:24px;margin:0;background:#fff;color:#111827;" +
+        "font-family:Arial,'Noto Sans',sans-serif;border-bottom:2px solid #cbd5e1;";
+
+      const statusColor =
+        !detail.attempted
+          ? "#64748b"
+          : detail.isCorrect
+            ? "#059669"
+            : "#dc2626";
+
+      const statusText =
+        !detail.attempted
+          ? "Not Attempted"
+          : detail.isCorrect
+            ? "Correct"
+            : "Incorrect";
+
+      card.innerHTML =
+        '<div style="display:flex;justify-content:space-between;gap:16px;">' +
+          '<strong style="font-size:18px;">Q' +
+            escapeHTML(detail.number) +
+            (detail.subject ? " - " + escapeHTML(detail.subject) : "") +
+          '</strong>' +
+          '<strong style="color:' + statusColor + ';">' +
+            statusText +
+          '</strong>' +
+        '</div>' +
+        (detail.passage
+          ? '<div style="margin-top:12px;padding:12px;background:#eff6ff;border-left:4px solid #2563eb;">' +
+              physicsToHTML(detail.passage) +
+            '</div>'
+          : "") +
+        '<div style="margin-top:12px;font-size:17px;line-height:1.55;">' +
+          physicsToHTML(detail.question) +
+        '</div>' +
+        renderQuestionTable(detail.table) +
+        '<div data-report-images style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;"></div>' +
+        (detail.options.length
+          ? '<ol type="A" style="margin:12px 0 0 24px;line-height:1.55;">' +
+              detail.options.map((option, index) =>
+                '<li data-option-index="' + index + '">' + physicsToHTML(option) + "</li>"
+              ).join("") +
+            "</ol>"
+          : "") +
+        '<div style="margin-top:14px;line-height:1.6;">' +
+          '<div><b>Student Answer:</b> ' +
+            physicsToHTML(detail.selectedAnswer) +
+          '</div>' +
+          '<div><b>Correct Answer:</b> ' +
+            physicsToHTML(
+              Array.isArray(detail.correctAnswer)
+                ? detail.correctAnswer.join(" | ")
+                : detail.correctAnswer
+            ) +
+          '</div>' +
+        '</div>';
+
+      const imageWrap =
+        card.querySelector("[data-report-images]");
+
+      function appendImage(container, source) {
+        const img = document.createElement("img");
+        const candidates = getQuestionImageCandidates(source);
+        let candidate = 0;
+        img.addEventListener("error", () => {
+          if (++candidate < candidates.length) img.src = candidates[candidate];
+          else { img.dataset.failed = "true"; img.alt = "Figure unavailable: " + source; }
+        });
+        img.src = candidates[0] || "";
+        img.crossOrigin = "anonymous";
+        img.alt = "Question figure";
+        img.style.cssText =
+          "display:block;max-width:100%;max-height:360px;object-fit:contain;";
+        container.appendChild(img);
+      }
+      (detail.media || []).forEach(source => appendImage(imageWrap, source));
+      (detail.optionMedia || []).forEach((items, index) => {
+        const container = card.querySelector('[data-option-index="' + index + '"]');
+        if (container) items.forEach(item => appendImage(container, item.src));
+      });
+
+      return card;
+    }
+
+
+    function waitForReportImages(container) {
+      return Promise.all(
+        [...container.querySelectorAll("img")].map(img => new Promise((resolve, reject) => {
+          const started = Date.now();
+          const check = () => {
+            if (img.complete && img.naturalWidth > 0) return resolve();
+            if (img.dataset.failed || Date.now() - started > 15000) return reject(new Error("A report figure could not load. Check its image path and try again; no incomplete PDF was downloaded."));
+            setTimeout(check, 100);
+          };
+          check();
+        }))
+      );
+    }
+
+
+    function openRatingModal() {
+      document
+        .getElementById("rating-modal")
+        .classList.add("show");
+      document.querySelector('#stars-container i')?.focus();
+    }
+
+    window.retryResultSave = () => savePerformanceDraft("manual_retry");
+    window.closeRating = () => {
+      document.getElementById("rating-modal").classList.remove("show");
+      document.getElementById("download-report-btn").focus();
+    };
+    window.showRating = async () => {
+      if (await savePerformanceDraft("rating_open")) openRatingModal();
+    };
+    document.getElementById("rating-modal").addEventListener("keydown", event => {
+      if (event.key === "Escape") window.closeRating();
+      if (event.key === "Tab") {
+        const items = [...event.currentTarget.querySelectorAll('button:not([disabled]), textarea, [tabindex="0"]')].filter(el => el.getClientRects().length);
+        const first = items[0], last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    });
+
+
+    window.downloadStudentReport =
+      async () => {
+        const button =
+          document.getElementById("download-report-btn");
+
+        const originalHTML =
+          button.innerHTML;
+
+        button.disabled = true;
+        button.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> Preparing PDF...';
+
+        let reportRoot = null;
+        try {
+          const saved = await savePerformanceDraft("report_download");
+          if (!saved || !resultSaved) {
+            throw new Error("Your result has not been saved yet. Please check your connection and retry the download; this will retry saving the same result.");
+          }
+
+          if (
+            !window.html2canvas ||
+            !window.jspdf?.jsPDF
+          ) {
+            throw new Error(
+              "PDF service is still loading. Please wait a few seconds and try again."
+            );
+          }
+
+          reportRoot =
+            document.createElement("div");
+
+          reportRoot.style.cssText =
+            "position:fixed;left:-10000px;top:0;width:900px;background:#fff;" +
+            "z-index:-1;pointer-events:none;";
+
+          const header =
+            document.createElement("header");
+
+          const instituteName =
+            examConfigData?.institute?.name ||
+            examConfigData?.instituteName ||
+            "Exam Elite";
+
+          header.style.cssText =
+            "width:900px;padding:30px;background:#fff;color:#0f172a;" +
+            "font-family:Arial,'Noto Sans',sans-serif;border-bottom:4px solid #1e3a8a;";
+
+          header.innerHTML =
+            '<h1 style="margin:0;color:#1e3a8a;">' +
+              escapeHTML(instituteName) +
+            '</h1>' +
+            '<h2 style="margin:8px 0 18px;">Complete Student Performance Report</h2>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;line-height:1.5;">' +
+              '<div><b>Student:</b> ' + escapeHTML(currentStudentName) + '</div>' +
+              '<div><b>Email:</b> ' + escapeHTML(currentStudentEmail) + '</div>' +
+              '<div><b>Class:</b> ' + escapeHTML(currentStudentClass) + '</div>' +
+              '<div><b>Centre Code:</b> ' + escapeHTML(currentCentreCode) + '</div>' +
+              '<div><b>Student Address:</b> ' + escapeHTML(currentStudentAddress) + '</div>' +
+              '<div><b>Institute Address:</b> ' + escapeHTML(examConfigData?.institute?.fullAddress || "") + '</div>' +
+              '<div><b>Not Attempted:</b> ' + (questionsList.length - correctCountFinal - wrongCountFinal) + '</div>' +
+              '<div><b>Score:</b> ' + escapeHTML(finalizedScoreString) + '</div>' +
+              '<div><b>Duration:</b> ' + escapeHTML(formatTimeTaken(getTimeTakenSeconds())) + '</div>' +
+              '<div><b>Correct:</b> ' + correctCountFinal + '</div>' +
+              '<div><b>Wrong:</b> ' + wrongCountFinal + '</div>' +
+              '<div><b>Tab Switches:</b> ' + tabSwitches + '</div>' +
+              '<div><b>Copy/Paste Attempts:</b> ' + copiesAttempted + '</div>' +
+            '</div>';
+
+          reportRoot.appendChild(header);
+
+          const cards =
+            answerDetails.map(detail => {
+              const card = buildReportCard(detail);
+              reportRoot.appendChild(card);
+              return card;
+            });
+
+          document.body.appendChild(reportRoot);
+
+          await document.fonts?.ready;
+          await waitForReportImages(reportRoot);
+
+          if (window.MathJax?.typesetPromise) {
+            await window.MathJax.typesetPromise([reportRoot]);
+          }
+
+          const { jsPDF } =
+            window.jspdf;
+
+          const pdf =
+            new jsPDF({
+              orientation: "portrait",
+              unit: "mm",
+              format: "a4",
+              compress: true
+            });
+
+          const pageWidth = 210;
+          const pageHeight = 297;
+          const margin = 10;
+          const usableWidth = pageWidth - margin * 2;
+          let cursorY = margin;
+
+          const securityBlock = document.createElement("section");
+          securityBlock.style.cssText = "width:900px;padding:24px;background:white;color:#111;white-space:pre-wrap;font:16px Arial;";
+          securityBlock.textContent = "Security Event Log\n" + (securityEvents.length ? securityEvents.map(event => JSON.stringify(event)).join("\n") : "No security events recorded.");
+          reportRoot.appendChild(securityBlock);
+          const blocks = [header, ...cards, securityBlock];
+
+          for (const block of blocks) {
+            const canvas =
+              await window.html2canvas(block, {
+                scale: 1.5,
+                backgroundColor: "#ffffff",
+                useCORS: true,
+                logging: false
+              });
+
+            // Keep readable full width. Slice long content across pages rather
+            // than shrinking an entire long question to unreadable text.
+            const mmPerPixel = usableWidth / canvas.width;
+            const fullHeight = canvas.height * mmPerPixel;
+            if (fullHeight <= pageHeight - margin * 2 && cursorY + fullHeight > pageHeight - margin) {
+              pdf.addPage();
+              cursorY = margin;
+            }
+            let offset = 0;
+            while (offset < canvas.height) {
+              let availablePixels = Math.floor((pageHeight - margin - cursorY) / mmPerPixel);
+              if (availablePixels < 1) { pdf.addPage(); cursorY = margin; continue; }
+              const height = Math.min(availablePixels, canvas.height - offset);
+              const slice = document.createElement("canvas");
+              slice.width = canvas.width;
+              slice.height = height;
+              slice.getContext("2d").drawImage(canvas, 0, offset, canvas.width, height, 0, 0, canvas.width, height);
+              pdf.addImage(slice.toDataURL("image/jpeg", 0.92), "JPEG", margin, cursorY, usableWidth, height * mmPerPixel, undefined, "FAST");
+              cursorY += height * mmPerPixel;
+              offset += height;
+              slice.width = slice.height = 0;
+              if (offset < canvas.height) { pdf.addPage(); cursorY = margin; }
+            }
+            canvas.width = canvas.height = 0;
+            cursorY += 4;
+          }
+          const pageCount = pdf.getNumberOfPages();
+          for (let page = 1; page <= pageCount; page++) {
+            pdf.setPage(page);
+            pdf.setFontSize(8);
+            pdf.text("Page " + page + " / " + pageCount, margin, pageHeight - 4);
+          }
+
+
+
+          const safeName =
+            (currentStudentName || "student")
+              .replace(/[^a-z0-9_-]+/gi, "_")
+              .replace(/^_+|_+$/g, "");
+
+          await pdf.save(
+            (safeName || "student") +
+            "_complete_test_report.pdf", { returnPromise: true }
+          );
+
+          reportRoot.remove();
+          openRatingModal();
+
+        } catch (error) {
+          console.error("PDF report error:", error);
+          alert(
+            "Report could not be downloaded:\n\n" +
+            error.message
+          );
+        } finally {
+          reportRoot?.remove();
+          button.disabled = false;
+          button.innerHTML = originalHTML;
+        }
+      };
+
+
     /* =========================================================
        RATING
     ========================================================== */
@@ -4883,6 +5585,12 @@
       )
       .forEach(
         star => {
+          star.tabIndex = 0;
+          star.setAttribute("role", "button");
+          star.setAttribute("aria-label", "Rate " + star.dataset.value + " out of 5");
+          star.addEventListener("keydown", event => {
+            if (event.key === " " || event.key === "Enter") { event.preventDefault(); star.click(); }
+          });
 
           star.addEventListener(
             "click",
@@ -4923,6 +5631,13 @@
                 )
                 .style.display =
                 "none";
+
+              document
+                .getElementById(
+                  "submit-all-btn"
+                )
+                .style.display =
+                "flex";
             }
           );
         }
@@ -5001,148 +5716,58 @@
         `;
 
 
-      const payload = {
-
-        name:
-          currentStudentName,
-
-        email:
-          currentStudentEmail,
-
-        batchCategory:
-          currentBatchCategory,
-
-        studentClass:
-          currentStudentClass,
-
-        address:
-          currentStudentAddress,
-
-        centreCode:
-          currentCentreCode,
-
-        institute:
-          examConfigData?.institute || {},
-
-        score:
-          finalizedScoreString,
-
-        calculatedScore,
-
-        totalScore,
-
-        correct:
-          correctCountFinal,
-
-        wrong:
-          wrongCountFinal,
-
-        attempted:
-          correctCountFinal +
-          wrongCountFinal,
-
-        timeTakenSeconds:
-          getTimeTakenSeconds(),
-
-        duration:
-          formatTimeTaken(
-            getTimeTakenSeconds()
-          ),
-
-        tabSwitches,
-
-        copiesAttempted,
-
-        refreshes,
-
-        penaltiesApplied:
-          0,
-
-        securityEvents,
-
-        rating:
-          selectedRating,
-
-        doubt:
-          document
-            .getElementById(
-              "doubt-input"
-            )
-            .value
-            .trim() ||
-          "None",
-
-        feedback:
-          document
-            .getElementById(
-              "feedback-input"
-            )
-            .value
-            .trim() ||
-          "None",
-
-        questionCount:
-          questionsList.length,
-
-        marksPerQuestion:
-          4,
-
-        negativeMarking:
-          0,
-
-        /*
-          Save the exact configuration
-          used for this attempt.
-        */
-
-        subjectSettings:
-          subjectConfig,
-
-        submissionStatus:
-          "submitted",
-
-        submissionReason:
-          "student_submit",
-
-        submittedAt:
-          new Date()
-      };
-
-
       try {
-
-        if (
-          resultDocId
-        ) {
-
-          await updateDoc(
-            doc(
-              db,
-              "results",
-              resultDocId
-            ),
-            payload
+        if (!resultDocId || !resultSaved) {
+          await savePerformanceDraft(
+            "rating_submit"
           );
-
-        } else {
-
-          const ref =
-            await addDoc(
-              collection(
-                db,
-                "results"
-              ),
-              payload
-            );
-
-
-          resultDocId =
-            ref.id;
         }
 
+        if (!resultDocId || !resultSaved) {
+          throw new Error(
+            "The submitted result could not be located. Please check your connection and try again."
+          );
+        }
 
-        resultSaved =
-          true;
+        /*
+          The complete result was already saved when the exam ended.
+          This write intentionally updates rating fields only.
+        */
+        await updateDoc(
+          doc(
+            db,
+            "results",
+            resultDocId
+          ),
+          {
+            rating:
+              selectedRating,
+
+            doubt:
+              document
+                .getElementById(
+                  "doubt-input"
+                )
+                .value
+                .trim() ||
+              "None",
+
+            feedback:
+              document
+                .getElementById(
+                  "feedback-input"
+                )
+                .value
+                .trim() ||
+              "None",
+
+            ratingSubmitted:
+              true,
+
+            ratingSubmittedAt:
+              new Date()
+          }
+        );
 
 
         sessionStorage.removeItem("examEndTime");
@@ -5182,7 +5807,7 @@
         submitButton.innerHTML =
           `
             <i class="fa-solid fa-cloud-arrow-up"></i>
-            Submit & Complete
+            Submit Rating
           `;
 
 
