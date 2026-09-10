@@ -1342,7 +1342,35 @@
             class="muted"
             style="font-size:11px;margin-top:9px"
           >
-            This setting is saved for future upload functionality.
+            Choose an input method, review the JSON, then publish the selected subject.
+          </div>
+
+          <div style="margin-top:16px">
+            <label for="bank-subject">Question Bank Subject</label>
+            <select id="bank-subject"><option value="chemistry">Chemistry</option><option value="physics">Physics</option><option value="biology">Biology</option><option value="maths">Maths</option></select>
+            <div id="bank-form-panel">
+              <label for="bank-question">Question (Unicode or LaTeX)</label>
+              <textarea id="bank-question" rows="3"></textarea>
+              <label for="bank-options">Options: one per line</label><textarea id="bank-options" rows="4"></textarea>
+              <label for="bank-answer">Correct answer: exact option text, or A/B/C/D</label><input id="bank-answer">
+              <label for="bank-image">Figure path or HTTPS URL (optional)</label><input id="bank-image">
+              <button type="button" id="bank-add" class="btn">Add Question to Draft</button>
+            </div>
+            <div id="bank-word-panel" hidden>
+              <p>Word template: each question starts with Q1. or 1.; options use A), B), C), D) on separate paragraphs; finish with Answer: B. Images and tables may be placed inside the question. Review every imported question before publishing. Native Word equations and arbitrary layouts are not guaranteed: use LaTeX or an embedded image.</p>
+              <input id="bank-word" type="file" accept=".docx">
+            </div>
+            <div id="bank-code-panel" hidden><label for="bank-file">Import JSON / text file</label><input id="bank-file" type="file" accept=".json,.txt,.html"></div>
+            <label for="bank-json">Editable JSON draft (all methods)</label>
+            <textarea id="bank-json" rows="10" spellcheck="false" placeholder='[{"q":"Question","options":["A","B"],"a":"A"}]'></textarea>
+            <p class="muted">Pictures must be included as image paths/URLs or embedded data images; JSON cannot recreate a missing picture. Publishing replaces only this subject's admin bank. Existing repository files stay unchanged. Large image banks should use repository assets.</p>
+            <div class="actions">
+              <button type="button" id="bank-load" class="btn">Load Current Bank</button>
+              <button type="button" id="bank-validate" class="btn">Validate Draft</button>
+              <button type="button" id="bank-publish" class="btn btn-success">Publish Subject Bank</button>
+              <button type="button" id="bank-repository" class="btn">Use Repository File</button>
+            </div>
+            <p id="bank-status" role="status" aria-live="polite"></p>
           </div>
 
         </div>
@@ -1625,6 +1653,9 @@
        JAVASCRIPT
   ========================================================== -->
 
+  <script src="question-bank.js"></script>
+  <script src="question-upload.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mammoth@1.11.0/mammoth.browser.min.js"></script>
   <script type="module">
 
     import { initializeApp }
@@ -1870,7 +1901,102 @@
       if (radio) {
         radio.checked = true;
       }
+      updateUploadPanels();
     }
+
+    function updateUploadPanels() {
+      const mode = getUploadMode();
+      $("bank-form-panel").hidden = mode !== "form";
+      $("bank-code-panel").hidden = mode !== "code";
+      $("bank-word-panel").hidden = mode !== "msword";
+    }
+
+    document.querySelectorAll('input[name="upload-mode"]').forEach(radio => radio.addEventListener("change", updateUploadPanels));
+    const bankStatus = message => { $("bank-status").textContent = message; };
+    function readBankDraft() {
+      const data = QuestionBank.parseQuestionDocument($("bank-json").value, "Draft");
+      const normalized = QuestionBank.validateBank(data);
+      return { data, normalized };
+    }
+    $("bank-add").addEventListener("click", () => {
+      try {
+        const draft = $("bank-json").value.trim() ? readBankDraft().data : [];
+        const list = Array.isArray(draft) ? draft : draft.questions;
+        const question = { q: $("bank-question").value.trim(), options: $("bank-options").value.split(/\r?\n/).map(v => v.trim()).filter(Boolean), a: $("bank-answer").value.trim() };
+        if ($("bank-image").value.trim()) question.image = $("bank-image").value.trim();
+        QuestionBank.validateBank([question]);
+        list.push(question);
+        $("bank-json").value = JSON.stringify(draft, null, 2);
+        bankStatus("Added to draft. Review and publish when ready.");
+      } catch (error) { bankStatus(error.message); }
+    });
+    $("bank-file").addEventListener("change", async event => {
+      try {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (file.size > 800000) throw new Error("File too large for an admin bank. Use repository JSON and image assets instead.");
+        const text = await file.text();
+        QuestionBank.validateBank(QuestionBank.parseQuestionDocument(text, file.name));
+        $("bank-json").value = text;
+        bankStatus("Imported into draft only. Review before publishing.");
+      } catch (error) { bankStatus(error.message); }
+    });
+    $("bank-word").addEventListener("change", async event => {
+      try {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (file.size > 10000000) throw new Error("Word file must be smaller than 10 MB.");
+        if (!window.mammoth) throw new Error("Word converter has not loaded. Check your connection or upload JSON.");
+        bankStatus("Reading Word file...");
+        const result = await window.mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() });
+        const data = parseWordQuestionHTML(result.value);
+        $("bank-json").value = JSON.stringify(data, null, 2);
+        bankStatus("Imported " + data.length + " questions. Check all equations, pictures and answers before publishing. " + result.messages.map(m => m.message).join("; "));
+      } catch (error) { bankStatus(error.message); }
+    });
+    $("bank-validate").addEventListener("click", () => {
+      try { bankStatus(readBankDraft().normalized.length + " questions validated. Check subject pool/display counts before starting an exam."); }
+      catch (error) { bankStatus(error.message); }
+    });
+    $("bank-load").addEventListener("click", async () => {
+      const subject = $("bank-subject").value;
+      if ($("bank-json").value.trim() && !confirm("Replace the current unsaved draft with " + subject + "?")) return;
+      try {
+        const snap = await getDoc(doc(db, "exam_config", "question_bank_" + subject));
+        let text;
+        if (snap.exists() && snap.data().active) text = snap.data().json;
+        else {
+          const response = await fetch("question/" + subject + ".html", { cache: "no-store" });
+          if (!response.ok) throw new Error("Repository bank could not be loaded.");
+          text = await response.text();
+        }
+        QuestionBank.validateBank(QuestionBank.parseQuestionDocument(text, subject));
+        $("bank-json").value = text;
+        bankStatus("Loaded " + subject + ". Changes remain a draft until published.");
+      } catch (error) { bankStatus(error.message); }
+    });
+    $("bank-publish").addEventListener("click", async () => {
+      const button = $("bank-publish");
+      try {
+        const { data, normalized } = readBankDraft();
+        const subject = $("bank-subject").value;
+        const json = JSON.stringify(data);
+        if (new TextEncoder().encode(json).length > 750000) throw new Error("Bank exceeds 750 KB. Store figures as repository assets and use image paths; do not embed large images.");
+        if (!confirm("Publish " + normalized.length + " questions for " + subject + "? This replaces the admin bank used by new attempts; repository files and active attempts remain unchanged.")) return;
+        button.disabled = true;
+        await setDoc(doc(db, "exam_config", "question_bank_" + subject), { active: true, json, count: normalized.length, updatedAt: new Date() });
+        bankStatus("Published " + subject + ": " + normalized.length + " questions. Set its pool/display counts in Subject Settings.");
+      } catch (error) { bankStatus(error.message); }
+      finally { button.disabled = false; }
+    });
+    $("bank-repository").addEventListener("click", async () => {
+      const subject = $("bank-subject").value;
+      if (!confirm("Use question/" + subject + ".html for new attempts? The uploaded bank will remain stored but inactive.")) return;
+      try {
+        await setDoc(doc(db, "exam_config", "question_bank_" + subject), { active: false }, { merge: true });
+        bankStatus("Repository file is active for " + subject + ". Uploaded bank retained.");
+      } catch (error) { bankStatus(error.message); }
+    });
 
 
     /* =========================================================
@@ -2760,6 +2886,13 @@
        NORMALIZE RESULT
     ========================================================== */
 
+    function parseAnswerDetails(value) {
+      try {
+        const data = JSON.parse(value || "[]");
+        return Array.isArray(data) ? data : [];
+      } catch { return []; }
+    }
+
     function normalizeResult(
       docSnap
     ) {
@@ -2942,6 +3075,11 @@
                 )
               : ""
           ),
+
+        answerDetails:
+          Array.isArray(r.answerDetails)
+            ? r.answerDetails
+            : parseAnswerDetails(r.answerDetailsJson),
 
         raw:
           r
@@ -3871,6 +4009,72 @@
                 : '<span class="muted">No doubt submitted.</span>'
             }
           </p>
+
+        </div>
+
+
+        <div
+          style="
+            margin-top:10px;
+            background:#f8fafc;
+            border-radius:10px;
+            padding:14px
+          "
+        >
+
+          <strong
+            style="
+              font-size:12px;
+              color:var(--muted);
+              text-transform:uppercase
+            "
+          >
+            Complete Answer Ledger
+          </strong>
+
+          <div
+            style="
+              margin-top:10px;
+              max-height:420px;
+              overflow:auto
+            "
+          >
+            ${
+              r.answerDetails.length
+                ? r.answerDetails.map(item => `
+                    <div
+                      style="
+                        padding:10px 0;
+                        border-bottom:1px solid #e2e8f0;
+                        line-height:1.5
+                      "
+                    >
+                      <b>
+                        Q${escapeHtml(item.number)}.
+                        ${escapeHtml(item.question || "")}
+                      </b>
+                      ${item.passage ? '<p style="white-space:pre-wrap">' + escapeHtml(item.passage) + '</p>' : ''}
+                      ${item.table ? '<pre style="white-space:pre-wrap">Table: ' + escapeHtml(JSON.stringify(item.table, null, 2)) + '</pre>' : ''}
+                      ${Array.isArray(item.options) ? '<ol type="A">' + item.options.map(o => '<li style="white-space:pre-wrap">' + escapeHtml(o) + '</li>').join('') + '</ol>' : ''}
+                      <br>
+                      <span>
+                        Student:
+                        ${escapeHtml(item.selectedAnswer || "Not Attempted")}
+                      </span>
+                      <br>
+                      <span style="color:#059669">
+                        Correct:
+                        ${escapeHtml(
+                          Array.isArray(item.correctAnswer)
+                            ? item.correctAnswer.join(" | ")
+                            : item.correctAnswer || ""
+                        )}
+                      </span>
+                    </div>
+                  `).join("")
+                : '<span class="muted">Answer ledger is unavailable for this older submission.</span>'
+            }
+          </div>
 
         </div>
       `;
