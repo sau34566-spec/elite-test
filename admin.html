@@ -1260,6 +1260,16 @@
 
         </div>
 
+        <div class="form-group" style="margin-top:18px;padding:14px;border:1px solid #fecaca;border-radius:10px;background:#fff7f7">
+          <label>Force Submit</label>
+          <button type="button" id="force-submit-all-btn" class="btn btn-danger">
+            <i class="fa-solid fa-forward"></i> Force Submit Unsaved Results
+          </button>
+          <div class="muted" style="font-size:11px;margin-top:6px">
+            This saves all currently logged-in or in-progress students from the admin panel.
+          </div>
+        </div>
+
         <!-- EXAM WINDOW -->
         <h3
           style="
@@ -1572,6 +1582,7 @@
                 <th>Copy Violations</th>
                 <th>Penalties</th>
                 <th>Status</th>
+                <th>Admin Action</th>
               </tr>
 
             </thead>
@@ -2906,6 +2917,11 @@
         toDate(r.timestamp) ||
         new Date(0);
 
+      const loggedIn =
+        toDate(r.loginAt) ||
+        toDate(r.createdAt) ||
+        new Date(0);
+
 
       const rating =
         parseRating(
@@ -3007,6 +3023,12 @@
         submittedAtStr:
           formatDate(submitted),
 
+        loginAt:
+          loggedIn,
+
+        loginAtStr:
+          formatDate(loggedIn),
+
         tabSwitches,
 
         copiesAttempted,
@@ -3082,7 +3104,11 @@
             : parseAnswerDetails(r.answerDetailsJson),
 
         raw:
-          r
+          r,
+
+        liveSession:
+          r.sourceCollection === "exam_sessions" ||
+          ["logged_in", "in_progress", "result_pending_feedback"].includes(String(r.status || ""))
       };
     }
 
@@ -3121,17 +3147,27 @@
 
       try {
 
-        const snap =
-          await getDocs(
-            collection(
-              db,
-              "results"
-            )
-          );
+        const [resultSnap, sessionSnap] = await Promise.all([
+          getDocs(collection(db, "results")),
+          getDocs(collection(db, "exam_sessions"))
+        ]);
+
+        const merged = new Map();
+        sessionSnap.docs.forEach(d => merged.set(d.id, {
+          id:d.id,
+          data:() => ({...d.data(), sourceCollection:"exam_sessions"})
+        }));
+        resultSnap.docs.forEach(d => {
+          const session = merged.get(d.id);
+          merged.set(d.id, {
+            id:d.id,
+            data:() => ({...(session ? session.data() : {}), ...d.data()})
+          });
+        });
 
 
         allStudentResults =
-          snap.docs.map(
+          [...merged.values()].map(
             normalizeResult
           );
 
@@ -3189,7 +3225,7 @@
         $("security-body").innerHTML =
           `<tr>
             <td
-              colspan="6"
+              colspan="7"
               class="empty"
               style="color:var(--danger)"
             >
@@ -3281,7 +3317,7 @@
 
 
       let data =
-        [...allStudentResults];
+        [...allStudentResults].filter(r => !r.liveSession);
 
 
       const batch =
@@ -3604,6 +3640,69 @@
        SECURITY
     ========================================================== */
 
+    async function forceSubmitResult(id, silent=false) {
+      const record = allStudentResults.find(r => r.id === id);
+      if (!record) return false;
+      if (!record.liveSession) {
+        if (!silent) alert("This result is already saved.");
+        return true;
+      }
+      const raw = record.raw || {};
+      const now = new Date();
+      const payload = {
+        name: raw.name || record.name || "Anonymous",
+        email: raw.email || record.email || "",
+        attemptId: raw.attemptId || id,
+        examId: raw.examId || "current_test",
+        examName: raw.examName || "Current Test",
+        subjects: Array.isArray(raw.subjects) ? raw.subjects : [],
+        score: raw.score || record.scoreText || "0/0",
+        correct: Number(raw.correct ?? record.correct ?? 0) || 0,
+        wrong: Number(raw.wrong ?? record.wrong ?? 0) || 0,
+        tabSwitches: Number(raw.tabSwitches ?? record.tabSwitches ?? 0) || 0,
+        copiesAttempted: Number(raw.copiesAttempted ?? record.copiesAttempted ?? 0) || 0,
+        penaltiesApplied: Number(raw.penaltiesApplied ?? record.penaltiesApplied ?? 0) || 0,
+        feedback: raw.feedback || "Admin force submitted",
+        doubt: raw.doubt || "None",
+        rating: Number(raw.rating ?? record.rating ?? 0) || 0,
+        status: "completed", completed: true,
+        submittedAt: raw.submittedAt || now, updatedAt: now,
+        forceSubmittedByAdmin: true, forceSubmittedAt: now
+      };
+      try {
+        await setDoc(doc(db, "results", id), payload, {merge:true});
+        await setDoc(doc(db, "exam_sessions", id), {
+          status:"final_submitted", submittedAt:payload.submittedAt,
+          forceSubmittedByAdmin:true, forceSubmittedAt:now, lastSeen:now,
+          score:payload.score, correct:payload.correct, wrong:payload.wrong,
+          tabSwitches:payload.tabSwitches, copiesAttempted:payload.copiesAttempted,
+          penaltiesApplied:payload.penaltiesApplied, feedback:payload.feedback,
+          doubt:payload.doubt, rating:payload.rating
+        }, {merge:true});
+        return true;
+      } catch (error) {
+        console.error("Force submit error:", error);
+        if (!silent) alert("Force submit failed: " + (error.code || error.message));
+        return false;
+      }
+    }
+
+    async function forceSubmitAllUnsaved() {
+      const pending = allStudentResults.filter(r => r.liveSession);
+      if (!pending.length) { alert("No unsaved student session is available."); return; }
+      if (!confirm("Force submit " + pending.length + " unsaved student result(s)?\n\nTheir current saved data will be finalized.")) return;
+      const btn = $("force-submit-all-btn");
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; }
+      let saved = 0;
+      try {
+        for (const item of pending) if (await forceSubmitResult(item.id, true)) saved++;
+        alert(saved + " student result(s) saved successfully.");
+        await fetchLiveDatabaseRecords();
+      } finally {
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-forward"></i> Force Submit Unsaved Results'; }
+      }
+    }
+
     function renderSecurity() {
 
       const body =
@@ -3678,9 +3777,8 @@
 
 
               <td>
-                ${escapeHtml(
-                  r.submittedAtStr
-                )}
+                <span class="muted">Login: ${escapeHtml(r.loginAtStr)}</span><br>
+                <span>Submit: ${escapeHtml(r.submittedAtStr)}</span>
               </td>
 
 
@@ -3741,11 +3839,26 @@
 
               </td>
 
+              <td>
+                ${r.liveSession
+                  ? `<button type="button" class="btn btn-small btn-danger force-submit-btn" data-id="${escapeHtml(r.id)}"><i class="fa-solid fa-forward"></i> Force Submit</button>`
+                  : `<span class="muted"><i class="fa-solid fa-check"></i> Saved</span>`}
+              </td>
+
             </tr>
           `;
 
         })
         .join("");
+
+      body.querySelectorAll(".force-submit-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          if (!confirm("Force submit this student's current saved result?")) return;
+          btn.disabled = true;
+          if (await forceSubmitResult(btn.dataset.id)) await fetchLiveDatabaseRecords();
+          else btn.disabled = false;
+        });
+      });
     }
 
 
@@ -4615,6 +4728,12 @@
       .addEventListener(
         "click",
         saveExamSettings
+      );
+
+    $("force-submit-all-btn")
+      .addEventListener(
+        "click",
+        forceSubmitAllUnsaved
       );
 
 
