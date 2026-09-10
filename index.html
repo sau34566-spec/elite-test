@@ -1420,17 +1420,14 @@
         id="review-ledger-container"
       ></div>
       <p id="result-save-status" role="status" aria-live="polite">Saving your result...</p>
-      <button type="button" class="btn" onclick="retryResultSave()">Retry Result Save</button>
-      <button type="button" class="btn" onclick="showRating()">Rate Test</button>
-
       <button
         type="button"
-        id="download-report-btn"
+        id="complete-test-btn"
         class="btn report-action"
-        onclick="downloadStudentReport()"
+        onclick="submitAndCompleteTest()"
       >
-        <i class="fa-solid fa-file-pdf"></i>
-        Download Complete Report (PDF)
+        <i class="fa-solid fa-check-double"></i>
+        Submit &amp; Complete
       </button>
 
     </div>
@@ -1576,6 +1573,15 @@
 
     </div>
 
+  </div>
+
+  <div class="success-overlay" id="completion-modal" role="dialog" aria-modal="true">
+    <div class="success-popup">
+      <i class="fa-solid fa-circle-check"></i>
+      <h3>Thank you for attempting the test!</h3>
+      <p>Your test has been submitted successfully. You may close this page now.</p>
+      <button type="button" class="btn" onclick="document.getElementById('completion-modal').classList.remove('show')">Close</button>
+    </div>
   </div>
 
 
@@ -5376,10 +5382,20 @@
       document.querySelector('#stars-container i')?.focus();
     }
 
+    window.submitAndCompleteTest = async () => {
+      const saved = await savePerformanceDraft("submit_complete");
+      if (!saved || !resultSaved) {
+        alert("Your result is not saved yet. Please reconnect and use Retry Result Save.");
+        return;
+      }
+      finishExamEnvironment();
+      document.getElementById("completion-modal").classList.add("show");
+    };
+
     window.retryResultSave = () => savePerformanceDraft("manual_retry");
     window.closeRating = () => {
       document.getElementById("rating-modal").classList.remove("show");
-      document.getElementById("download-report-btn").focus();
+      document.getElementById("complete-test-btn")?.focus();
     };
     window.showRating = async () => {
       if (await savePerformanceDraft("rating_open")) openRatingModal();
@@ -5399,6 +5415,11 @@
       async () => {
         const button =
           document.getElementById("download-report-btn");
+
+        if (!button) {
+          alert("Report download is not available on this dashboard.");
+          return;
+        }
 
         const originalHTML =
           button.innerHTML;
@@ -5439,14 +5460,14 @@
             "Exam Elite";
 
           header.style.cssText =
-            "width:900px;padding:30px;background:#fff;color:#0f172a;" +
-            "font-family:Arial,'Noto Sans',sans-serif;border-bottom:4px solid #1e3a8a;";
+            "width:900px;padding:0 0 22px;background:#fff;color:#0f172a;position:relative;" +
+            "font-family:Arial,'Noto Sans',sans-serif;border-bottom:4px solid #092b3c;";
 
           header.innerHTML =
-            '<h1 style="margin:0;color:#1e3a8a;">' +
-              escapeHTML(instituteName) +
-            '</h1>' +
-            '<h2 style="margin:8px 0 18px;">Complete Student Performance Report</h2>' +
+            '<img src="question/bookesh-report-header.jpeg" alt="LLTC Pandwa and Bookesh header" style="display:block;width:100%;height:auto;max-height:198px;object-fit:cover;" onerror="this.style.display=\'none\'">' +
+            '<div style="padding:18px 30px 0;position:relative;">' +
+            '<div style="position:absolute;inset:20px 0 auto;text-align:center;font-size:44px;font-weight:800;letter-spacing:8px;color:rgba(16,61,92,.08);transform:rotate(-18deg);pointer-events:none;">BOOKESH</div>' +
+            '<h2 style="margin:0 0 14px;color:#103d5c;">Complete Student Performance Report</h2>' +
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;line-height:1.5;">' +
               '<div><b>Student:</b> ' + escapeHTML(currentStudentName) + '</div>' +
               '<div><b>Email:</b> ' + escapeHTML(currentStudentEmail) + '</div>' +
@@ -5461,7 +5482,7 @@
               '<div><b>Wrong:</b> ' + wrongCountFinal + '</div>' +
               '<div><b>Tab Switches:</b> ' + tabSwitches + '</div>' +
               '<div><b>Copy/Paste Attempts:</b> ' + copiesAttempted + '</div>' +
-            '</div>';
+            '</div></div>';
 
           reportRoot.appendChild(header);
 
@@ -5832,7 +5853,7 @@
 
       }
     );
- 
+
   </script>
 
 </body>
