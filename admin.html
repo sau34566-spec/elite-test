@@ -50,111 +50,6 @@
       display:none!important
     }
 
-    /* Exam Setup manager */
-    .exam-setup-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
-      margin-top:14px;
-    }
-    .setup-box{
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:16px;
-      background:#fff;
-    }
-    .setup-box h3{
-      color:var(--primary);
-      font-size:15px;
-      margin-bottom:6px;
-    }
-    .setup-box .help{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.5;
-      margin-bottom:12px;
-    }
-    .setup-list{
-      display:grid;
-      gap:8px;
-      max-height:360px;
-      overflow:auto;
-    }
-    .setup-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:10px 12px;
-      border:1px solid var(--border);
-      border-radius:9px;
-      background:#f8fafc;
-    }
-    .setup-row-left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width:0;
-    }
-    .setup-row-left input[type=checkbox]{
-      width:18px;
-      height:18px;
-      flex:0 0 auto;
-    }
-    .setup-row-left span{
-      font-weight:700;
-      font-size:13px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .setup-remove{
-      border:0;
-      background:#fee2e2;
-      color:#b91c1c;
-      border-radius:7px;
-      padding:6px 9px;
-      font-weight:700;
-      cursor:pointer;
-    }
-    .custom-add-row{
-      display:flex;
-      gap:8px;
-      margin-top:12px;
-    }
-    .custom-add-row input{
-      flex:1;
-    }
-    .field-config-row{
-      display:grid;
-      grid-template-columns:1.1fr 1.5fr .8fr auto auto;
-      gap:8px;
-      align-items:center;
-    }
-    .field-config-row input,.field-config-row select{
-      padding:9px 10px;
-      border-width:1px;
-      font-size:12px;
-    }
-    .field-config-row .small-check{
-      display:flex;
-      align-items:center;
-      gap:5px;
-      font-size:11px;
-      font-weight:700;
-      text-transform:none;
-      letter-spacing:0;
-      margin:0;
-    }
-    .field-config-row .small-check input{
-      width:16px;
-      height:16px;
-    }
-    @media(max-width:800px){
-      .exam-setup-grid{grid-template-columns:1fr}
-      .field-config-row{grid-template-columns:1fr 1fr}
-    }
-
     #login-overlay{
       position:fixed;
       inset:0;
@@ -561,11 +456,7 @@
       color:#d97706
     }
 
-    .maths .subject-icon{
-      background:#f5f3ff;
-      color:#7c3aed
-    }
-
+    .maths .subject-icon,
     .english .subject-icon{
       background:#f5f3ff;
       color:#7c3aed
@@ -579,6 +470,38 @@
       width:100%;
       margin-top:4px
     }
+
+    /* EXAM SETUP MANAGER */
+    .exam-setup-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      margin-top:14px;
+    }
+    .setup-box{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:16px;
+      background:#fff;
+    }
+    .setup-box h3{color:var(--primary);font-size:15px;margin-bottom:6px}
+    .setup-box .help{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:12px}
+    .setup-list{display:grid;gap:8px;max-height:360px;overflow:auto}
+    .setup-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:#f8fafc}
+    .setup-row-left{display:flex;align-items:center;gap:10px;min-width:0}
+    .setup-row-left input[type=checkbox]{width:18px;height:18px;flex:0 0 auto}
+    .setup-row-left span{font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .setup-remove{border:0;background:#fee2e2;color:#b91c1c;border-radius:7px;padding:6px 9px;font-weight:700;cursor:pointer}
+    .custom-add-row{display:flex;gap:8px;margin-top:12px}
+    .custom-add-row input{flex:1}
+    .field-config-row{display:grid;grid-template-columns:1.1fr 1.5fr .8fr auto auto auto;gap:8px;align-items:center}
+    .field-config-row input,.field-config-row select{padding:9px 10px;border-width:1px;font-size:12px}
+    .small-check{display:flex!important;align-items:center;gap:5px;font-size:11px!important;font-weight:700!important;text-transform:none!important;letter-spacing:0!important;margin:0!important}
+    .small-check input{width:16px!important;height:16px!important}
+    .setup-switch{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:13px 14px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff;margin-bottom:14px}
+    .setup-switch label{display:flex;align-items:center;gap:9px;margin:0;text-transform:none;letter-spacing:0;font-size:13px}
+    .setup-switch input{width:18px;height:18px}
+    @media(max-width:800px){.exam-setup-grid{grid-template-columns:1fr}.field-config-row{grid-template-columns:1fr 1fr}}
 
     .saved-config{
       margin-top:20px;
@@ -1060,191 +983,57 @@
 
           <!-- PHYSICS -->
           <div class="subject-card physics">
-
-            <div class="subject-title">
-              <div class="subject-icon">
-                <i class="fa-solid fa-atom"></i>
-              </div>
-              Physics
-            </div>
-
+            <div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-atom"></i></div>Physics</div>
             <label class="subject-enabled"><input id="physics-enabled" type="checkbox" checked> Include in this exam</label>
-
-            <div class="form-group">
-              <label for="physics-pool">
-                Total Pool Questions
-              </label>
-
-              <input
-                id="physics-pool"
-                type="number"
-                min="1"
-                placeholder="e.g. 30"
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="physics-limit">
-                Student Display Limit
-              </label>
-
-              <input
-                id="physics-limit"
-                type="number"
-                min="1"
-                placeholder="e.g. 25"
-              >
-            </div>
-
-            <button
-              id="save-physics-btn"
-              class="btn btn-success subject-save"
-              data-subject="physics"
-            >
-              <i class="fa-solid fa-floppy-disk"></i>
-              Save Physics
-            </button>
-
+            <div class="form-group"><label for="physics-pool">Total Pool Questions</label><input id="physics-pool" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="physics-limit">Student Display Limit</label><input id="physics-limit" type="number" min="1" placeholder="e.g. 25"></div>
+            <div class="form-group"><label for="physics-duration">Duration (Minutes)</label><input id="physics-duration" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="physics-marks">Marks / Question</label><input id="physics-marks" type="number" min="0.01" step="0.01" placeholder="e.g. 4"></div>
+            <button id="save-physics-btn" class="btn btn-success subject-save" data-subject="physics"><i class="fa-solid fa-floppy-disk"></i> Save Physics</button>
           </div>
-
 
           <!-- CHEMISTRY -->
           <div class="subject-card chemistry">
-
-            <div class="subject-title">
-              <div class="subject-icon">
-                <i class="fa-solid fa-flask"></i>
-              </div>
-              Chemistry
-            </div>
-
+            <div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-flask"></i></div>Chemistry</div>
             <label class="subject-enabled"><input id="chemistry-enabled" type="checkbox" checked> Include in this exam</label>
-
-            <div class="form-group">
-              <label for="chemistry-pool">
-                Total Pool Questions
-              </label>
-
-              <input
-                id="chemistry-pool"
-                type="number"
-                min="1"
-                placeholder="e.g. 30"
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="chemistry-limit">
-                Student Display Limit
-              </label>
-
-              <input
-                id="chemistry-limit"
-                type="number"
-                min="1"
-                placeholder="e.g. 25"
-              >
-            </div>
-
-            <button
-              id="save-chemistry-btn"
-              class="btn btn-success subject-save"
-              data-subject="chemistry"
-            >
-              <i class="fa-solid fa-floppy-disk"></i>
-              Save Chemistry
-            </button>
-
+            <div class="form-group"><label for="chemistry-pool">Total Pool Questions</label><input id="chemistry-pool" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="chemistry-limit">Student Display Limit</label><input id="chemistry-limit" type="number" min="1" placeholder="e.g. 25"></div>
+            <div class="form-group"><label for="chemistry-duration">Duration (Minutes)</label><input id="chemistry-duration" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="chemistry-marks">Marks / Question</label><input id="chemistry-marks" type="number" min="0.01" step="0.01" placeholder="e.g. 4"></div>
+            <button id="save-chemistry-btn" class="btn btn-success subject-save" data-subject="chemistry"><i class="fa-solid fa-floppy-disk"></i> Save Chemistry</button>
           </div>
-
 
           <!-- BIOLOGY -->
           <div class="subject-card biology">
-
-            <div class="subject-title">
-              <div class="subject-icon">
-                <i class="fa-solid fa-dna"></i>
-              </div>
-              Biology
-            </div>
-
+            <div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-dna"></i></div>Biology</div>
             <label class="subject-enabled"><input id="biology-enabled" type="checkbox" checked> Include in this exam</label>
-
-            <div class="form-group">
-              <label for="biology-pool">
-                Total Pool Questions
-              </label>
-
-              <input
-                id="biology-pool"
-                type="number"
-                min="1"
-                placeholder="e.g. 60"
-              >
-            </div>
-
-            <div class="form-group">
-              <label for="biology-limit">
-                Student Display Limit
-              </label>
-
-              <input
-                id="biology-limit"
-                type="number"
-                min="1"
-                placeholder="e.g. 50"
-              >
-            </div>
-
-            <button
-              id="save-biology-btn"
-              class="btn btn-success subject-save"
-              data-subject="biology"
-            >
-              <i class="fa-solid fa-floppy-disk"></i>
-              Save Biology
-            </button>
-
+            <div class="form-group"><label for="biology-pool">Total Pool Questions</label><input id="biology-pool" type="number" min="1" placeholder="e.g. 60"></div>
+            <div class="form-group"><label for="biology-limit">Student Display Limit</label><input id="biology-limit" type="number" min="1" placeholder="e.g. 50"></div>
+            <div class="form-group"><label for="biology-duration">Duration (Minutes)</label><input id="biology-duration" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="biology-marks">Marks / Question</label><input id="biology-marks" type="number" min="0.01" step="0.01" placeholder="e.g. 4"></div>
+            <button id="save-biology-btn" class="btn btn-success subject-save" data-subject="biology"><i class="fa-solid fa-floppy-disk"></i> Save Biology</button>
           </div>
 
-          <!-- MATHEMATICS -->
+          <!-- MATHS -->
           <div class="subject-card maths">
-            <div class="subject-title">
-              <div class="subject-icon"><i class="fa-solid fa-square-root-variable"></i></div>
-              Maths
-            </div>
+            <div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-square-root-variable"></i></div>Maths</div>
             <label class="subject-enabled"><input id="maths-enabled" type="checkbox"> Include in this exam</label>
-            <div class="form-group">
-              <label for="maths-pool">Total Pool Questions</label>
-              <input id="maths-pool" type="number" min="1" placeholder="e.g. 30">
-            </div>
-            <div class="form-group">
-              <label for="maths-limit">Student Display Limit</label>
-              <input id="maths-limit" type="number" min="1" placeholder="e.g. 25">
-            </div>
-            <button id="save-maths-btn" class="btn btn-success subject-save" data-subject="maths">
-              <i class="fa-solid fa-floppy-disk"></i> Save Maths
-            </button>
+            <div class="form-group"><label for="maths-pool">Total Pool Questions</label><input id="maths-pool" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="maths-limit">Student Display Limit</label><input id="maths-limit" type="number" min="1" placeholder="e.g. 25"></div>
+            <div class="form-group"><label for="maths-duration">Duration (Minutes)</label><input id="maths-duration" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="maths-marks">Marks / Question</label><input id="maths-marks" type="number" min="0.01" step="0.01" placeholder="e.g. 4"></div>
+            <button id="save-maths-btn" class="btn btn-success subject-save" data-subject="maths"><i class="fa-solid fa-floppy-disk"></i> Save Maths</button>
           </div>
 
           <!-- ENGLISH -->
           <div class="subject-card english">
-            <div class="subject-title">
-              <div class="subject-icon"><i class="fa-solid fa-language"></i></div>
-              English
-            </div>
+            <div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-language"></i></div>English</div>
             <label class="subject-enabled"><input id="english-enabled" type="checkbox"> Include in this exam</label>
-            <div class="form-group">
-              <label for="english-pool">Total Pool Questions</label>
-              <input id="english-pool" type="number" min="1" placeholder="e.g. 30">
-            </div>
-            <div class="form-group">
-              <label for="english-limit">Student Display Limit</label>
-              <input id="english-limit" type="number" min="1" placeholder="e.g. 25">
-            </div>
-            <button id="save-english-btn" class="btn btn-success subject-save" data-subject="english">
-              <i class="fa-solid fa-floppy-disk"></i> Save English
-            </button>
+            <div class="form-group"><label for="english-pool">Total Pool Questions</label><input id="english-pool" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="english-limit">Student Display Limit</label><input id="english-limit" type="number" min="1" placeholder="e.g. 25"></div>
+            <div class="form-group"><label for="english-duration">Duration (Minutes)</label><input id="english-duration" type="number" min="1" placeholder="e.g. 30"></div>
+            <div class="form-group"><label for="english-marks">Marks / Question</label><input id="english-marks" type="number" min="0.01" step="0.01" placeholder="e.g. 4"></div>
+            <button id="save-english-btn" class="btn btn-success subject-save" data-subject="english"><i class="fa-solid fa-floppy-disk"></i> Save English</button>
           </div>
 
         </div>
@@ -1260,78 +1049,25 @@
           </div>
 
           <div class="subject-status-row">
-
-            <div class="subject-status">
-              <strong>Physics</strong>
-              <span id="saved-physics">
-                Not configured
-              </span>
-            </div>
-
-            <div class="subject-status">
-              <strong>Chemistry</strong>
-              <span id="saved-chemistry">
-                Not configured
-              </span>
-            </div>
-
-            <div class="subject-status">
-              <strong>Biology</strong>
-              <span id="saved-biology">
-                Not configured
-              </span>
-            </div>
-
-            <div class="subject-status">
-              <strong>Maths</strong>
-              <span id="saved-maths">Not configured</span>
-            </div>
-
-            <div class="subject-status">
-              <strong>English</strong>
-              <span id="saved-english">Not configured</span>
-            </div>
-
+            <div class="subject-status"><strong>Physics</strong><span id="saved-physics">Not configured</span></div>
+            <div class="subject-status"><strong>Chemistry</strong><span id="saved-chemistry">Not configured</span></div>
+            <div class="subject-status"><strong>Biology</strong><span id="saved-biology">Not configured</span></div>
+            <div class="subject-status"><strong>Maths</strong><span id="saved-maths">Not configured</span></div>
+            <div class="subject-status"><strong>English</strong><span id="saved-english">Not configured</span></div>
           </div>
 
         </div>
 
 
-        <!-- DURATION -->
-        <h3
-          style="
-            color:var(--primary);
-            font-size:16px;
-            margin-top:25px;
-            margin-bottom:12px;
-          "
-        >
-          Exam Timer
-        </h3>
-
-        <div class="grid-2">
-
-          <div class="form-group">
-            <label for="config-duration">
-              Exam Duration (Minutes) *
-            </label>
-
-            <input
-              id="config-duration"
-              type="number"
-              min="1"
-              placeholder="e.g. 90"
-            >
-          </div>
-
-          <div class="form-group">
-            <label for="config-question-order">Question Order *</label>
-            <select id="config-question-order">
-              <option value="random">Random</option>
-              <option value="sequence">Sequence</option>
-            </select>
-          </div>
-
+        <!-- EXAM CONTROLS -->
+        <h3 style="color:var(--primary);font-size:16px;margin-top:25px;margin-bottom:12px">Exam Controls</h3>
+        <div class="notice" style="margin-bottom:14px">
+          Duration and marks are now configured <b>per subject</b> in Subject-wise Question Settings above.
+          If a student selects multiple subjects, their subject durations are added together for the exam timer.
+        </div>
+        <div class="form-group">
+          <label for="config-question-order">Question Order *</label>
+          <select id="config-question-order"><option value="random">Random</option><option value="sequence">Sequence</option></select>
         </div>
 
         <h3 style="color:var(--primary);font-size:16px;margin-top:25px;margin-bottom:12px;">Student Access & Institute Details</h3>
@@ -1346,7 +1082,7 @@
           </div>
           <div class="form-group">
             <label for="config-centre-code">Examination Centre Code *</label>
-            <input id="config-centre-code" type="text" maxlength="30" placeholder="e.g. LLTC2026">
+            <input id="config-centre-code" type="text" maxlength="30" placeholder="e.g. CENTRE2026">
           </div>
           <div class="form-group">
             <label for="config-institute-name">Institute Name *</label>
@@ -1463,35 +1199,6 @@
         </div>
 
 
-
-
-          <div style="margin-top:16px">
-            <label for="bank-subject">Question Bank Subject</label>
-            <select id="bank-subject"><option value="chemistry">Chemistry</option><option value="physics">Physics</option><option value="biology">Biology</option><option value="maths">Maths</option><option value="english">English</option></select>
-            <div id="bank-form-panel">
-              <label for="bank-question">Question (Unicode or LaTeX)</label>
-              <textarea id="bank-question" rows="3"></textarea>
-              <label for="bank-options">Options: one per line</label><textarea id="bank-options" rows="4"></textarea>
-              <label for="bank-answer">Correct answer: exact option text, or A/B/C/D</label><input id="bank-answer">
-              <label for="bank-image">Figure path or HTTPS URL (optional)</label><input id="bank-image">
-              <button type="button" id="bank-add" class="btn">Add Question to Draft</button>
-            </div>
-
-            <label for="bank-json">Editable JSON draft (all methods)</label>
-            <textarea id="bank-json" rows="10" spellcheck="false" placeholder='[{"q":"Question","options":["A","B"],"a":"A"}]'></textarea>
-            <p class="muted">Pictures must be included as image paths/URLs or embedded data images; JSON cannot recreate a missing picture. Publishing replaces only this subject's admin bank. Existing repository files stay unchanged. Large image banks should use repository assets.</p>
-            <div class="actions">
-              <button type="button" id="bank-load" class="btn">Load Current Bank</button>
-              <button type="button" id="bank-validate" class="btn">Validate Draft</button>
-              <button type="button" id="bank-publish" class="btn btn-success">Publish Subject Bank</button>
-              <button type="button" id="bank-repository" class="btn">Use Repository File</button>
-            </div>
-            <p id="bank-status" role="status" aria-live="polite"></p>
-          </div>
-
-        </div>
-
-
         <div class="actions">
 
           <button
@@ -1499,7 +1206,7 @@
             class="btn btn-success"
           >
             <i class="fa-solid fa-floppy-disk"></i>
-            Save & Apply Timer
+            Save & Apply Settings
           </button>
 
           <button
@@ -1542,21 +1249,26 @@
     <section id="panel-exam-setup" class="panel">
       <div class="card">
         <h2><i class="fa-solid fa-list-check"></i> Exam Setup</h2>
-        <p class="subtitle">
-          Yahan se student login page aur available subjects ko bina code change kiye control karein.
-          Save karne ke baad <b>index.html</b> automatically isi configuration ko follow karega.
-        </p>
+        <p class="subtitle">Student login fields aur exam subjects ko bina code change kiye control karein.</p>
+
+        <div class="setup-switch">
+          <div>
+            <strong>Student Subject Selection</strong>
+            <div class="muted" style="font-size:11px;margin-top:4px">ON karne par login page par enabled subjects ka multiple-selection option dikhega. OFF par sab enabled subjects automatically use honge.</div>
+          </div>
+          <label><input id="student-subject-selection-enabled" type="checkbox"> Enable</label>
+        </div>
 
         <div class="exam-setup-grid">
           <div class="setup-box">
             <h3><i class="fa-solid fa-user-gear"></i> Student Login Fields</h3>
-            <div class="help">Jis field ko student se nahi lena ho uska tick hata dein. Required ka matlab field mandatory rahegi.</div>
+            <div class="help">Jis field ko nahi lena ho uska tick hata dein. Required ko bhi separately control kar sakte hain.</div>
             <div id="student-field-settings" class="setup-list"></div>
           </div>
 
           <div class="setup-box">
             <h3><i class="fa-solid fa-book-open"></i> Exam Subjects</h3>
-            <div class="help">Subject ko enable/disable karne ke liye tick use karein. Custom subject add karne par question file <b>question/subject-id.html</b> honi chahiye.</div>
+            <div class="help">Tick se subject enable/disable karein. Custom subject add karne par question file <b>question/subject-id.html</b> honi chahiye.</div>
             <div id="exam-subject-settings" class="setup-list"></div>
             <div class="custom-add-row">
               <input id="new-subject-name" type="text" maxlength="50" placeholder="New subject, e.g. Reasoning">
@@ -1567,17 +1279,11 @@
 
         <div class="setup-box" style="margin-top:16px">
           <h3><i class="fa-solid fa-plus-circle"></i> Custom Student Fields</h3>
-          <div class="help">Example: Father Name, Roll Number, Mobile Number, School Name. Field ID code ke liye automatically banega; aapko index.html edit nahi karna padega.</div>
+          <div class="help">Example: Father Name, Roll Number, Mobile Number, School Name.</div>
           <div id="custom-field-settings" class="setup-list"></div>
           <div class="custom-add-row">
             <input id="new-field-label" type="text" maxlength="60" placeholder="New field label, e.g. Father Name">
-            <select id="new-field-type" style="max-width:150px">
-              <option value="text">Text</option>
-              <option value="tel">Mobile</option>
-              <option value="number">Number</option>
-              <option value="date">Date</option>
-              <option value="email">Email</option>
-            </select>
+            <select id="new-field-type" style="max-width:150px"><option value="text">Text</option><option value="tel">Mobile</option><option value="number">Number</option><option value="date">Date</option><option value="email">Email</option></select>
             <button type="button" id="add-field-btn" class="btn"><i class="fa-solid fa-plus"></i> Add Field</button>
           </div>
         </div>
@@ -1589,7 +1295,6 @@
         <p id="exam-setup-status" class="muted" style="margin-top:10px"></p>
       </div>
     </section>
-
 
     <!-- =========================================================
          RESULTS PANEL
@@ -2051,381 +1756,6 @@
 
 
     /* =========================================================
-       QUESTION BANK INPUT MODE
-       JSON/text file upload is disabled for now.
-    ========================================================== */
-
-    function getUploadMode() {
-      return "form";
-    }
-
-    function setUploadMode() {
-      // Compatibility only. The removed upload-mode selector is no longer used.
-    }
-
-    function updateUploadPanels() {
-      const formPanel = $("bank-form-panel");
-      if (formPanel) formPanel.hidden = false;
-    }
-
-    const bankStatus = message => { $("bank-status").textContent = message; };
-    function readBankDraft() {
-      const data = QuestionBank.parseQuestionDocument($("bank-json").value, "Draft");
-      const normalized = QuestionBank.validateBank(data);
-      return { data, normalized };
-    }
-    $("bank-add").addEventListener("click", () => {
-      try {
-        const draft = $("bank-json").value.trim() ? readBankDraft().data : [];
-        const list = Array.isArray(draft) ? draft : draft.questions;
-        const question = { q: $("bank-question").value.trim(), options: $("bank-options").value.split(/\r?\n/).map(v => v.trim()).filter(Boolean), a: $("bank-answer").value.trim() };
-        if ($("bank-image").value.trim()) question.image = $("bank-image").value.trim();
-        QuestionBank.validateBank([question]);
-        list.push(question);
-        $("bank-json").value = JSON.stringify(draft, null, 2);
-        bankStatus("Added to draft. Review and publish when ready.");
-      } catch (error) { bankStatus(error.message); }
-    });
-    $("bank-validate").addEventListener("click", () => {
-      try { bankStatus(readBankDraft().normalized.length + " questions validated. Check subject pool/display counts before starting an exam."); }
-      catch (error) { bankStatus(error.message); }
-    });
-    $("bank-load").addEventListener("click", async () => {
-      const subject = $("bank-subject").value;
-      if ($("bank-json").value.trim() && !confirm("Replace the current unsaved draft with " + subject + "?")) return;
-      try {
-        const snap = await getDoc(doc(db, "exam_config", "question_bank_" + subject));
-        let text;
-        if (snap.exists() && snap.data().active) text = snap.data().json;
-        else {
-          const response = await fetch("question/" + subject + ".html", { cache: "no-store" });
-          if (!response.ok) throw new Error("Repository bank could not be loaded.");
-          text = await response.text();
-        }
-        QuestionBank.validateBank(QuestionBank.parseQuestionDocument(text, subject));
-        $("bank-json").value = text;
-        bankStatus("Loaded " + subject + ". Changes remain a draft until published.");
-      } catch (error) { bankStatus(error.message); }
-    });
-    $("bank-publish").addEventListener("click", async () => {
-      const button = $("bank-publish");
-      try {
-        const { data, normalized } = readBankDraft();
-        const subject = $("bank-subject").value;
-        const json = JSON.stringify(data);
-        if (new TextEncoder().encode(json).length > 750000) throw new Error("Bank exceeds 750 KB. Store figures as repository assets and use image paths; do not embed large images.");
-        if (!confirm("Publish " + normalized.length + " questions for " + subject + "? This replaces the admin bank used by new attempts; repository files and active attempts remain unchanged.")) return;
-        button.disabled = true;
-        await setDoc(doc(db, "exam_config", "question_bank_" + subject), { active: true, json, count: normalized.length, updatedAt: new Date() });
-        bankStatus("Published " + subject + ": " + normalized.length + " questions. Set its pool/display counts in Subject Settings.");
-      } catch (error) { bankStatus(error.message); }
-      finally { button.disabled = false; }
-    });
-    $("bank-repository").addEventListener("click", async () => {
-      const subject = $("bank-subject").value;
-      if (!confirm("Use question/" + subject + ".html for new attempts? The uploaded bank will remain stored but inactive.")) return;
-      try {
-        await setDoc(doc(db, "exam_config", "question_bank_" + subject), { active: false }, { merge: true });
-        bankStatus("Repository file is active for " + subject + ". Uploaded bank retained.");
-      } catch (error) { bankStatus(error.message); }
-    });
-
-
-    /* =========================================================
-       EXAM SETUP MANAGER
-    ========================================================== */
-
-    function slugifySubject(value) {
-      return String(value || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
-        .slice(0, 40);
-    }
-
-    function fieldIdFromLabel(value) {
-      return String(value || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "_")
-        .replace(/^_+|_+$/g, "")
-        .slice(0, 40) || ("field_" + Date.now());
-    }
-
-    const DEFAULT_STUDENT_FIELDS = {
-      centreCode:{enabled:true,required:true,label:"Examination Centre Code"},
-      name:{enabled:true,required:true,label:"Full Name"},
-      email:{enabled:true,required:true,label:"Gmail Address"},
-      batchCategory:{enabled:true,required:true,label:"Batch Category"},
-      class:{enabled:true,required:true,label:"Class"},
-      address:{enabled:true,required:true,label:"Address"}
-    };
-
-    function normalizeExamSetup(data = {}) {
-      const setup = data.examSetup || {};
-      const configuredSubjects = Array.isArray(setup.subjects) ? setup.subjects : [];
-      const subjectMap = new Map(configuredSubjects.map(s => [String(s.id || "").trim(), s]));
-
-      const subjects = BUILTIN_SUBJECTS.map(def => {
-        const old = subjectMap.get(def.id);
-        const oldConfig = data.subjects?.[def.id] || {};
-        return {
-          id:def.id,
-          label: old?.label || def.label,
-          enabled: old ? old.enabled !== false : oldConfig.enabled !== false && (def.defaultEnabled || Boolean(oldConfig.pool || oldConfig.limit))
-        };
-      });
-
-      configuredSubjects.forEach(s => {
-        const id = slugifySubject(s.id || s.label);
-        if (!id || BUILTIN_SUBJECTS.some(x => x.id === id)) return;
-        if (!subjects.some(x => x.id === id)) {
-          subjects.push({id, label:String(s.label || id).trim(), enabled:s.enabled !== false});
-        }
-      });
-
-      const studentFields = {};
-      for (const [id, def] of Object.entries(DEFAULT_STUDENT_FIELDS)) {
-        const saved = setup.studentFields?.[id] || {};
-        studentFields[id] = {
-          enabled: saved.enabled !== false,
-          required: saved.required !== false,
-          label: saved.label || def.label
-        };
-      }
-
-      const customFields = Array.isArray(setup.customFields) ? setup.customFields.map(f => ({
-        id: fieldIdFromLabel(f.id || f.label),
-        label: String(f.label || f.id || "Custom Field").trim(),
-        type: ["text","tel","number","date","email"].includes(f.type) ? f.type : "text",
-        enabled: f.enabled !== false,
-        required: f.required === true
-      })) : [];
-
-      return {subjects, studentFields, customFields};
-    }
-
-    function renderExamSetupPanel() {
-      const subjectBox = $("exam-subject-settings");
-      const fieldBox = $("student-field-settings");
-      const customBox = $("custom-field-settings");
-      if (!subjectBox || !fieldBox || !customBox) return;
-
-      subjectBox.innerHTML = examSetupState.subjects.map(s => `
-        <div class="setup-row" data-subject-row="${escapeHtml(s.id)}">
-          <label class="setup-row-left" style="margin:0;text-transform:none;letter-spacing:0">
-            <input type="checkbox" class="exam-subject-toggle" data-subject="${escapeHtml(s.id)}" ${s.enabled ? "checked" : ""}>
-            <span>${escapeHtml(s.label)}</span>
-          </label>
-          ${BUILTIN_SUBJECTS.some(x => x.id === s.id) ? "" : `<button type="button" class="setup-remove" data-remove-subject="${escapeHtml(s.id)}"><i class="fa-solid fa-trash"></i></button>`}
-        </div>
-      `).join("");
-
-      const fieldNames = [
-        ["centreCode","Examination Centre Code"],
-        ["name","Full Name"],
-        ["email","Gmail Address"],
-        ["batchCategory","Batch Category"],
-        ["class","Class"],
-        ["address","Address"]
-      ];
-      fieldBox.innerHTML = fieldNames.map(([id,fallback]) => {
-        const f = examSetupState.studentFields[id] || {enabled:true,required:true,label:fallback};
-        return `
-          <div class="setup-row">
-            <label class="setup-row-left" style="margin:0;text-transform:none;letter-spacing:0">
-              <input type="checkbox" class="student-field-toggle" data-field="${id}" ${f.enabled ? "checked" : ""}>
-              <span>${escapeHtml(f.label || fallback)}</span>
-            </label>
-            <label class="small-check" style="display:flex;align-items:center;gap:5px;margin:0;text-transform:none;letter-spacing:0;font-size:11px">
-              <input type="checkbox" class="student-field-required" data-field-required="${id}" ${f.required ? "checked" : ""} ${f.enabled ? "" : "disabled"}> Required
-            </label>
-          </div>`;
-      }).join("");
-
-      customBox.innerHTML = examSetupState.customFields.length ? examSetupState.customFields.map(f => `
-        <div class="field-config-row setup-row">
-          <input value="${escapeHtml(f.id)}" data-custom-id="${escapeHtml(f.id)}" readonly title="Field ID">
-          <input value="${escapeHtml(f.label)}" data-custom-label="${escapeHtml(f.id)}" maxlength="60">
-          <select data-custom-type="${escapeHtml(f.id)}">
-            ${["text","tel","number","date","email"].map(t => `<option value="${t}" ${f.type===t?"selected":""}>${t}</option>`).join("")}
-          </select>
-          <label class="small-check"><input type="checkbox" data-custom-enabled="${escapeHtml(f.id)}" ${f.enabled?"checked":""}> Show</label>
-          <label class="small-check"><input type="checkbox" data-custom-required="${escapeHtml(f.id)}" ${f.required?"checked":""} ${f.enabled?"":"disabled"}> Required</label>
-          <button type="button" class="setup-remove" data-remove-field="${escapeHtml(f.id)}"><i class="fa-solid fa-trash"></i></button>
-        </div>`).join("") : `<div class="muted">No custom student field added yet.</div>`;
-
-      customBox.querySelectorAll("[data-custom-enabled]").forEach(el => {
-        el.addEventListener("change", () => {
-          const id = el.dataset.customEnabled;
-          const req = customBox.querySelector(`[data-custom-required="${CSS.escape(id)}"]`);
-          if (req) req.disabled = !el.checked;
-        });
-      });
-
-      document.querySelectorAll(".student-field-toggle").forEach(el => {
-        el.addEventListener("change", () => {
-          const req = document.querySelector(`[data-field-required="${CSS.escape(el.dataset.field)}"]`);
-          if (req) req.disabled = !el.checked;
-        });
-      });
-    }
-
-    function renderDynamicSubjectCards() {
-      const host = $("custom-subject-config-grid");
-      if (!host) return;
-      const custom = examSetupState.subjects.filter(s => !BUILTIN_SUBJECTS.some(x => x.id === s.id));
-      host.innerHTML = custom.map(s => `
-        <div class="subject-card" style="border-top:4px solid #64748b">
-          <div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-book"></i></div>${escapeHtml(s.label)}</div>
-          <label class="subject-enabled"><input id="${escapeHtml(s.id)}-enabled" type="checkbox" ${s.enabled?"checked":""}> Include in this exam</label>
-          <div class="form-group"><label for="${escapeHtml(s.id)}-pool">Total Pool Questions</label><input id="${escapeHtml(s.id)}-pool" type="number" min="1" placeholder="e.g. 30"></div>
-          <div class="form-group"><label for="${escapeHtml(s.id)}-limit">Student Display Limit</label><input id="${escapeHtml(s.id)}-limit" type="number" min="1" placeholder="e.g. 25"></div>
-          <button id="save-${escapeHtml(s.id)}-btn" class="btn btn-success subject-save" data-subject="${escapeHtml(s.id)}"><i class="fa-solid fa-floppy-disk"></i> Save ${escapeHtml(s.label)}</button>
-        </div>`).join("");
-
-      custom.forEach(s => {
-        const saved = currentExamConfig?.subjects?.[s.id] || {};
-        setSubjectConfig(s.id, saved);
-        $("save-" + s.id + "-btn")?.addEventListener("click", () => saveSubjectConfig(s.id));
-      });
-    }
-
-    function collectExamSetupStateFromUI() {
-      examSetupState.subjects = examSetupState.subjects.map(s => ({
-        ...s,
-        enabled: document.querySelector(`.exam-subject-toggle[data-subject="${CSS.escape(s.id)}"]`)?.checked === true
-      }));
-
-      for (const [id] of Object.entries(DEFAULT_STUDENT_FIELDS)) {
-        const enabled = document.querySelector(`.student-field-toggle[data-field="${CSS.escape(id)}"]`)?.checked === true;
-        const requiredEl = document.querySelector(`[data-field-required="${CSS.escape(id)}"]`);
-        examSetupState.studentFields[id] = {
-          ...examSetupState.studentFields[id],
-          enabled,
-          required: enabled && requiredEl?.checked === true
-        };
-      }
-
-      examSetupState.customFields = examSetupState.customFields.map(f => {
-        const labelEl = document.querySelector(`[data-custom-label="${CSS.escape(f.id)}"]`);
-        const typeEl = document.querySelector(`[data-custom-type="${CSS.escape(f.id)}"]`);
-        const enabledEl = document.querySelector(`[data-custom-enabled="${CSS.escape(f.id)}"]`);
-        const requiredEl = document.querySelector(`[data-custom-required="${CSS.escape(f.id)}"]`);
-        return {...f, label:(labelEl?.value || f.label).trim() || f.label, type:typeEl?.value || f.type, enabled:enabledEl?.checked === true, required:enabledEl?.checked === true && requiredEl?.checked === true};
-      });
-    }
-
-    async function saveExamSetup() {
-      collectExamSetupStateFromUI();
-      const btn = $("save-exam-setup-btn");
-      if (btn) btn.disabled = true;
-      try {
-        await setDoc(doc(db,"exam_config","current_test"), {
-          examSetup: {
-            subjects: examSetupState.subjects,
-            studentFields: examSetupState.studentFields,
-            customFields: examSetupState.customFields,
-            updatedAt:new Date()
-          },
-          updatedAt:new Date()
-        }, {merge:true});
-
-        // Keep the existing subject question controls synchronized with Exam Setup.
-        for (const subject of SUBJECTS) {
-          const setupItem = examSetupState.subjects.find(x => x.id === subject);
-          const checkbox = $(`${subject}-enabled`);
-          if (checkbox && setupItem) checkbox.checked = setupItem.enabled;
-          const cfg = getSubjectConfig(subject);
-          await setDoc(doc(db,"exam_config","current_test"), {
-            subjects:{[subject]:{
-              enabled: setupItem?.enabled === true,
-              pool: setupItem?.enabled === true ? (Number.isFinite(cfg.pool) ? cfg.pool : 0) : 0,
-              limit: setupItem?.enabled === true ? (Number.isFinite(cfg.limit) ? cfg.limit : 0) : 0,
-              totalPool: setupItem?.enabled === true ? (Number.isFinite(cfg.pool) ? cfg.pool : 0) : 0,
-              studentLimit: setupItem?.enabled === true ? (Number.isFinite(cfg.limit) ? cfg.limit : 0) : 0,
-              poolQuestions: setupItem?.enabled === true ? (Number.isFinite(cfg.pool) ? cfg.pool : 0) : 0,
-              displayQuestions: setupItem?.enabled === true ? (Number.isFinite(cfg.limit) ? cfg.limit : 0) : 0
-            }}
-          },{merge:true});
-        }
-
-        currentExamConfig = {...currentExamConfig, examSetup:JSON.parse(JSON.stringify(examSetupState))};
-        setStatus("Exam Setup saved successfully","ok");
-        $("exam-setup-status").textContent = "Saved. Student login fields and subject availability will use this configuration on the next page load.";
-        alert("Exam Setup saved successfully.");
-      } catch(error) {
-        console.error("Exam setup save error:",error);
-        $("exam-setup-status").textContent = "Save failed: " + (error.code || error.message);
-        alert("Failed to save Exam Setup:\n\n" + (error.code || error.message));
-      } finally { if (btn) btn.disabled=false; }
-    }
-
-    function loadExamSetupFromConfig(data) {
-      examSetupState = normalizeExamSetup(data || {});
-      SUBJECTS = examSetupState.subjects.map(s => s.id);
-      renderExamSetupPanel();
-      renderDynamicSubjectCards();
-    }
-
-    function addExamSubject() {
-      const input = $("new-subject-name");
-      const label = input.value.trim();
-      const id = slugifySubject(label);
-      if (!label || !id) return alert("Please enter a valid subject name.");
-      if (examSetupState.subjects.some(s => s.id === id)) return alert("This subject already exists.");
-      examSetupState.subjects.push({id,label,enabled:true});
-      SUBJECTS = examSetupState.subjects.map(s => s.id);
-      input.value = "";
-      renderExamSetupPanel();
-      renderDynamicSubjectCards();
-    }
-
-    function addCustomStudentField() {
-      const labelInput = $("new-field-label");
-      const type = $("new-field-type").value;
-      const label = labelInput.value.trim();
-      const id = fieldIdFromLabel(label);
-      if (!label) return alert("Please enter a field label.");
-      if (Object.prototype.hasOwnProperty.call(DEFAULT_STUDENT_FIELDS,id) || examSetupState.customFields.some(f => f.id === id)) return alert("A field with this ID already exists. Use a different label.");
-      examSetupState.customFields.push({id,label,type,enabled:true,required:false});
-      labelInput.value = "";
-      renderExamSetupPanel();
-    }
-
-    $("add-subject-btn")?.addEventListener("click", addExamSubject);
-    $("new-subject-name")?.addEventListener("keydown", e => { if (e.key === "Enter") addExamSubject(); });
-    $("add-field-btn")?.addEventListener("click", addCustomStudentField);
-    $("new-field-label")?.addEventListener("keydown", e => { if (e.key === "Enter") addCustomStudentField(); });
-    $("save-exam-setup-btn")?.addEventListener("click", saveExamSetup);
-    $("reload-exam-setup-btn")?.addEventListener("click", () => loadExamSettings());
-    $("exam-subject-settings")?.addEventListener("change", e => {
-      const id = e.target.dataset.subject;
-      if (!id) return;
-      const cardCheckbox = $(`${id}-enabled`);
-      if (cardCheckbox) cardCheckbox.checked = e.target.checked;
-    });
-    $("exam-subject-settings")?.addEventListener("click", e => {
-      const btn = e.target.closest("[data-remove-subject]");
-      if (!btn) return;
-      const id = btn.dataset.removeSubject;
-      if (!confirm("Remove " + id + " from Exam Setup? Existing question-bank data will not be deleted.")) return;
-      examSetupState.subjects = examSetupState.subjects.filter(s => s.id !== id);
-      SUBJECTS = examSetupState.subjects.map(s => s.id);
-      renderExamSetupPanel();
-      renderDynamicSubjectCards();
-    });
-    $("custom-field-settings")?.addEventListener("click", e => {
-      const btn = e.target.closest("[data-remove-field]");
-      if (!btn) return;
-      const id = btn.dataset.removeField;
-      examSetupState.customFields = examSetupState.customFields.filter(f => f.id !== id);
-      renderExamSetupPanel();
-    });
-
-
-    /* =========================================================
        DATE TIME LOCAL
     ========================================================== */
 
@@ -2444,7 +1774,7 @@
 
 
     /* =========================================================
-       SUBJECT CONFIG HELPERS
+       SUBJECT CONFIG + EXAM SETUP
     ========================================================== */
 
     const BUILTIN_SUBJECTS = [
@@ -2456,303 +1786,210 @@
     ];
 
     let SUBJECTS = BUILTIN_SUBJECTS.map(x => x.id);
-    let examSetupState = {
-      subjects: BUILTIN_SUBJECTS.map(x => ({id:x.id,label:x.label,enabled:x.defaultEnabled})),
-      studentFields: {
-        centreCode:{enabled:true,required:true,label:"Examination Centre Code"},
-        name:{enabled:true,required:true,label:"Full Name"},
-        email:{enabled:true,required:true,label:"Gmail Address"},
-        batchCategory:{enabled:true,required:true,label:"Batch Category"},
-        class:{enabled:true,required:true,label:"Class"},
-        address:{enabled:true,required:true,label:"Address"}
-      },
-      customFields: []
+
+    const DEFAULT_STUDENT_FIELDS = {
+      centreCode:{enabled:true,required:true,label:"Examination Centre Code"},
+      name:{enabled:true,required:true,label:"Full Name"},
+      email:{enabled:true,required:true,label:"Gmail Address"},
+      batchCategory:{enabled:true,required:true,label:"Batch Category"},
+      class:{enabled:true,required:true,label:"Class"},
+      address:{enabled:true,required:true,label:"Address"}
     };
 
+    let examSetupState = {
+      subjects: BUILTIN_SUBJECTS.map(x => ({id:x.id,label:x.label,enabled:x.defaultEnabled})),
+      studentFields: JSON.parse(JSON.stringify(DEFAULT_STUDENT_FIELDS)),
+      customFields: [],
+      allowStudentSubjectSelection: false
+    };
+
+    function slugifySubject(value) {
+      return String(value || "").trim().toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40);
+    }
+
+    function fieldIdFromLabel(value) {
+      return String(value || "").trim().toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_+|_+$/g,"").slice(0,40) || ("field_"+Date.now());
+    }
+
+    function subjectLabel(id) {
+      return examSetupState.subjects.find(x => x.id === id)?.label || capitalize(id);
+    }
 
     function getSubjectConfig(subject) {
-
-      const pool =
-        parseInt(
-          $(`${subject}-pool`).value,
-          10
-        );
-
-      const limit =
-        parseInt(
-          $(`${subject}-limit`).value,
-          10
-        );
-
-      const enabled =
-        $(`${subject}-enabled`)?.checked === true;
-
-      return {
-        pool,
-        limit,
-        enabled
-      };
+      const pool = parseInt($(`${subject}-pool`)?.value,10);
+      const limit = parseInt($(`${subject}-limit`)?.value,10);
+      const durationMinutes = parseInt($(`${subject}-duration`)?.value,10);
+      const marksPerQuestion = parseFloat($(`${subject}-marks`)?.value);
+      const enabled = $(`${subject}-enabled`)?.checked === true;
+      return {pool,limit,durationMinutes,marksPerQuestion,enabled};
     }
 
-
-    function setSubjectConfig(
-      subject,
-      config
-    ) {
-
-      const pool =
-        config?.pool ??
-        config?.totalPool ??
-        "";
-
-      const limit =
-        config?.limit ??
-        config?.studentLimit ??
-        "";
-
-      const enabled =
-        config?.enabled !== false && Boolean(pool && limit);
-
-      if ($(`${subject}-enabled`)) {
-        $(`${subject}-enabled`).checked = enabled;
-      }
-
-      $(`${subject}-pool`).value =
-        pool;
-
-      $(`${subject}-limit`).value =
-        limit;
-
-      updateSavedSubjectDisplay(
-        subject,
-        pool,
-        limit
-      );
+    function setSubjectConfig(subject, config = {}, legacyDuration = 30) {
+      const pool = config.pool ?? config.totalPool ?? config.poolQuestions ?? "";
+      const limit = config.limit ?? config.studentLimit ?? config.displayQuestions ?? "";
+      const durationMinutes = config.durationMinutes ?? config.duration ?? legacyDuration ?? 30;
+      const marksPerQuestion = config.marksPerQuestion ?? config.marks ?? 4;
+      const setupEnabled = examSetupState.subjects.find(x => x.id===subject)?.enabled;
+      const enabled = setupEnabled !== undefined ? setupEnabled : (config.enabled !== false && Boolean(pool && limit));
+      if ($(`${subject}-enabled`)) $(`${subject}-enabled`).checked = enabled;
+      if ($(`${subject}-pool`)) $(`${subject}-pool`).value = pool;
+      if ($(`${subject}-limit`)) $(`${subject}-limit`).value = limit;
+      if ($(`${subject}-duration`)) $(`${subject}-duration`).value = durationMinutes;
+      if ($(`${subject}-marks`)) $(`${subject}-marks`).value = marksPerQuestion;
+      updateSavedSubjectDisplay(subject,pool,limit,durationMinutes,marksPerQuestion);
     }
 
-
-    function updateSavedSubjectDisplay(
-      subject,
-      pool,
-      limit
-    ) {
-
-      const element =
-        $(`saved-${subject}`);
-
+    function updateSavedSubjectDisplay(subject,pool,limit,durationMinutes,marksPerQuestion) {
+      const element = $(`saved-${subject}`);
       if (!element) return;
-
-      const isEnabled = $(`${subject}-enabled`)?.checked === true;
-
-      if (!isEnabled) {
-        element.textContent = "Disabled";
-        return;
-      }
-
-      if (!pool || !limit) {
-
-        element.textContent =
-          "Not configured";
-
-        return;
-      }
-
-      element.textContent =
-        `Pool: ${pool} | Display: ${limit}`;
+      if ($(`${subject}-enabled`)?.checked !== true) { element.textContent="Disabled"; return; }
+      if (!pool || !limit || !durationMinutes || !marksPerQuestion) { element.textContent="Not configured"; return; }
+      element.textContent = `Pool: ${pool} | Display: ${limit} | Duration: ${durationMinutes} min | Marks/Q: ${marksPerQuestion}`;
     }
 
+    function normalizeExamSetup(data = {}) {
+      const setup = data.examSetup || {};
+      const configured = Array.isArray(setup.subjects) ? setup.subjects : [];
+      const map = new Map(configured.map(x => [slugifySubject(x.id || x.label),x]));
+      const subjects = BUILTIN_SUBJECTS.map(def => {
+        const saved=map.get(def.id), cfg=data.subjects?.[def.id] || {};
+        return {id:def.id,label:saved?.label || def.label,enabled:saved ? saved.enabled!==false : (cfg.enabled!==false && (def.defaultEnabled || Boolean(cfg.pool||cfg.limit)))};
+      });
+      configured.forEach(item => {
+        const id=slugifySubject(item.id || item.label);
+        if(!id || subjects.some(x=>x.id===id)) return;
+        subjects.push({id,label:String(item.label||id).trim(),enabled:item.enabled!==false});
+      });
+      const studentFields={};
+      Object.entries(DEFAULT_STUDENT_FIELDS).forEach(([id,def])=>{
+        const saved=setup.studentFields?.[id] || {};
+        studentFields[id]={enabled:saved.enabled!==false,required:saved.required!==false,label:saved.label||def.label};
+      });
+      const customFields=Array.isArray(setup.customFields)?setup.customFields.map(f=>({
+        id:fieldIdFromLabel(f.id||f.label),label:String(f.label||f.id||"Custom Field").trim(),
+        type:["text","tel","number","date","email"].includes(f.type)?f.type:"text",enabled:f.enabled!==false,required:f.required===true
+      })):[];
+      return {subjects,studentFields,customFields,allowStudentSubjectSelection:setup.allowStudentSubjectSelection===true};
+    }
 
-    /* =========================================================
-       SAVE ONE SUBJECT
-    ========================================================== */
+    function renderExamSetupPanel() {
+      const subjectBox=$("exam-subject-settings"), fieldBox=$("student-field-settings"), customBox=$("custom-field-settings");
+      if(!subjectBox||!fieldBox||!customBox) return;
+      $("student-subject-selection-enabled").checked = examSetupState.allowStudentSubjectSelection === true;
+      subjectBox.innerHTML=examSetupState.subjects.map(item=>`
+        <div class="setup-row"><label class="setup-row-left" style="margin:0;text-transform:none;letter-spacing:0"><input type="checkbox" class="exam-subject-toggle" data-subject="${escapeHtml(item.id)}" ${item.enabled?"checked":""}><span>${escapeHtml(item.label)}</span></label>${BUILTIN_SUBJECTS.some(x=>x.id===item.id)?"":`<button type="button" class="setup-remove" data-remove-subject="${escapeHtml(item.id)}"><i class="fa-solid fa-trash"></i></button>`}</div>`).join("");
+      fieldBox.innerHTML=Object.entries(DEFAULT_STUDENT_FIELDS).map(([id,def])=>{
+        const f=examSetupState.studentFields[id]||def;
+        return `<div class="setup-row"><label class="setup-row-left" style="margin:0;text-transform:none;letter-spacing:0"><input type="checkbox" class="student-field-toggle" data-field="${id}" ${f.enabled?"checked":""}><span>${escapeHtml(f.label||def.label)}</span></label><label class="small-check"><input type="checkbox" data-field-required="${id}" ${f.required?"checked":""} ${f.enabled?"":"disabled"}> Required</label></div>`;
+      }).join("");
+      customBox.innerHTML=examSetupState.customFields.length?examSetupState.customFields.map(f=>`
+        <div class="field-config-row setup-row"><input value="${escapeHtml(f.id)}" readonly><input value="${escapeHtml(f.label)}" data-custom-label="${escapeHtml(f.id)}" maxlength="60"><select data-custom-type="${escapeHtml(f.id)}">${["text","tel","number","date","email"].map(t=>`<option value="${t}" ${f.type===t?"selected":""}>${t}</option>`).join("")}</select><label class="small-check"><input type="checkbox" data-custom-enabled="${escapeHtml(f.id)}" ${f.enabled?"checked":""}> Show</label><label class="small-check"><input type="checkbox" data-custom-required="${escapeHtml(f.id)}" ${f.required?"checked":""} ${f.enabled?"":"disabled"}> Required</label><button type="button" class="setup-remove" data-remove-field="${escapeHtml(f.id)}"><i class="fa-solid fa-trash"></i></button></div>`).join(""):`<div class="muted">No custom student field added yet.</div>`;
+      document.querySelectorAll(".student-field-toggle").forEach(el=>el.addEventListener("change",()=>{const req=document.querySelector(`[data-field-required="${CSS.escape(el.dataset.field)}"]`);if(req)req.disabled=!el.checked;}));
+      customBox.querySelectorAll("[data-custom-enabled]").forEach(el=>el.addEventListener("change",()=>{const req=customBox.querySelector(`[data-custom-required="${CSS.escape(el.dataset.customEnabled)}"]`);if(req)req.disabled=!el.checked;}));
+    }
 
-    async function saveSubjectConfig(
-      subject
-    ) {
+    function renderDynamicSubjectCards() {
+      const host=$("custom-subject-config-grid"); if(!host) return;
+      const custom=examSetupState.subjects.filter(item=>!BUILTIN_SUBJECTS.some(x=>x.id===item.id));
+      host.innerHTML=custom.map(item=>`<div class="subject-card" style="border-top:4px solid #64748b"><div class="subject-title"><div class="subject-icon"><i class="fa-solid fa-book"></i></div>${escapeHtml(item.label)}</div><label class="subject-enabled"><input id="${escapeHtml(item.id)}-enabled" type="checkbox" ${item.enabled?"checked":""}> Include in this exam</label><div class="form-group"><label>Total Pool Questions</label><input id="${escapeHtml(item.id)}-pool" type="number" min="1"></div><div class="form-group"><label>Student Display Limit</label><input id="${escapeHtml(item.id)}-limit" type="number" min="1"></div><div class="form-group"><label>Duration (Minutes)</label><input id="${escapeHtml(item.id)}-duration" type="number" min="1"></div><div class="form-group"><label>Marks / Question</label><input id="${escapeHtml(item.id)}-marks" type="number" min="0.01" step="0.01"></div><button id="save-${escapeHtml(item.id)}-btn" class="btn btn-success subject-save"><i class="fa-solid fa-floppy-disk"></i> Save ${escapeHtml(item.label)}</button></div>`).join("");
+      custom.forEach(item=>{
+        const cfg=currentExamConfig?.subjects?.[item.id]||{};
+        setSubjectConfig(item.id,cfg,30);
+        $(`save-${item.id}-btn`)?.addEventListener("click",()=>saveSubjectConfig(item.id));
+      });
+    }
 
-      const config =
-        getSubjectConfig(subject);
+    function collectExamSetupStateFromUI() {
+      examSetupState.allowStudentSubjectSelection=$("student-subject-selection-enabled")?.checked===true;
+      examSetupState.subjects=examSetupState.subjects.map(item=>({...item,enabled:document.querySelector(`.exam-subject-toggle[data-subject="${CSS.escape(item.id)}"]`)?.checked===true}));
+      Object.keys(DEFAULT_STUDENT_FIELDS).forEach(id=>{
+        const enabled=document.querySelector(`.student-field-toggle[data-field="${CSS.escape(id)}"]`)?.checked===true;
+        const required=document.querySelector(`[data-field-required="${CSS.escape(id)}"]`)?.checked===true;
+        examSetupState.studentFields[id]={...examSetupState.studentFields[id],enabled,required:enabled&&required};
+      });
+      examSetupState.customFields=examSetupState.customFields.map(f=>{
+        const label=document.querySelector(`[data-custom-label="${CSS.escape(f.id)}"]`)?.value.trim()||f.label;
+        const type=document.querySelector(`[data-custom-type="${CSS.escape(f.id)}"]`)?.value||f.type;
+        const enabled=document.querySelector(`[data-custom-enabled="${CSS.escape(f.id)}"]`)?.checked===true;
+        const required=document.querySelector(`[data-custom-required="${CSS.escape(f.id)}"]`)?.checked===true;
+        return {...f,label,type,enabled,required:enabled&&required};
+      });
+    }
 
-      if (!config.enabled) {
-        await setDoc(doc(db, "exam_config", "current_test"), {
-          subjects: { [subject]: { enabled:false, pool:0, limit:0, totalPool:0, studentLimit:0, poolQuestions:0, displayQuestions:0, updatedAt:new Date() } },
-          updatedAt:new Date()
-        }, { merge:true });
-        updateSavedSubjectDisplay(subject, 0, 0);
-        setStatus(`${capitalize(subject)} disabled for this exam`, "ok");
-        return;
-      }
-
-      if (
-        !Number.isFinite(config.pool) ||
-        config.pool < 1
-      ) {
-
-        alert(
-          `${capitalize(subject)}: Total Pool Questions enter karein.`
-        );
-
-        return;
-      }
-
-      if (
-        !Number.isFinite(config.limit) ||
-        config.limit < 1
-      ) {
-
-        alert(
-          `${capitalize(subject)}: Student Display Limit enter karein.`
-        );
-
-        return;
-      }
-
-      if (
-        config.limit >
-        config.pool
-      ) {
-
-        alert(
-          `${capitalize(subject)}: Student Display Limit Total Pool se greater nahi ho sakta.`
-        );
-
-        return;
-      }
-
-
-      const button =
-        $(`save-${subject}-btn`);
-
-      const oldHTML =
-        button.innerHTML;
-
-      button.disabled = true;
-
-      button.innerHTML =
-        `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
-
-      setStatus(
-        `Saving ${capitalize(subject)} configuration...`,
-        "busy"
-      );
-
-
+    async function saveExamSetup() {
+      collectExamSetupStateFromUI();
+      const btn=$("save-exam-setup-btn"); if(btn)btn.disabled=true;
       try {
+        const currentSubjects={...(currentExamConfig?.subjects||{})};
+        examSetupState.subjects.forEach(item=>{
+          const cardEnabled=$(`${item.id}-enabled`); if(cardEnabled) cardEnabled.checked=item.enabled;
+          const cfg=getSubjectConfig(item.id);
+          const previous=currentSubjects[item.id]||{};
+          currentSubjects[item.id]={...previous,enabled:item.enabled,pool:Number.isFinite(cfg.pool)?cfg.pool:(previous.pool||0),limit:Number.isFinite(cfg.limit)?cfg.limit:(previous.limit||0),totalPool:Number.isFinite(cfg.pool)?cfg.pool:(previous.totalPool||0),studentLimit:Number.isFinite(cfg.limit)?cfg.limit:(previous.studentLimit||0),poolQuestions:Number.isFinite(cfg.pool)?cfg.pool:(previous.poolQuestions||0),displayQuestions:Number.isFinite(cfg.limit)?cfg.limit:(previous.displayQuestions||0),durationMinutes:Number.isFinite(cfg.durationMinutes)?cfg.durationMinutes:(previous.durationMinutes||30),marksPerQuestion:Number.isFinite(cfg.marksPerQuestion)?cfg.marksPerQuestion:(previous.marksPerQuestion||4)};
+        });
+        await setDoc(doc(db,"exam_config","current_test"),{examSetup:{subjects:examSetupState.subjects,studentFields:examSetupState.studentFields,customFields:examSetupState.customFields,allowStudentSubjectSelection:examSetupState.allowStudentSubjectSelection,updatedAt:new Date()},subjects:currentSubjects,updatedAt:new Date()},{merge:true});
+        currentExamConfig={...currentExamConfig,examSetup:JSON.parse(JSON.stringify(examSetupState)),subjects:currentSubjects};
+        $("exam-setup-status").textContent="Saved. Student login and subject selection will use this setup on next page load.";
+        setStatus("Exam Setup saved successfully","ok");
+        alert("Exam Setup saved successfully.");
+        updateExamStatus();
+      } catch(error) { console.error(error); $("exam-setup-status").textContent="Save failed: "+(error.code||error.message); alert("Failed to save Exam Setup:\n\n"+(error.code||error.message)); }
+      finally { if(btn)btn.disabled=false; }
+    }
 
-        /*
-          IMPORTANT:
+    function loadExamSetupFromConfig(data={}) {
+      examSetupState=normalizeExamSetup(data);
+      SUBJECTS=examSetupState.subjects.map(x=>x.id);
+      renderExamSetupPanel();
+      renderDynamicSubjectCards();
+    }
 
-          Existing exam_config/current_test document
-          ke andar sirf subject-wise settings update hongi.
+    function addExamSubject() {
+      const input=$("new-subject-name"), label=input.value.trim(), id=slugifySubject(label);
+      if(!label||!id)return alert("Please enter a valid subject name.");
+      if(examSetupState.subjects.some(x=>x.id===id))return alert("This subject already exists.");
+      examSetupState.subjects.push({id,label,enabled:true}); SUBJECTS=examSetupState.subjects.map(x=>x.id); input.value=""; renderExamSetupPanel(); renderDynamicSubjectCards();
+    }
 
-          Isse Physics save karne par Chemistry/Biology
-          ki existing settings delete nahi hongi.
-        */
+    function addCustomStudentField() {
+      const input=$("new-field-label"), label=input.value.trim(), type=$("new-field-type").value, id=fieldIdFromLabel(label);
+      if(!label)return alert("Please enter a field label.");
+      if(Object.prototype.hasOwnProperty.call(DEFAULT_STUDENT_FIELDS,id)||examSetupState.customFields.some(x=>x.id===id))return alert("A field with this ID already exists.");
+      examSetupState.customFields.push({id,label,type,enabled:true,required:false}); input.value=""; renderExamSetupPanel();
+    }
 
-        await setDoc(
-
-          doc(
-            db,
-            "exam_config",
-            "current_test"
-          ),
-
-          {
-            subjects: {
-
-              [subject]: {
-
-                pool:
-                  config.pool,
-
-                limit:
-                  config.limit,
-
-                totalPool:
-                  config.pool,
-
-                studentLimit:
-                  config.limit,
-
-                poolQuestions:
-                  config.pool,
-
-                displayQuestions:
-                  config.limit,
-
-                enabled:
-                  config.enabled === true,
-
-                updatedAt:
-                  new Date()
-              }
-
-            },
-
-            updatedAt:
-              new Date()
-
-          },
-
-          {
-            merge: true
-          }
-        );
-
-
-        updateSavedSubjectDisplay(
-          subject,
-          config.pool,
-          config.limit
-        );
-
-
-        setStatus(
-          `${capitalize(subject)} configuration saved successfully`,
-          "ok"
-        );
-
-
-        alert(
-          `${capitalize(subject)} configuration saved successfully.\n\nPool: ${config.pool}\nStudent Display: ${config.limit}`
-        );
-
-      } catch (err) {
-
-        console.error(
-          "Subject config save error:",
-          err
-        );
-
-        setStatus(
-          "Save failed: " +
-          (err.code || err.message),
-          "error"
-        );
-
-        alert(
-          "Failed to save subject configuration:\n\n" +
-          (err.code || err.message)
-        );
-
-      } finally {
-
-        button.disabled = false;
-
-        button.innerHTML =
-          oldHTML;
+    async function saveSubjectConfig(subject) {
+      const config=getSubjectConfig(subject), label=subjectLabel(subject);
+      if(config.enabled) {
+        if(!Number.isFinite(config.pool)||config.pool<1)return alert(`${label}: Total Pool Questions enter karein.`);
+        if(!Number.isFinite(config.limit)||config.limit<1)return alert(`${label}: Student Display Limit enter karein.`);
+        if(config.limit>config.pool)return alert(`${label}: Student Display Limit Total Pool se greater nahi ho sakta.`);
+        if(!Number.isFinite(config.durationMinutes)||config.durationMinutes<1)return alert(`${label}: valid Duration enter karein.`);
+        if(!Number.isFinite(config.marksPerQuestion)||config.marksPerQuestion<=0)return alert(`${label}: valid Marks / Question enter karein.`);
       }
+      const previous=currentExamConfig?.subjects?.[subject]||{};
+      const payload={enabled:config.enabled,pool:Number.isFinite(config.pool)?config.pool:(previous.pool||0),limit:Number.isFinite(config.limit)?config.limit:(previous.limit||0),totalPool:Number.isFinite(config.pool)?config.pool:(previous.totalPool||0),studentLimit:Number.isFinite(config.limit)?config.limit:(previous.studentLimit||0),poolQuestions:Number.isFinite(config.pool)?config.pool:(previous.poolQuestions||0),displayQuestions:Number.isFinite(config.limit)?config.limit:(previous.displayQuestions||0),durationMinutes:Number.isFinite(config.durationMinutes)?config.durationMinutes:(previous.durationMinutes||30),marksPerQuestion:Number.isFinite(config.marksPerQuestion)?config.marksPerQuestion:(previous.marksPerQuestion||4),updatedAt:new Date()};
+      const button=$(`save-${subject}-btn`), oldHTML=button?.innerHTML; if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving...';}
+      try {
+        await setDoc(doc(db,"exam_config","current_test"),{subjects:{[subject]:payload},updatedAt:new Date()},{merge:true});
+        const setupItem=examSetupState.subjects.find(x=>x.id===subject); if(setupItem)setupItem.enabled=config.enabled;
+        await setDoc(doc(db,"exam_config","current_test"),{examSetup:{...examSetupState,updatedAt:new Date()}},{merge:true});
+        currentExamConfig={...currentExamConfig,subjects:{...(currentExamConfig?.subjects||{}),[subject]:payload}};
+        updateSavedSubjectDisplay(subject,payload.pool,payload.limit,payload.durationMinutes,payload.marksPerQuestion);
+        renderExamSetupPanel(); setStatus(`${label} configuration saved`,"ok");
+      } catch(error){console.error(error);alert(`Failed to save ${label}:\n\n${error.code||error.message}`);}
+      finally{if(button){button.disabled=false;button.innerHTML=oldHTML;}}
     }
 
-
-    function capitalize(value) {
-
-      return String(value)
-        .charAt(0)
-        .toUpperCase() +
-        String(value)
-          .slice(1);
-    }
+    $("add-subject-btn")?.addEventListener("click",addExamSubject);
+    $("new-subject-name")?.addEventListener("keydown",e=>{if(e.key==="Enter")addExamSubject();});
+    $("add-field-btn")?.addEventListener("click",addCustomStudentField);
+    $("new-field-label")?.addEventListener("keydown",e=>{if(e.key==="Enter")addCustomStudentField();});
+    $("save-exam-setup-btn")?.addEventListener("click",saveExamSetup);
+    $("reload-exam-setup-btn")?.addEventListener("click",()=>loadExamSettings());
+    $("exam-subject-settings")?.addEventListener("change",e=>{const id=e.target.dataset.subject;if(!id)return;const card=$(`${id}-enabled`);if(card)card.checked=e.target.checked;});
+    $("exam-subject-settings")?.addEventListener("click",e=>{const btn=e.target.closest("[data-remove-subject]");if(!btn)return;const id=btn.dataset.removeSubject;if(!confirm(`Remove ${subjectLabel(id)} from Exam Setup? Existing Firestore/question data will not be deleted.`))return;examSetupState.subjects=examSetupState.subjects.filter(x=>x.id!==id);SUBJECTS=examSetupState.subjects.map(x=>x.id);renderExamSetupPanel();renderDynamicSubjectCards();});
+    $("custom-field-settings")?.addEventListener("click",e=>{const btn=e.target.closest("[data-remove-field]");if(!btn)return;examSetupState.customFields=examSetupState.customFields.filter(x=>x.id!==btn.dataset.removeField);renderExamSetupPanel();});
 
     function resizeLogo(file) {
       return new Promise((resolve, reject) => {
@@ -2809,7 +2046,6 @@
 
           currentExamConfig = {};
           loadExamSetupFromConfig({});
-
           setStatus(
             "Connected — no exam configuration found",
             "ok"
@@ -2844,16 +2080,11 @@
           data.subjects || {};
 
 
+        const enabledCount = Math.max(1, SUBJECTS.filter(subject => (subjects[subject]?.enabled !== false) && examSetupState.subjects.find(x => x.id === subject)?.enabled !== false).length);
+        const legacyPerSubjectDuration = Math.max(1, Math.round((Number(data.durationMinutes) || 30) / enabledCount));
         SUBJECTS.forEach(subject => {
-
-          const subjectData =
-            subjects[subject] || {};
-
-          setSubjectConfig(
-            subject,
-            subjectData
-          );
-
+          const subjectData = subjects[subject] || {};
+          setSubjectConfig(subject, { ...subjectData, durationMinutes: subjectData.durationMinutes ?? legacyPerSubjectDuration, marksPerQuestion: subjectData.marksPerQuestion ?? 4 }, legacyPerSubjectDuration);
         });
 
 
@@ -2866,14 +2097,10 @@
           to unko delete nahi kiya ja raha.
         */
 
-        $("config-duration").value =
-          data.durationMinutes ??
-          30;
-
         $("config-question-order").value = data.questionOrder === "sequence" ? "sequence" : "random";
         $("config-class-mode").value = ["11", "12", "both"].includes(data.allowedClass) ? data.allowedClass : "12";
         $("config-centre-code").value = data.centreCode || "";
-        $("config-institute-name").value = data.institute?.name || "Life Line Teaching Cottage (LLTC)";
+        $("config-institute-name").value = data.institute?.name || "";
         $("config-institute-short-address").value = data.institute?.shortAddress || "";
         $("config-institute-full-address").value = data.institute?.fullAddress || "";
 
@@ -2886,13 +2113,7 @@
           dateTimeLocalValue(
             data.windowEnd
           );
-
-        setUploadMode(
-          data.uploadMode ||
-          "form"
-        );
-
-        $("config-max-tab-switches").value =
+$("config-max-tab-switches").value =
           data.security?.maxTabSwitches ??
           3;
 
@@ -2941,253 +2162,48 @@
     ========================================================== */
 
     async function saveExamSettings() {
+      const windowStartVal=$("config-window-start").value;
+      const windowEndVal=$("config-window-end").value;
+      const maxTabSwitches=Math.max(1,Math.min(20,parseInt($("config-max-tab-switches").value,10)||3));
+      const replaceQuestionOnSwitch=$("config-replace-on-switch").value==="yes";
+      const questionOrder=$("config-question-order").value;
+      const allowedClass=$("config-class-mode").value;
+      const centreCode=$("config-centre-code").value.trim().toUpperCase();
+      const instituteName=$("config-institute-name").value.trim();
+      const instituteShortAddress=$("config-institute-short-address").value.trim();
+      const instituteFullAddress=$("config-institute-full-address").value.trim();
+      if(!centreCode||!instituteName||!instituteShortAddress||!instituteFullAddress){alert("Please complete centre code and all institute details.");return;}
 
-      const durationMinutes =
-        parseInt(
-          $("config-duration").value,
-          10
-        );
-
-
-      const windowStartVal =
-        $("config-window-start").value;
-
-      const windowEndVal =
-        $("config-window-end").value;
-
-      const maxTabSwitches =
-        Math.max(
-          1,
-          Math.min(
-            20,
-            parseInt(
-              $("config-max-tab-switches").value,
-              10
-            ) || 3
-          )
-        );
-
-      const replaceQuestionOnSwitch =
-        $("config-replace-on-switch").value === "yes";
-
-      const questionOrder = $("config-question-order").value;
-      const allowedClass = $("config-class-mode").value;
-      const centreCode = $("config-centre-code").value.trim().toUpperCase();
-      const instituteName = $("config-institute-name").value.trim();
-      const instituteShortAddress = $("config-institute-short-address").value.trim();
-      const instituteFullAddress = $("config-institute-full-address").value.trim();
-
-      if (!centreCode || !instituteName || !instituteShortAddress || !instituteFullAddress) {
-        alert("Please complete centre code and all institute details.");
-        return;
-      }
-
-      const subjects = {};
-      for (const subject of SUBJECTS) {
-        const item = getSubjectConfig(subject);
-        if (!item.enabled) {
-          subjects[subject] = { enabled:false, pool:0, limit:0, totalPool:0, studentLimit:0, poolQuestions:0, displayQuestions:0 };
-          continue;
+      const subjects={}; let durationMinutes=0;
+      for(const subject of SUBJECTS){
+        const item=getSubjectConfig(subject), previous=currentExamConfig?.subjects?.[subject]||{};
+        if(item.enabled){
+          if(!Number.isFinite(item.pool)||item.pool<1||!Number.isFinite(item.limit)||item.limit<1||item.limit>item.pool){alert(`${subjectLabel(subject)}: enter valid pool and display limits.`);return;}
+          if(!Number.isFinite(item.durationMinutes)||item.durationMinutes<1){alert(`${subjectLabel(subject)}: enter a valid subject duration.`);return;}
+          if(!Number.isFinite(item.marksPerQuestion)||item.marksPerQuestion<=0){alert(`${subjectLabel(subject)}: enter valid marks per question.`);return;}
+          durationMinutes += item.durationMinutes;
         }
-        if (!Number.isFinite(item.pool) || item.pool < 1 || !Number.isFinite(item.limit) || item.limit < 1 || item.limit > item.pool) {
-          alert(`${capitalize(subject)}: enter valid pool and display limits.`);
-          return;
-        }
-        subjects[subject] = {
-          enabled:true,
-          pool:item.pool,
-          limit:item.limit,
-          totalPool:item.pool,
-          studentLimit:item.limit,
-          poolQuestions:item.pool,
-          displayQuestions:item.limit
-        };
+        subjects[subject]={enabled:item.enabled,pool:Number.isFinite(item.pool)?item.pool:(previous.pool||0),limit:Number.isFinite(item.limit)?item.limit:(previous.limit||0),totalPool:Number.isFinite(item.pool)?item.pool:(previous.totalPool||0),studentLimit:Number.isFinite(item.limit)?item.limit:(previous.studentLimit||0),poolQuestions:Number.isFinite(item.pool)?item.pool:(previous.poolQuestions||0),displayQuestions:Number.isFinite(item.limit)?item.limit:(previous.displayQuestions||0),durationMinutes:Number.isFinite(item.durationMinutes)?item.durationMinutes:(previous.durationMinutes||30),marksPerQuestion:Number.isFinite(item.marksPerQuestion)?item.marksPerQuestion:(previous.marksPerQuestion||4)};
       }
+      if(durationMinutes<1){alert("Please enable and configure at least one subject.");return;}
 
-      let logoDataUrl = currentExamConfig?.institute?.logoDataUrl || "";
-      const logoFile = $("config-institute-logo").files?.[0];
-      if (logoFile) {
-        try {
-          logoDataUrl = await resizeLogo(logoFile);
-        } catch (error) {
-          alert(error.message);
-          return;
-        }
-      }
+      let logoDataUrl=currentExamConfig?.institute?.logoDataUrl||"";
+      const logoFile=$("config-institute-logo").files?.[0];
+      if(logoFile){try{logoDataUrl=await resizeLogo(logoFile);}catch(error){alert(error.message);return;}}
+      if(!windowStartVal||!windowEndVal){alert("Please set Exam Window Start and End.");return;}
+      const startMs=new Date(windowStartVal).getTime(), endMs=new Date(windowEndVal).getTime();
+      if(!Number.isFinite(startMs)||!Number.isFinite(endMs)||endMs<=startMs){alert("Exam Window End must be later than Exam Window Start.");return;}
 
-
-      if (
-        !durationMinutes ||
-        durationMinutes < 1
-      ) {
-
-        alert(
-          "Please enter a valid exam duration."
-        );
-
-        return;
-      }
-
-
-      if (
-        !windowStartVal ||
-        !windowEndVal
-      ) {
-
-        alert(
-          "Please set Exam Window Start and End."
-        );
-
-        return;
-      }
-
-
-      const startMs =
-        new Date(
-          windowStartVal
-        ).getTime();
-
-      const endMs =
-        new Date(
-          windowEndVal
-        ).getTime();
-
-
-      if (
-        !Number.isFinite(startMs) ||
-        !Number.isFinite(endMs) ||
-        endMs <= startMs
-      ) {
-
-        alert(
-          "Exam Window End must be later than Exam Window Start."
-        );
-
-        return;
-      }
-
-
-      const btn =
-        $("save-config-btn");
-
-      btn.disabled = true;
-
-      btn.innerHTML =
-        `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
-
-      setStatus(
-        "Saving timer configuration...",
-        "busy"
-      );
-
-
-      try {
-
-        await setDoc(
-
-          doc(
-            db,
-            "exam_config",
-            "current_test"
-          ),
-
-          {
-
-            durationMinutes,
-
-            questionOrder,
-
-            allowedClass,
-
-            centreCode,
-
-            institute: {
-              name: instituteName,
-              shortAddress: instituteShortAddress,
-              fullAddress: instituteFullAddress,
-              logoDataUrl
-            },
-
-            subjects,
-
-            windowStart:
-              startMs,
-
-            windowEnd:
-              endMs,
-
-            security: {
-              maxTabSwitches,
-              replaceQuestionOnSwitch
-            },
-
-            updatedAt:
-              new Date()
-
-          },
-
-          {
-            merge: true
-          }
-        );
-
-
-        updateExamStatus();
-
-
-        setStatus(
-          "Timer configuration saved successfully",
-          "ok"
-        );
-
-
-        alert(
-          "Timer & exam window saved successfully."
-        );
-
-        currentExamConfig = {
-          ...currentExamConfig,
-          durationMinutes,
-          questionOrder,
-          allowedClass,
-          centreCode,
-          institute: {
-            name: instituteName,
-            shortAddress: instituteShortAddress,
-            fullAddress: instituteFullAddress,
-            logoDataUrl
-          }
-        };
-
-
-      } catch (err) {
-
-        console.error(
-          "Save config error:",
-          err
-        );
-
-        setStatus(
-          "Save failed: " +
-          (err.code || err.message),
-          "error"
-        );
-
-        alert(
-          "Failed to save configuration:\n\n" +
-          (err.code || err.message)
-        );
-
-
-      } finally {
-
-        btn.disabled = false;
-
-        btn.innerHTML =
-          `<i class="fa-solid fa-floppy-disk"></i> Save & Apply Timer`;
-      }
+      collectExamSetupStateFromUI();
+      examSetupState.subjects=examSetupState.subjects.map(item=>({...item,enabled:subjects[item.id]?.enabled===true}));
+      const btn=$("save-config-btn"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; setStatus("Saving exam configuration...","busy");
+      try{
+        await setDoc(doc(db,"exam_config","current_test"),{durationMinutes,questionOrder,allowedClass,centreCode,institute:{name:instituteName,shortAddress:instituteShortAddress,fullAddress:instituteFullAddress,logoDataUrl},subjects,examSetup:{subjects:examSetupState.subjects,studentFields:examSetupState.studentFields,customFields:examSetupState.customFields,allowStudentSubjectSelection:examSetupState.allowStudentSubjectSelection,updatedAt:new Date()},windowStart:startMs,windowEnd:endMs,security:{maxTabSwitches,replaceQuestionOnSwitch},updatedAt:new Date()},{merge:true});
+        currentExamConfig={...currentExamConfig,durationMinutes,questionOrder,allowedClass,centreCode,institute:{name:instituteName,shortAddress:instituteShortAddress,fullAddress:instituteFullAddress,logoDataUrl},subjects,examSetup:JSON.parse(JSON.stringify(examSetupState))};
+        updateExamStatus(); renderExamSetupPanel(); setStatus("Exam configuration saved successfully","ok"); alert("Exam settings saved successfully.");
+      }catch(err){console.error("Save config error:",err);setStatus("Save failed: "+(err.code||err.message),"error");alert("Failed to save configuration:\n\n"+(err.code||err.message));}
+      finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> Save & Apply Settings';}
     }
-
 
     /* =========================================================
        EXAM STATUS
@@ -3201,8 +2217,8 @@
       const end =
         $("config-window-end").value;
 
-      const duration =
-        $("config-duration").value;
+      const enabledSubjects = SUBJECTS.map(id => ({id, cfg:getSubjectConfig(id)})).filter(x => x.cfg.enabled);
+      const duration = enabledSubjects.reduce((sum,x) => sum + (Number.isFinite(x.cfg.durationMinutes) ? x.cfg.durationMinutes : 0), 0);
 
 
       if (!start || !end) {
@@ -3505,7 +2521,7 @@
                 r.calculatedScore
               ) > 0
                 ? Math.round(
-                    Number(r.calculatedScore) / 4
+                    Number(r.calculatedScore) / (Number(r.marksPerQuestion) || 4)
                   )
                 : 0
             ) +
@@ -3536,9 +2552,8 @@
           r,
 
         liveSession: (() => {
-          const status = String(r.status || "").toLowerCase();
-          return ["logged_in", "in_progress", "result_pending_feedback"].includes(status) ||
-            (r.sourceCollection === "exam_sessions" && !["completed", "final_submitted", "submitted"].includes(status));
+          const status=String(r.status||"").toLowerCase();
+          return ["logged_in","in_progress","result_pending_feedback"].includes(status) || (r.sourceCollection==="exam_sessions" && !["completed","final_submitted","submitted"].includes(status));
         })()
       };
     }
@@ -4102,6 +3117,8 @@
         centreCode: raw.centreCode ?? record.centreCode ?? "",
         institute: raw.institute || currentExamConfig?.institute || {},
         subjectSettings: raw.subjectSettings || currentExamConfig?.subjects || {},
+        selectedSubjects: Array.isArray(raw.selectedSubjects) ? raw.selectedSubjects : [],
+        marksPerQuestionBySubject: raw.marksPerQuestionBySubject || {},
         studentExtraFields: raw.studentExtraFields || {},
         status: "completed", completed: true,
         submittedAt: raw.submittedAt || now, updatedAt: now,
@@ -4489,12 +3506,6 @@
 
         </div>
 
-        ${(() => {
-          const extras = r.raw?.studentExtraFields || {};
-          const entries = Object.entries(extras).filter(([k,v]) => String(v ?? "").trim() !== "");
-          if (!entries.length) return "";
-          return `<div style="margin-top:14px;background:#f8fafc;border-radius:10px;padding:14px"><strong style="font-size:12px;color:var(--muted);text-transform:uppercase">Additional Student Fields</strong><div class="detail-grid" style="margin-top:10px">${entries.map(([k,v]) => `<div class="detail-item"><strong>${escapeHtml(k)}</strong><span>${escapeHtml(String(v))}</span></div>`).join("")}</div></div>`;
-        })()}
 
         <div
           style="
@@ -5251,13 +4262,6 @@
       );
 
 
-    $("config-duration")
-      .addEventListener(
-        "input",
-        updateExamStatus
-      );
-
-
     /* =========================================================
        SUBJECT SAVE BUTTONS
     ========================================================== */
@@ -5300,15 +4304,7 @@
           )
       );
 
-
-    $("save-english-btn")
-      .addEventListener(
-        "click",
-        () =>
-          saveSubjectConfig(
-            "english"
-          )
-      );
+    $("save-english-btn").addEventListener("click",()=>saveSubjectConfig("english"));
 
 
     /* =========================================================
