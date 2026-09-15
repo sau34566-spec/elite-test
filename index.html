@@ -731,6 +731,48 @@
       margin: 0 0 1.5rem;
     }
 
+    .performance-feedback-card {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid #dbe4ee;
+    }
+
+    .performance-feedback-card .form-group {
+      margin-bottom: 20px;
+    }
+
+    .performance-feedback-card textarea {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+    }
+
+    .performance-action-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .performance-action-row .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .performance-complete-btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 16px;
+      padding: 14px 18px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .performance-action-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .rating-overlay {
       position: fixed;
       inset: 0;
@@ -1472,132 +1514,62 @@
         id="review-ledger-container"
       ></div>
       <p id="result-save-status" role="status" aria-live="polite">Saving your result...</p>
-      <button type="button" class="btn" onclick="retryResultSave()">Retry Result Save</button>
-      <button type="button" class="btn" onclick="showRating()">Rate Test</button>
 
-      <button
-        type="button"
-        id="download-report-btn"
-        class="btn report-action"
-        onclick="downloadStudentReport()"
-      >
-        <i class="fa-solid fa-file-pdf"></i>
-        Download Complete Report (PDF)
-      </button>
+      <div class="performance-action-row">
+        <button type="button" class="btn btn-secondary" onclick="retryResultSave()">
+          <i class="fa-solid fa-rotate"></i>
+          Retry Result Save
+        </button>
 
-    </div>
-
-  </div>
-
-  <div
-    class="rating-overlay"
-    id="rating-modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="rating-modal-title"
-  >
-    <div class="rating-popup">
-      <button type="button" class="btn" onclick="closeRating()" aria-label="Close rating dialog">Close</button>
-
-      <h3 id="rating-modal-title">
-        Rate Your Test Experience
-      </h3>
-
-      <p class="subtitle">
-        Your test is already submitted. This step only updates your rating and feedback.
-      </p>
+        <button
+          type="button"
+          id="download-report-btn"
+          class="btn report-action"
+          onclick="downloadStudentReport()"
+        >
+          <i class="fa-solid fa-file-pdf"></i>
+          Download Questions & Performance PDF
+        </button>
+      </div>
 
       <form
         id="feedback-form"
+        class="performance-feedback-card"
         onsubmit="submitFinalFeedback(event)"
       >
-
         <div class="form-group">
-
-          <label>
-            Overall Experience Rating *
-          </label>
-
-          <div
-            class="rating-stars"
-            id="stars-container"
-          >
-
-            <i
-              class="fa-solid fa-star"
-              data-value="1"
-            ></i>
-
-            <i
-              class="fa-solid fa-star"
-              data-value="2"
-            ></i>
-
-            <i
-              class="fa-solid fa-star"
-              data-value="3"
-            ></i>
-
-            <i
-              class="fa-solid fa-star"
-              data-value="4"
-            ></i>
-
-            <i
-              class="fa-solid fa-star"
-              data-value="5"
-            ></i>
-
+          <label>Overall Experience Rating *</label>
+          <div class="rating-stars" id="stars-container">
+            <i class="fa-solid fa-star" data-value="1"></i>
+            <i class="fa-solid fa-star" data-value="2"></i>
+            <i class="fa-solid fa-star" data-value="3"></i>
+            <i class="fa-solid fa-star" data-value="4"></i>
+            <i class="fa-solid fa-star" data-value="5"></i>
           </div>
-
-          <div
-            class="error-msg"
-            id="rating-error"
-          >
+          <div class="error-msg" id="rating-error">
             <i class="fa-solid fa-circle-exclamation"></i>
             Rating required.
           </div>
-
         </div>
 
         <div class="form-group">
-
-          <label for="doubt-input">
-            Doubts / Queries? (Optional)
-          </label>
-
-          <textarea
-            id="doubt-input"
-            rows="2"
-            placeholder="Describe doubt..."
-          ></textarea>
-
+          <label for="doubt-input">Doubts / Queries? (Optional)</label>
+          <textarea id="doubt-input" rows="3" placeholder="Describe doubt..."></textarea>
         </div>
 
         <div class="form-group">
-
-          <label for="feedback-input">
-            Feedback (Optional)
-          </label>
-
-          <textarea
-            id="feedback-input"
-            rows="2"
-            placeholder="Your feedback..."
-          ></textarea>
-
+          <label for="feedback-input">Feedback (Optional)</label>
+          <textarea id="feedback-input" rows="3" placeholder="Your feedback..."></textarea>
         </div>
 
         <button
           type="submit"
           id="submit-all-btn"
-          class="btn"
-          style="width:100%;justify-content:center;display:none;"
+          class="btn performance-complete-btn"
         >
           <i class="fa-solid fa-cloud-arrow-up"></i>
-          Submit Rating
+          Submit & Complete
         </button>
-
       </form>
 
     </div>
@@ -1618,12 +1590,12 @@
       <i class="fa-solid fa-circle-check"></i>
 
       <h3>
-        Rating Submitted Successfully!
+        Test Completed Successfully!
       </h3>
 
       <p>
-        Your test result was already saved. Your rating and feedback
-        have now been updated successfully.
+        Your result, rating and feedback have been saved successfully.
+        You may now close this page.
       </p>
 
     </div>
@@ -5265,31 +5237,21 @@
     }
 
 
-    function openRatingModal() {
-      document
-        .getElementById("rating-modal")
-        .classList.add("show");
-      document.querySelector('#stars-container i')?.focus();
-    }
-
     window.retryResultSave = () => savePerformanceDraft("manual_retry");
-    window.closeRating = () => {
-      document.getElementById("rating-modal").classList.remove("show");
-      document.getElementById("download-report-btn").focus();
-    };
-    window.showRating = async () => {
-      if (await savePerformanceDraft("rating_open")) openRatingModal();
-    };
-    document.getElementById("rating-modal").addEventListener("keydown", event => {
-      if (event.key === "Escape") window.closeRating();
-      if (event.key === "Tab") {
-        const items = [...event.currentTarget.querySelectorAll('button:not([disabled]), textarea, [tabindex="0"]')].filter(el => el.getClientRects().length);
-        const first = items[0], last = items[items.length - 1];
-        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-      }
-    });
 
+
+    function triggerDirectPdfDownload(pdf, filename) {
+      const blob = pdf.output("blob");
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
 
     window.downloadStudentReport =
       async () => {
@@ -5357,6 +5319,10 @@
               '<div><b>Wrong:</b> ' + wrongCountFinal + '</div>' +
               '<div><b>Tab Switches:</b> ' + tabSwitches + '</div>' +
               '<div><b>Copy/Paste Attempts:</b> ' + copiesAttempted + '</div>' +
+              '<div><b>Selected Subjects:</b> ' + escapeHTML((getAttemptSubjects().length ? getAttemptSubjects() : Object.keys(subjectConfig || {}).filter(id => subjectConfig[id]?.displayQuestions > 0)).map(id => SUBJECT_LABELS[id] || id).join(', ')) + '</div>' +
+              '<div><b>Rating:</b> ' + (selectedRating ? selectedRating + '/5' : 'Not submitted') + '</div>' +
+              '<div style="grid-column:1/-1"><b>Doubt / Query:</b> ' + escapeHTML(document.getElementById("doubt-input")?.value?.trim() || 'None') + '</div>' +
+              '<div style="grid-column:1/-1"><b>Feedback:</b> ' + escapeHTML(document.getElementById("feedback-input")?.value?.trim() || 'None') + '</div>' +
             '</div>';
 
           reportRoot.appendChild(header);
@@ -5449,13 +5415,12 @@
               .replace(/[^a-z0-9_-]+/gi, "_")
               .replace(/^_+|_+$/g, "");
 
-          await pdf.save(
-            (safeName || "student") +
-            "_complete_test_report.pdf", { returnPromise: true }
+          triggerDirectPdfDownload(
+            pdf,
+            (safeName || "student") + "_complete_performance_report.pdf"
           );
 
           reportRoot.remove();
-          openRatingModal();
 
         } catch (error) {
           console.error("PDF report error:", error);
@@ -5528,12 +5493,7 @@
                 .style.display =
                 "none";
 
-              document
-                .getElementById(
-                  "submit-all-btn"
-                )
-                .style.display =
-                "flex";
+
             }
           );
         }
@@ -5703,7 +5663,7 @@
         submitButton.innerHTML =
           `
             <i class="fa-solid fa-cloud-arrow-up"></i>
-            Submit Rating
+            Submit & Complete
           `;
 
 
