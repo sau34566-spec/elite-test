@@ -1129,6 +1129,8 @@
 
         </div>
 
+        <div id="custom-student-fields"></div>
+
         <div style="text-align:right;margin-top:2rem;">
 
           <button
@@ -1681,6 +1683,19 @@
     let currentStudentClass = "";
     let currentStudentAddress = "";
     let currentCentreCode = "";
+    let studentExtraFields = {};
+    let examSetupConfig = {
+      studentFields: {
+        centreCode:{enabled:true,required:true,label:"Examination Centre Code"},
+        name:{enabled:true,required:true,label:"Full Name"},
+        email:{enabled:true,required:true,label:"Gmail Address"},
+        batchCategory:{enabled:true,required:true,label:"Batch Category"},
+        class:{enabled:true,required:true,label:"Class"},
+        address:{enabled:true,required:true,label:"Address"}
+      },
+      customFields: [],
+      subjects: []
+    };
 
     let examStartTime = 0;
 
@@ -1701,6 +1716,11 @@
     let performanceShown = false;
 
     let resultDocId = null;
+
+    // Same attempt ID is shared by exam_sessions and results so Admin Force Submit
+    // can safely finalize the exact in-progress attempt without creating duplicates.
+    let examSessionId = null;
+    let examSessionSyncPromise = null;
 
     let resultSaved = false;
 
@@ -1750,6 +1770,11 @@
       },
 
       maths: {
+        poolQuestions: 0,
+        displayQuestions: 0
+      },
+
+      english: {
         poolQuestions: 0,
         displayQuestions: 0
       }
@@ -1825,6 +1850,7 @@
       saveSecurityState();
 
       selectedAnswers = {};
+      studentExtraFields = {};
 
       reserveQuestionsBySubject = {};
 
@@ -1837,6 +1863,8 @@
       performanceShown = false;
 
       resultDocId = null;
+      examSessionId = null;
+      examSessionSyncPromise = null;
 
       resultSaved = false;
 
@@ -2256,20 +2284,24 @@
        SUBJECT HELPERS
     ========================================================== */
 
-    const SUBJECT_FILES = {
+    let SUBJECT_FILES = {
       chemistry: "question/chemistry.html",
       physics: "question/physics.html",
       biology: "question/biology.html",
-      maths: "question/maths.html"
+      maths: "question/maths.html",
+      english: "question/english.html"
     };
 
 
-    const SUBJECT_LABELS = {
+    let SUBJECT_LABELS = {
       chemistry: "Chemistry",
       physics: "Physics",
       biology: "Biology",
-      maths: "Maths"
+      maths: "Maths",
+      english: "English"
     };
+
+    let ACTIVE_SUBJECTS = ["chemistry","physics","biology","maths","english"];
 
 
     /*
@@ -2430,216 +2462,66 @@
 
 
     function readAdminSubjectSettings(config) {
+      const containers = [config?.subjects, config?.subjectSettings, config?.subjectConfig, config?.questionSettings, config?.questionConfig];
+      let foundContainer = containers.find(c => c && typeof c === "object") || {};
 
-      /*
-        Possible main containers.
-      */
+      const savedSetup = config?.examSetup || {};
+      const configuredSubjects = Array.isArray(savedSetup.subjects) ? savedSetup.subjects : [];
 
-      const containers = [
-        config?.subjectSettings,
-        config?.subjects,
-        config?.subjectConfig,
-        config?.questionSettings,
-        config?.questionConfig
-      ];
+      const fallbackIds = ["chemistry","physics","biology","maths","english"];
+      const subjectEntries = configuredSubjects.length ? configuredSubjects : fallbackIds.map(id => ({
+        id,
+        label: id.charAt(0).toUpperCase() + id.slice(1),
+        enabled: foundContainer?.[id]?.enabled !== false
+      }));
 
-      let foundContainer = null;
+      ACTIVE_SUBJECTS = [];
+      SUBJECT_FILES = {};
+      SUBJECT_LABELS = {};
 
-      for (const container of containers) {
+      const nextConfig = {};
 
-        if (
-          container &&
-          typeof container === "object"
-        ) {
+      for (const entry of subjectEntries) {
+        const id = String(entry.id || "").trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
+        if (!id || ACTIVE_SUBJECTS.includes(id)) continue;
+        const label = String(entry.label || id).trim();
+        ACTIVE_SUBJECTS.push(id);
+        SUBJECT_LABELS[id] = label;
+        SUBJECT_FILES[id] = `question/${id}.html`;
 
-          foundContainer = container;
-          break;
+        let setting = extractSubjectSettings(foundContainer, id);
+        if (!setting && config?.[id]) setting = extractSubjectSettings({[id]:config[id]}, id);
+
+        const base = subjectConfig[id] || {poolQuestions:0,displayQuestions:0};
+        let pool = setting?.poolQuestions ?? base.poolQuestions ?? 0;
+        let display = setting?.displayQuestions ?? base.displayQuestions ?? 0;
+        if (entry.enabled === false || foundContainer?.[id]?.enabled === false) {
+          pool = 0;
+          display = 0;
         }
+        pool = Math.max(0, Math.floor(Number(pool) || 0));
+        display = Math.max(0, Math.min(pool, Math.floor(Number(display) || 0)));
+        nextConfig[id] = {poolQuestions:pool, displayQuestions:display};
       }
-
-
-      const nextConfig = {
-        chemistry: {
-          ...subjectConfig.chemistry
-        },
-
-        physics: {
-          ...subjectConfig.physics
-        },
-
-        biology: {
-          ...subjectConfig.biology
-        },
-
-        maths: {
-          ...subjectConfig.maths
-        }
-      };
-
-
-      for (const subject of [
-        "chemistry",
-        "physics",
-        "biology",
-        "maths"
-      ]) {
-
-        let setting = null;
-
-        if (foundContainer) {
-          setting =
-            extractSubjectSettings(
-              foundContainer,
-              subject
-            );
-
-          if (foundContainer?.[subject]?.enabled === false) {
-            setting = { poolQuestions: 0, displayQuestions: 0 };
-          }
-        }
-
-
-        /*
-          Also support direct fields such as:
-
-          chemistryPoolQuestions
-          chemistryDisplayQuestions
-        */
-
-        if (!setting) {
-
-          const directPoolKeys = [
-            `${subject}PoolQuestions`,
-            `${subject}TotalPoolQuestions`,
-            `${subject}Pool`
-          ];
-
-          const directDisplayKeys = [
-            `${subject}DisplayQuestions`,
-            `${subject}StudentDisplayQuestions`,
-            `${subject}DisplayLimit`,
-            `${subject}StudentLimit`
-          ];
-
-          let directPool = null;
-          let directDisplay = null;
-
-          for (const key of directPoolKeys) {
-
-            if (
-              config?.[key] !== undefined &&
-              Number.isFinite(Number(config[key]))
-            ) {
-
-              directPool =
-                Number(config[key]);
-
-              break;
-            }
-          }
-
-          for (const key of directDisplayKeys) {
-
-            if (
-              config?.[key] !== undefined &&
-              Number.isFinite(Number(config[key]))
-            ) {
-
-              directDisplay =
-                Number(config[key]);
-
-              break;
-            }
-          }
-
-          if (
-            directPool !== null ||
-            directDisplay !== null
-          ) {
-
-            setting = {
-              poolQuestions: directPool,
-              displayQuestions: directDisplay
-            };
-          }
-        }
-
-
-        if (setting) {
-
-          if (
-            setting.poolQuestions !== null &&
-            Number.isFinite(
-              Number(setting.poolQuestions)
-            )
-          ) {
-
-            nextConfig[subject].poolQuestions =
-              Math.max(
-                0,
-                Math.floor(
-                  Number(setting.poolQuestions)
-                )
-              );
-          }
-
-
-          if (
-            setting.displayQuestions !== null &&
-            Number.isFinite(
-              Number(setting.displayQuestions)
-            )
-          ) {
-
-            nextConfig[subject].displayQuestions =
-              Math.max(
-                0,
-                Math.floor(
-                  Number(setting.displayQuestions)
-                )
-              );
-          }
-        }
-      }
-
-
-      /*
-        Make sure display cannot be greater than pool.
-
-        If admin accidentally sets:
-
-        Pool = 20
-        Display = 25
-
-        then display is automatically reduced to 20.
-      */
-
-      for (const subject of [
-        "chemistry",
-        "physics",
-        "biology",
-        "maths"
-      ]) {
-
-        const configItem =
-          nextConfig[subject];
-
-        if (
-          configItem.displayQuestions >
-          configItem.poolQuestions
-        ) {
-
-          configItem.displayQuestions =
-            configItem.poolQuestions;
-        }
-      }
-
 
       subjectConfig = nextConfig;
+      examSetupConfig = {
+        studentFields: {
+          centreCode:{enabled:true,required:true,label:"Examination Centre Code"},
+          name:{enabled:true,required:true,label:"Full Name"},
+          email:{enabled:true,required:true,label:"Gmail Address"},
+          batchCategory:{enabled:true,required:true,label:"Batch Category"},
+          class:{enabled:true,required:true,label:"Class"},
+          address:{enabled:true,required:true,label:"Address"},
+          ...(savedSetup.studentFields || {})
+        },
+        customFields: Array.isArray(savedSetup.customFields) ? savedSetup.customFields.filter(f => f && f.enabled !== false) : [],
+        subjects: subjectEntries
+      };
 
+      applyStudentFieldConfiguration(examSetupConfig);
       return subjectConfig;
     }
-
 
     /* =========================================================
        CONFIG SUMMARY ON INSTRUCTION PAGE
@@ -2656,12 +2538,7 @@
 
       container.innerHTML = "";
 
-      const subjects = [
-        "chemistry",
-        "physics",
-        "biology",
-        "maths"
-      ];
+      const subjects = ACTIVE_SUBJECTS;
 
       let totalDisplay = 0;
 
@@ -3067,6 +2944,60 @@
       }
     }
 
+    function getStudentFieldDefinition(id) {
+      const defaults = {
+        centreCode:{enabled:true,required:true,label:"Examination Centre Code"},
+        name:{enabled:true,required:true,label:"Full Name"},
+        email:{enabled:true,required:true,label:"Gmail Address"},
+        batchCategory:{enabled:true,required:true,label:"Batch Category"},
+        class:{enabled:true,required:true,label:"Class"},
+        address:{enabled:true,required:true,label:"Address"}
+      };
+      return {...(defaults[id] || {}), ...(examSetupConfig.studentFields?.[id] || {})};
+    }
+
+    function applyStudentFieldConfiguration(setup = {}) {
+      const defs = setup.studentFields || {};
+      const map = {
+        centreCode:"centre-code",
+        name:"student-name",
+        email:"student-email",
+        batchCategory:"batch-category",
+        class:"student-class",
+        address:"student-address"
+      };
+
+      Object.entries(map).forEach(([key,inputId]) => {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        const def = getStudentFieldDefinition(key);
+        const wrapper = input.closest(".form-group");
+        if (wrapper) wrapper.style.display = def.enabled === false ? "none" : "";
+        input.required = def.enabled !== false && def.required !== false;
+        input.disabled = def.enabled === false;
+        const label = wrapper?.querySelector("label");
+        if (label && def.label) label.textContent = def.label + (def.required !== false && def.enabled !== false ? " *" : "");
+      });
+
+      const customHost = document.getElementById("custom-student-fields");
+      if (!customHost) return;
+      const customFields = Array.isArray(setup.customFields) ? setup.customFields.filter(f => f && f.enabled !== false) : [];
+      customHost.innerHTML = customFields.map(f => {
+        const id = String(f.id || "").replace(/[^a-zA-Z0-9_-]/g, "_");
+        const label = escapeHTML(f.label || f.id || "Field");
+        const type = ["text","tel","number","date","email"].includes(f.type) ? f.type : "text";
+        return `<div class="form-group dynamic-student-field" data-field-id="${escapeHTML(f.id)}"><label for="custom-field-${escapeHTML(id)}">${label}${f.required ? " *" : ""}</label><input id="custom-field-${escapeHTML(id)}" type="${type}" data-custom-student-field="${escapeHTML(f.id)}" ${f.required ? "required" : ""}></div>`;
+      }).join("");
+    }
+
+    function collectCustomStudentFields() {
+      const out = {};
+      document.querySelectorAll("[data-custom-student-field]").forEach(input => {
+        out[input.dataset.customStudentField] = input.value.trim();
+      });
+      return out;
+    }
+
     function applyPortalConfiguration(config = {}) {
       const institute = config.institute || {};
       const name = institute.name || "Life Line Teaching Cottage (LLTC)";
@@ -3088,6 +3019,13 @@
         });
         if (classSelect.value && allowed !== "both" && classSelect.value !== allowed) classSelect.value = "";
       }
+      examSetupConfig = {
+        ...examSetupConfig,
+        studentFields: { ...examSetupConfig.studentFields, ...(config.examSetup?.studentFields || {}) },
+        customFields: Array.isArray(config.examSetup?.customFields) ? config.examSetup.customFields : (examSetupConfig.customFields || []),
+        subjects: Array.isArray(config.examSetup?.subjects) ? config.examSetup.subjects : (examSetupConfig.subjects || [])
+      };
+      applyStudentFieldConfiguration(examSetupConfig);
     }
 
 
@@ -3247,6 +3185,8 @@
             .value
             .trim();
 
+        const fieldConfig = examSetupConfig.studentFields || {};
+
 
         const emailError =
           document.getElementById(
@@ -3305,7 +3245,7 @@
           "none";
 
         classUnavailableMessage.style.display =
-          classInput === "11"
+          fieldConfig.class?.enabled !== false && classInput === "11"
             ? "flex"
             : "none";
 
@@ -3313,7 +3253,7 @@
           "none";
 
 
-        if (!nameInput) {
+        if (fieldConfig.name?.enabled !== false && fieldConfig.name?.required !== false && !nameInput) {
 
           alert(
             "Please enter your full name."
@@ -3323,17 +3263,18 @@
         }
 
         const configuredCentreCode = String(examConfigData?.centreCode || "").trim().toUpperCase();
-        if (configuredCentreCode && centreCodeInput !== configuredCentreCode) {
+        if (fieldConfig.centreCode?.enabled !== false && configuredCentreCode && centreCodeInput !== configuredCentreCode) {
           centreCodeError.style.display = "flex";
           return;
         }
 
 
-        if (
-          !emailInput.endsWith(
-            "@gmail.com"
-          )
-        ) {
+        if (fieldConfig.email?.enabled !== false && fieldConfig.email?.required !== false && !emailInput) {
+          emailError.style.display = "flex";
+          return;
+        }
+
+        if (fieldConfig.email?.enabled !== false && emailInput && !emailInput.endsWith("@gmail.com")) {
 
           emailError.style.display =
             "flex";
@@ -3342,10 +3283,7 @@
         }
 
 
-        if (
-          !["R", "D"]
-            .includes(batchInput)
-        ) {
+        if (fieldConfig.batchCategory?.enabled !== false && fieldConfig.batchCategory?.required !== false && !["R", "D"].includes(batchInput)) {
 
           batchError.style.display =
             "flex";
@@ -3353,7 +3291,7 @@
           return;
         }
 
-        if (!classInput) {
+        if (fieldConfig.class?.enabled !== false && fieldConfig.class?.required !== false && !classInput) {
 
           classError.style.display =
             "flex";
@@ -3365,7 +3303,7 @@
           ? examConfigData.allowedClass
           : "12";
 
-        if (allowedClass !== "both" && classInput !== allowedClass) {
+        if (fieldConfig.class?.enabled !== false && classInput && allowedClass !== "both" && classInput !== allowedClass) {
 
           classUnavailableMessage.style.display =
             "flex";
@@ -3373,7 +3311,7 @@
           return;
         }
 
-        if (!addressInput) {
+        if (fieldConfig.address?.enabled !== false && fieldConfig.address?.required !== false && !addressInput) {
 
           addressError.style.display =
             "flex";
@@ -3390,47 +3328,39 @@
 
         try {
 
-          const snap =
-            await getDocs(
-              query(
-                collection(
-                  db,
-                  "results"
-                ),
-                where(
-                  "email",
-                  "==",
-                  emailInput
+          if (fieldConfig.email?.enabled !== false && emailInput) {
+            const snap =
+              await getDocs(
+                query(
+                  collection(db, "results"),
+                  where("email", "==", emailInput)
                 )
-              )
-            );
+              );
 
-
-          if (!snap.empty) {
-
-            duplicateError.style.display =
-              "flex";
-
-            return;
+            if (!snap.empty) {
+              duplicateError.style.display = "flex";
+              return;
+            }
           }
 
 
           currentStudentName =
-            nameInput;
+            fieldConfig.name?.enabled !== false ? nameInput : "";
 
           currentStudentEmail =
-            emailInput;
+            fieldConfig.email?.enabled !== false ? emailInput : "";
 
           currentBatchCategory =
-            batchInput;
+            fieldConfig.batchCategory?.enabled !== false ? batchInput : "";
 
           currentStudentClass =
-            classInput;
+            fieldConfig.class?.enabled !== false ? classInput : "";
 
           currentStudentAddress =
-            addressInput;
+            fieldConfig.address?.enabled !== false ? addressInput : "";
 
-          currentCentreCode = centreCodeInput;
+          currentCentreCode = fieldConfig.centreCode?.enabled !== false ? centreCodeInput : "";
+          studentExtraFields = collectCustomStudentFields();
 
 
           resetAttemptState();
@@ -3729,6 +3659,115 @@
 
 
     /* =========================================================
+       LIVE EXAM SESSION / ADMIN FORCE SUBMIT SYNC
+       A lightweight exam_sessions document is created at exam start.
+       It is updated while the student answers questions and is finalized
+       by Admin Force Submit without creating a second result document.
+    ========================================================== */
+
+    function buildLiveSessionScore() {
+      let correct = 0;
+      let wrong = 0;
+
+      questionsList.forEach((q, idx) => {
+        const selectedIdx = selectedAnswers[idx];
+        if (selectedIdx === undefined) return;
+        const selectedText = q.options?.[selectedIdx];
+        const correctText = q.a || q.correct || q.ans;
+        if (selectedText === correctText) correct++;
+        else wrong++;
+      });
+
+      const rawScore = (correct * 4) - (wrong * 1);
+      const score = Math.max(0, rawScore);
+      return {
+        correct,
+        wrong,
+        score,
+        scoreText: `${score}/${questionsList.length * 4}`
+      };
+    }
+
+    async function syncExamSession(extra = {}) {
+      if (!isExamActive || !currentStudentEmail || !questionsList.length) return true;
+      if (examSessionSyncPromise) return examSessionSyncPromise;
+
+      examSessionSyncPromise = (async () => {
+        try {
+          if (!examSessionId) {
+            examSessionId = doc(collection(db, "exam_sessions")).id;
+          }
+
+          // If Admin already force-submitted this attempt, do not write over it.
+          const currentSession = await getDoc(doc(db, "exam_sessions", examSessionId));
+          if (currentSession.exists()) {
+            const current = currentSession.data() || {};
+            const status = String(current.status || "").toLowerCase();
+            if (["final_submitted", "completed", "submitted"].includes(status) && current.forceSubmittedByAdmin) {
+              isExamActive = false;
+              hasSubmitted = true;
+              clearInterval(timerInterval);
+              showExamModal(
+                "security",
+                "Examination Force Submitted",
+                "The administrator has finalized your examination. Your saved result is already with the admin panel.",
+                "Close",
+                null,
+                "primary"
+              );
+              return false;
+            }
+          }
+
+          const live = buildLiveSessionScore();
+          const now = new Date();
+          const payload = {
+            name: currentStudentName,
+            email: currentStudentEmail,
+            batchCategory: currentBatchCategory,
+            studentClass: currentStudentClass,
+            address: currentStudentAddress,
+            studentExtraFields,
+            centreCode: currentCentreCode,
+            examId: examConfigData?.examId || "current_test",
+            examName: examConfigData?.examName || "Current Test",
+            subjects: [...new Set(questionsList.map(q => q._subjectName).filter(Boolean))],
+            attemptId: examSessionId,
+            status: "in_progress",
+            completed: false,
+            startedAt: examStartTime ? new Date(examStartTime) : now,
+            lastSeen: now,
+            updatedAt: now,
+            currentQuestionIndex,
+            questionCount: questionsList.length,
+            score: live.scoreText,
+            calculatedScore: live.score,
+            totalScore: questionsList.length * 4,
+            correct: live.correct,
+            wrong: live.wrong,
+            attempted: live.correct + live.wrong,
+            tabSwitches,
+            copiesAttempted,
+            refreshes,
+            penaltiesApplied: 0,
+            securityEvents,
+            ...extra
+          };
+
+          await setDoc(doc(db, "exam_sessions", examSessionId), payload, { merge: true });
+          return true;
+        } catch (error) {
+          console.warn("Live exam session sync warning:", error);
+          return true;
+        } finally {
+          examSessionSyncPromise = null;
+        }
+      })();
+
+      return examSessionSyncPromise;
+    }
+
+    /* =========================================================
        START EXAM
     ========================================================== */
 
@@ -3837,88 +3876,20 @@
             Biology
           */
 
-          const chemistryQuestions =
-            await loadSubjectQuestions(
-              "chemistry"
-            );
-
-
-          const physicsQuestions =
-            await loadSubjectQuestions(
-              "physics"
-            );
-
-
-          const biologyQuestions =
-            await loadSubjectQuestions(
-              "biology"
-            );
-
-          const mathsQuestions =
-            await loadSubjectQuestions(
-              "maths"
-            );
-
-
-          /*
-            At least one question should exist.
-          */
-
-          if (
-            chemistryQuestions.displayed.length === 0 &&
-            physicsQuestions.displayed.length === 0 &&
-            biologyQuestions.displayed.length === 0 &&
-            mathsQuestions.displayed.length === 0
-          ) {
-
-            throw new Error(
-              "No questions are enabled. Please check the subject-wise Test Setup in the Admin Panel."
-            );
+          const loadedSubjectQuestions = {};
+          for (const subject of ACTIVE_SUBJECTS) {
+            loadedSubjectQuestions[subject] = await loadSubjectQuestions(subject);
           }
 
+          if (!ACTIVE_SUBJECTS.some(subject => loadedSubjectQuestions[subject]?.displayed?.length > 0)) {
+            throw new Error("No questions are enabled. Please check Exam Setup and Subject-wise Test Setup in the Admin Panel.");
+          }
 
-          /*
-            Independently randomize the complete paper for this attempt.
-            Secure browser randomness greatly reduces matching paper order.
-          */
-
-          /*
-            IMPORTANT:
-            Subject order is fixed and NEVER mixed:
-            Chemistry -> Physics -> Biology.
-
-            Randomization still happens independently inside each
-            subject pool, so students receive different questions
-            without mixing the three subjects.
-          */
-          questionsList = [
-            ...chemistryQuestions.displayed,
-            ...physicsQuestions.displayed,
-            ...biologyQuestions.displayed,
-            ...mathsQuestions.displayed
-          ];
-
-
-          /*
-            Keep combined pool for compatibility.
-          */
-
-          questionPool =
-            [
-              ...chemistryQuestions.all,
-              ...physicsQuestions.all,
-              ...biologyQuestions.all,
-              ...mathsQuestions.all
-            ];
-
-
-          reserveQuestionsBySubject = {
-            chemistry: chemistryQuestions.reserve,
-            physics: physicsQuestions.reserve,
-            biology: biologyQuestions.reserve,
-            maths: mathsQuestions.reserve
-          };
-
+          questionsList = ACTIVE_SUBJECTS.flatMap(subject => loadedSubjectQuestions[subject].displayed);
+          questionPool = ACTIVE_SUBJECTS.flatMap(subject => loadedSubjectQuestions[subject].all);
+          reserveQuestionsBySubject = Object.fromEntries(
+            ACTIVE_SUBJECTS.map(subject => [subject, loadedSubjectQuestions[subject].reserve])
+          );
 
           usedQuestionIds =
             new Set(
@@ -3936,6 +3907,8 @@
 
           isExamActive = true;
 
+          await syncExamSession({ status: "in_progress" });
+
           window.ExamSecurityGuard?.start({
             active: () => isExamActive && !hasSubmitted,
             onViolation: handleEnvironmentViolation
@@ -3944,6 +3917,7 @@
           performanceShown = false;
 
           resultDocId = null;
+          examSessionId = null;
 
           resultSaved = false;
           resultSavePromise = null;
@@ -4045,7 +4019,8 @@
             "• chemistry.html\n" +
             "• physics.html\n" +
             "• biology.html\n" +
-            "• maths.html\n\n" +
+            "• maths.html\n" +
+            "• english.html\n\n" +
             "Also check the subject-wise Test Setup in Admin Panel.\n\n" +
             "Error: " +
             error.message
@@ -4526,6 +4501,7 @@
         answerInput.autocomplete = "off";
         answerInput.addEventListener("input", event => {
           selectedAnswers[index] = event.target.value;
+      void syncExamSession();
         });
         optionsBlock.appendChild(answerInput);
 
@@ -5126,6 +5102,7 @@
         Save immediately when Performance slide appears.
       */
 
+      void syncExamSession({ status: "result_pending_feedback" });
       savePerformanceDraft(
         submissionReason
       );
@@ -5172,6 +5149,8 @@
 
         address:
           currentStudentAddress,
+
+        studentExtraFields,
 
         centreCode:
           currentCentreCode,
@@ -5274,9 +5253,19 @@
       document.getElementById("result-save-status").textContent = "Saving your result... Please keep this page open.";
       try {
         // Allocate once, reuse on retries; concurrent callers share one promise.
-        if (!resultDocId) resultDocId = doc(collection(db, "results")).id;
+        if (!resultDocId) resultDocId = examSessionId || doc(collection(db, "results")).id;
         await setDoc(doc(db, "results", resultDocId), payload);
 
+        if (examSessionId) {
+          await setDoc(doc(db, "exam_sessions", examSessionId), {
+            ...payload,
+            attemptId: examSessionId,
+            status: "completed",
+            completed: true,
+            lastSeen: new Date(),
+            updatedAt: new Date()
+          }, { merge: true });
+        }
 
         resultSaved =
           true;
