@@ -1,0 +1,106 @@
+[
+  {
+    "id": "case",
+    "q": "Select the lowercase variable. / छोटा अक्षर चुनिए।",
+    "options": [
+      "x",
+      "X",
+      "Y",
+      "Z"
+    ],
+    "a": "x"
+  },
+  {
+    "id": "equation",
+    "q": "Solve / हल कीजिए: \\[\\begin{aligned}x+y&=5\\\\\nx-y&=1\\end{aligned}\\]",
+    "options": [
+      "x = 3, y = 2",
+      "x = 2, y = 3",
+      "x = 1, y = 4",
+      "x = 4, y = 1"
+    ],
+    "a": "x = 3, y = 2"
+  },
+  {
+    "id": "reaction",
+    "q": "Complete the reaction: \\(\\ce{2H2 + O2 -> 2 ?}\\)",
+    "options": [
+      "\\(\\ce{H2O}\\)",
+      "\\(\\ce{CO2}\\)",
+      "\\(\\ce{NH3}\\)",
+      "\\(\\ce{HCl}\\)"
+    ],
+    "a": "\\(\\ce{H2O}\\)"
+  },
+  {
+    "id": "diagram",
+    "q": "Find x in the right triangle. / समकोण त्रिभुज में x ज्ञात कीजिए।",
+    "image": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjIwIiB2aWV3Qm94PSIwIDAgMzIwIDIyMCI+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSIyMjAiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTUwIDMwVjE4MEgyNTBaIiBmaWxsPSJub25lIiBzdHJva2U9IiMxZTNhOGEiIHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik01MCAxNjVINjVWMTgwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxZTNhOGEiLz48ZyBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiMxMTE4MjciPjx0ZXh0IHg9IjE1IiB5PSIxMTUiPjQ8L3RleHQ+PHRleHQgeD0iMTQwIiB5PSIyMDgiPjM8L3RleHQ+PHRleHQgeD0iMTY1IiB5PSI5NSI+eDwvdGV4dD48L2c+PC9zdmc+",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "7"
+    ],
+    "a": "5"
+  },
+  {
+    "id": "matching",
+    "q": "Match the quantities with their SI units. / राशियों का SI मात्रकों से मिलान करें।",
+    "table": {
+      "headers": [
+        "Column I",
+        "Column II"
+      ],
+      "rows": [
+        [
+          "A. Force",
+          "1. joule"
+        ],
+        [
+          "B. Energy",
+          "2. newton"
+        ]
+      ]
+    },
+    "options": [
+      "A–2, B–1",
+      "A–1, B–2"
+    ],
+    "a": "A–2, B–1"
+  },
+  {
+    "id": "passage",
+    "passage": "Read the passage carefully. A student practises regularly, reviews mistakes and repeats difficult exercises. Improvement comes through patient practice.\n\nअनुच्छेद ध्यान से पढ़िए। एक विद्यार्थी नियमित अभ्यास करता है, गलतियों की समीक्षा करता है और कठिन अभ्यास दोहराता है। धैर्यपूर्वक अभ्यास से सुधार होता है।",
+    "q": "What helps the student improve? / विद्यार्थी को सुधार में क्या मदद मिलती है?",
+    "options": [
+      "Regular practice / नियमित अभ्यास",
+      "Avoiding study / पढ़ाई से बचना",
+      "Guessing only / केवल अनुमान",
+      "Ignoring mistakes / गलतियों की अनदेखी"
+    ],
+    "a": "Regular practice / नियमित अभ्यास"
+  },
+  {
+    "id": "multiple",
+    "q": "Select the prime numbers.",
+    "type": "multiple",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "a": [
+      "2",
+      "3"
+    ]
+  },
+  {
+    "id": "numeric",
+    "q": "Enter 2 + 3.",
+    "type": "numeric",
+    "options": [],
+    "a": "5"
+  }
+]

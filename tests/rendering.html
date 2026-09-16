@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bookesh renderer verification</title>
+<style>body{font-family:Arial,sans-serif;margin:20px;color:#111827}main{max-width:750px;margin:auto}.answer-report-card{box-sizing:border-box;width:100%!important}.question-format-line{display:block;white-space:pre-wrap}.question-table{border-collapse:collapse;width:100%}.question-table td,.question-table th{padding:8px;border:1px solid #aaa}.question-table-scroll{overflow:auto}#status{padding:16px;background:#eff6ff}img{max-width:100%}li{margin:8px 0}.question-math-expression{overflow-wrap:anywhere}</style>
+<script src="../question-bank.js"></script><script src="../exam-report.js"></script>
+<script>window.MathJax={loader:{load:['[tex]/mhchem']},tex:{packages:{'[+]':['mhchem']},inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]'],['$$','$$']]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head><body><main><h1>Question renderer verification</h1><p>This fixture uses sample questions only. It does not connect to Firebase or create an exam attempt.</p><p id="status" role="status">Loading sample formats...</p><div id="reports"></div></main>
+<script>
+window.addEventListener('load',async()=>{try{
+const raw=await (await fetch('../examples/supported-questions.json')).json();
+const questions=QuestionBank.validateBank(raw,'samples');
+for(const [index,q] of questions.entries()){
+const card=ExamReport.buildReportCard({number:index+1,question:q.q,passage:q.__passage,table:q.__table,options:q.options,media:q.__media.map(m=>m.src),optionMedia:q.__optionMedia,attempted:true,isCorrect:true,selectedAnswer:QuestionBank.getCorrectAnswer(q),correctAnswer:QuestionBank.getCorrectAnswer(q)});
+document.getElementById('reports').appendChild(card);
+}
+if(!window.MathJax?.startup?.promise)throw Error('MathJax did not load');
+await MathJax.startup.promise;await MathJax.typesetPromise([document.getElementById('reports')]);
+await Promise.all([...document.querySelectorAll('img')].map(img=>img.decode()));
+if(document.querySelector('mjx-merror,[data-mjx-error]'))throw Error('An equation failed to render');
+if(!document.querySelector('mjx-container'))throw Error('Equations were not typeset');
+document.getElementById('status').textContent='PASS: 8 sample formats rendered, including multiline maths, chemical reactions, diagram, matching table and bilingual passage.';
+}catch(e){document.getElementById('status').textContent='FAIL: '+e.message;}});
+</script></body></html>

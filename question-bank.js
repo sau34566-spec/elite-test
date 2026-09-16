@@ -156,8 +156,16 @@
       }
     }
 
-    const value = text(answer)
-      .trim()
+    // Answer text may itself end in a bracket/period, or distinguish x from X.
+    // Match it intact before interpreting legacy option labels such as "A)".
+    const original = text(answer).trim();
+    const literal = options.findIndex(option => option.trim() === original);
+    if (original && literal >= 0) return literal;
+    const spaced = original.replace(/\s+/g, " ");
+    const whitespaceMatch = options.findIndex(option => option.replace(/\s+/g, " ").trim() === spaced);
+    if (original && whitespaceMatch >= 0) return whitespaceMatch;
+
+    const value = original
       .replace(/[.)\]:-]+$/, "")
       .trim();
 
@@ -276,7 +284,11 @@
       ? input.optionMedia.map((item) =>
           getQuestionMedia({ images: item })
         )
-      : [];
+      : (() => {
+          const raw = input.options ?? input.choices ?? input.alternatives ?? input.answers ?? input.option ?? [];
+          const entries = Array.isArray(raw) ? raw : raw && typeof raw === "object" ? Object.values(raw) : [];
+          return entries.map(option => option && typeof option === "object" ? getQuestionMedia(option) : []);
+        })();
 
     q.__passage = text(
       input.passage ??
