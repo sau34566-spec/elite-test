@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    [hidden] { display: none !important; }
     :root {
       --primary: #1e3a8a;
       --primary-light: #3b82f6;
@@ -461,6 +462,8 @@
     }
 
     .option-label {
+      text-transform: none;
+      letter-spacing: normal;
       display: flex;
       align-items: flex-start;
       padding: 1rem;
@@ -1391,6 +1394,7 @@
           class="option-container"
           id="options-block"
         ></div>
+        <p id="screen-awake-status" role="status" style="margin-top:12px;font-size:.8rem;color:#64748b"></p>
 
       </div>
 
@@ -1424,14 +1428,13 @@
     ========================================================== -->
     <div class="slide" id="slide-4">
 
-      <h2>
+      <h2 id="result-page-title">
         <i class="fa-solid fa-square-poll-horizontal"></i>
         Performance Dashboard
       </h2>
 
-      <p class="subtitle">
-        Your metrics and evaluation sheet.
-      </p>
+      <p class="subtitle" id="result-page-description">Your metrics and evaluation sheet.</p>
+      <div id="student-report-content" hidden>
 
       <div class="score-board">
 
@@ -1513,6 +1516,7 @@
         class="review-section"
         id="review-ledger-container"
       ></div>
+      </div>
       <p id="result-save-status" role="status" aria-live="polite">Saving your result...</p>
 
       <div class="performance-action-row">
@@ -1608,9 +1612,14 @@
   ========================================================== -->
   <script src="security.js"></script>
   <script src="question-bank.js"></script>
+  <script src="exam-report.js"></script>
+  <script src="result-archive.js"></script>
+  <script src="screen-awake.js"></script>
   <script>
     window.MathJax = {
+      loader: { load: ["[tex]/mhchem"] },
       tex: {
+        packages: { "[+]": ["mhchem"] },
         inlineMath: [["\\(", "\\)"], ["$", "$"]],
         displayMath: [["\\[", "\\]"], ["$$", "$$"]]
       },
@@ -1638,7 +1647,9 @@
       getDocs,
       query,
       where,
-      updateDoc
+      updateDoc,
+      onSnapshot,
+      writeBatch
     } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 
@@ -1720,6 +1731,7 @@
     let hasSubmitted = false;
 
     let performanceShown = false;
+    let studentReportVisible = false;
 
     let resultDocId = null;
 
@@ -1728,6 +1740,7 @@
     let answerDetails = [];
     let resultSavePromise = null;
     let frozenResultPayload = null;
+    let preparedReportArchive = null;
     let examFinishedAt = null;
 
 
@@ -1852,6 +1865,7 @@
       answerDetails = [];
       resultSavePromise = null;
       frozenResultPayload = null;
+      preparedReportArchive = null;
       examFinishedAt = null;
     }
 
@@ -1944,290 +1958,7 @@
       readable.
     */
 
-    function physicsInlineToHTML(value) {
-
-      let s = escapeHTML(value);
-
-      s = s.replace(
-        /([A-Za-z])⃗/gu,
-        '<span class="vector-symbol">$1</span>'
-      );
-
-      s = s.replace(
-        /î/gu,
-        '<span class="unit-vector">i</span>'
-      );
-
-      s = s.replace(
-        /ĵ/gu,
-        '<span class="unit-vector">j</span>'
-      );
-
-      s = s.replace(
-        /k̂/gu,
-        '<span class="unit-vector">k</span>'
-      );
-
-      return s;
-    }
-
-
-    function formatNormalQuestion(value) {
-
-      return value
-        .split("\n")
-        .map(rawLine => {
-
-          const line = rawLine.trim();
-
-          if (!line) {
-            return '<span class="question-format-gap" aria-hidden="true"></span>';
-          }
-
-          let className = "question-format-line";
-
-          if (
-            /^(List|Column)[-\s]?(I|II)\b/i.test(line) ||
-            /^Choose the correct/i.test(line)
-          ) {
-            className += " question-format-heading";
-          } else if (
-            /^(I|II|III|IV|V|VI|VII|VIII|IX|X)[.)]\s+/.test(line)
-          ) {
-            className += " question-format-statement";
-          } else if (/^[A-R][.)]\s+/.test(line)) {
-            className += " question-format-match-left";
-          } else if (
-            /^(i|ii|iii|iv|v|vi|vii|viii|ix|x)[.)]\s+/.test(line)
-          ) {
-            className += " question-format-match-right";
-          } else if (/[→⇌⟶]/u.test(line)) {
-            className += " question-format-equation";
-          }
-
-          return `<span class="${className}">${physicsInlineToHTML(line)}</span>`;
-        })
-        .join("");
-    }
-
-
-    function formatMatchColumns(value) {
-
-      const lines = value
-        .split("\n")
-        .map(line => line.trim());
-
-      const columnOneIndex = lines.findIndex(line =>
-        /^(Column|List)[-\s]?I$/i.test(line)
-      );
-
-      const columnTwoIndex = lines.findIndex((line, index) =>
-        index > columnOneIndex &&
-        /^(Column|List)[-\s]?II$/i.test(line)
-      );
-
-      if (
-        columnOneIndex === -1 ||
-        columnTwoIndex === -1 ||
-        columnTwoIndex <= columnOneIndex
-      ) {
-        return formatNormalQuestion(value);
-      }
-
-      const introduction = lines
-        .slice(0, columnOneIndex)
-        .filter(Boolean);
-
-      const leftItems = lines
-        .slice(columnOneIndex + 1, columnTwoIndex)
-        .filter(Boolean);
-
-      const rightItems = lines
-        .slice(columnTwoIndex + 1)
-        .filter(Boolean);
-
-      if (!leftItems.length || !rightItems.length) {
-        return formatNormalQuestion(value);
-      }
-
-      const output = introduction.map(line =>
-        `<span class="question-format-line">${physicsInlineToHTML(line)}</span>`
-      );
-
-      output.push('<span class="match-column-table">');
-      output.push(
-        '<span class="match-column-row">' +
-          '<span class="match-column-cell match-column-heading">' +
-            physicsInlineToHTML(lines[columnOneIndex]) +
-          '</span>' +
-          '<span class="match-column-cell match-column-heading">' +
-            physicsInlineToHTML(lines[columnTwoIndex]) +
-          '</span>' +
-        '</span>'
-      );
-
-      const rowCount = Math.max(leftItems.length, rightItems.length);
-
-      for (let index = 0; index < rowCount; index += 1) {
-
-        const leftItem = leftItems[index] || "";
-        const rightItem = rightItems[index] || "";
-
-        output.push(
-          '<span class="match-column-row">' +
-            `<span class="match-column-cell${leftItem ? "" : " match-column-empty"}">` +
-              physicsInlineToHTML(leftItem || "—") +
-            '</span>' +
-            `<span class="match-column-cell${rightItem ? "" : " match-column-empty"}">` +
-              physicsInlineToHTML(rightItem || "—") +
-            '</span>' +
-          '</span>'
-        );
-      }
-
-      output.push('</span>');
-
-      return output.join("");
-    }
-
-
-    function physicsToHTML(value) {
-
-      const normalizedText = String(value ?? "")
-        .replace(/\r\n?/g, "\n");
-
-      const hasColumnOne =
-        /^(Column|List)[-\s]?I$/im.test(normalizedText);
-
-      const hasColumnTwo =
-        /^(Column|List)[-\s]?II$/im.test(normalizedText);
-
-      if (hasColumnOne && hasColumnTwo) {
-        return formatMatchColumns(normalizedText);
-      }
-
-      return formatNormalQuestion(normalizedText);
-    }
-
-
-    function normalizeTableRows(tableData) {
-      if (!tableData) return null;
-
-      if (Array.isArray(tableData)) {
-        return {
-          headers: [],
-          rows: tableData.map(row =>
-            Array.isArray(row)
-              ? row
-              : row && typeof row === "object"
-                ? Object.values(row)
-                : [row]
-          )
-        };
-      }
-
-      if (typeof tableData !== "object") return null;
-
-      const headers =
-        tableData.headers ??
-        tableData.columns ??
-        tableData.headings ??
-        [];
-
-      const rows =
-        tableData.rows ??
-        tableData.data ??
-        tableData.items ??
-        null;
-
-      if (Array.isArray(rows)) {
-        return {
-          headers:
-            Array.isArray(headers)
-              ? headers
-              : Object.values(headers || {}),
-          rows: rows.map(row =>
-            Array.isArray(row)
-              ? row
-              : row && typeof row === "object"
-                ? Object.values(row)
-                : [row]
-          )
-        };
-      }
-
-      const left =
-        tableData.columnI ??
-        tableData.listI ??
-        tableData.left ??
-        tableData.a;
-
-      const right =
-        tableData.columnII ??
-        tableData.listII ??
-        tableData.right ??
-        tableData.b;
-
-      if (Array.isArray(left) || Array.isArray(right)) {
-        const leftItems = Array.isArray(left) ? left : [];
-        const rightItems = Array.isArray(right) ? right : [];
-        const length = Math.max(leftItems.length, rightItems.length);
-
-        return {
-          headers: ["Column I", "Column II"],
-          rows: Array.from({ length }, (_, index) => [
-            leftItems[index] ?? "",
-            rightItems[index] ?? ""
-          ])
-        };
-      }
-
-      return null;
-    }
-
-
-    function renderQuestionTable(tableData) {
-      const table = normalizeTableRows(tableData);
-
-      if (!table || !table.rows.length) return "";
-
-      const columnCount = Math.max(
-        table.headers.length,
-        ...table.rows.map(row => row.length)
-      );
-
-      const headers =
-        table.headers.length
-          ? table.headers
-          : Array.from(
-              { length: columnCount },
-              (_, index) => "Column " + (index + 1)
-            );
-
-      return (
-        '<div class="question-table-scroll">' +
-          '<table class="question-table">' +
-            '<thead><tr>' +
-              headers.map(value =>
-                "<th>" + physicsToHTML(getOptionText(value)) + "</th>"
-              ).join("") +
-            '</tr></thead>' +
-            '<tbody>' +
-              table.rows.map(row =>
-                '<tr>' +
-                  Array.from({ length: columnCount }, (_, index) =>
-                    "<td>" +
-                    physicsToHTML(getOptionText(row[index] ?? "")) +
-                    "</td>"
-                  ).join("") +
-                '</tr>'
-              ).join("") +
-            '</tbody>' +
-          '</table>' +
-        '</div>'
-      );
-    }
-
+    const { physicsToHTML, renderQuestionTable, getQuestionImageCandidates, buildReportCard } = window.ExamReport;
 
     function renderQuestionBody(question) {
       const passage =
@@ -3540,7 +3271,7 @@
               isExamActive = false;
               hasSubmitted = true;
               clearInterval(timerInterval);
-              window.ExamSecurityGuard?.stop();
+              finishExamEnvironment();
               showAdminForceSubmitOverlay();
               return false;
             }
@@ -3625,6 +3356,7 @@
 
         // Fullscreen must be requested from the student's button press.
         // Unsupported or blocked fullscreen does not stop the test.
+        void window.ExamScreenAwake?.start();
         await window.ExamSecurityGuard?.requestFullscreen();
 
 
@@ -3746,10 +3478,12 @@
           resultSaved = false;
           resultSavePromise = null;
           frozenResultPayload = null;
+          preparedReportArchive = null;
           examFinishedAt = null;
 
           isExamActive = true;
-          await syncExamSession({status:"in_progress"});
+          void window.ExamScreenAwake?.start();
+          if (!await syncExamSession({status:"in_progress"})) return;
 
           window.ExamSecurityGuard?.start({
             active: () => isExamActive && !hasSubmitted,
@@ -3836,6 +3570,9 @@
 
 
         } catch (error) {
+          isExamActive = false;
+          clearInterval(timerInterval);
+          finishExamEnvironment();
 
           console.error(
             error
@@ -4135,31 +3872,6 @@
     ========================================================== */
 
     const getQuestionMedia = QuestionBank.getQuestionMedia;
-
-    function getQuestionImageCandidates(source) {
-      const src = String(source || "").trim();
-      if (/^[a-z][a-z0-9+.-]*:/i.test(src) && !/^(?:https?:|blob:|data:image\/(?:png|jpeg|gif|webp|svg\+xml)[;,])/i.test(src)) return [];
-
-      if (
-        !src ||
-        /^(?:https?:|data:|blob:|\/)/i.test(src)
-      ) {
-        return src ? [src] : [];
-      }
-
-      const clean = src.replace(/^\.\//, "");
-
-      if (clean.startsWith("question/")) {
-        return [clean];
-      }
-
-      // Question JSON files and their asset folders live inside /question.
-      // Keep the original path as a fallback for older/root-level datasets.
-      return [
-        "question/" + clean,
-        clean
-      ];
-    }
 
     function renderQuestionMedia(qData, imageBlock) {
       const media = getQuestionMedia(qData);
@@ -4625,6 +4337,7 @@
     function finishExamEnvironment() {
       // Stop first, otherwise fullscreen exit itself could be counted.
       window.ExamSecurityGuard?.stop();
+      window.ExamScreenAwake?.stop();
       void exitExamFullscreen();
 
       window.clearTimeout(securityNoticeTimer);
@@ -4804,9 +4517,7 @@
           });
 
 
-          const completeReview = buildReportCard(answerDetails[answerDetails.length - 1]);
-          completeReview.style.width = "100%";
-          reviewContainer.appendChild(completeReview);
+          // The report is rendered only after applying the admin visibility setting.
         }
       );
 
@@ -4901,6 +4612,7 @@
         "0 Marks";
 
 
+      applyStudentReportVisibility();
       window.changeSlide(4);
       void syncExamSession({status:"result_pending_feedback",score:finalizedScoreString,calculatedScore,totalScore,correct:correctCount,wrong:wrongCount});
       window.MathJax?.startup?.promise?.then(() => window.MathJax.typesetPromise([reviewContainer])).catch(console.warn);
@@ -5026,11 +4738,8 @@
         questionCount:
           questionsList.length,
 
-        // JSON avoids Firestore's restriction on nested arrays (tables/media).
-        answerDetailsJson: JSON.stringify(answerDetails, (key, value) =>
-          typeof value === "string" && value.startsWith("data:image/")
-            ? "[Embedded figure available in student PDF]" : value),
-
+        // Full answer content (including data images) is attached below after
+        // the attempt ID has been allocated. Large snapshots use reserved parts.
 
         marksPerQuestion:
           (() => {
@@ -5069,6 +4778,13 @@
       try {
         // Allocate once, reuse on retries; concurrent callers share one promise.
         if (!resultDocId) resultDocId = examSessionId || doc(collection(db, "results")).id;
+        if (!preparedReportArchive) preparedReportArchive = window.ExamResultArchive.prepare(answerDetails, resultDocId);
+        Object.assign(payload, preparedReportArchive.fields);
+        await window.ExamResultArchive.save(preparedReportArchive, async entries => {
+          const batch = writeBatch(db);
+          entries.forEach(entry => batch.set(doc(db, "results", entry.id), entry.data));
+          await batch.commit();
+        });
         await setDoc(doc(db, "results", resultDocId), payload);
         if (examSessionId) {
           await setDoc(doc(db,"exam_sessions",examSessionId), {
@@ -5078,7 +4794,11 @@
             completed:true,
             lastSeen:new Date(),
             updatedAt:new Date()
-          }, {merge:true});
+          }, {merge:true}).catch(error => {
+            // The complete primary result is already durable. A missing live-session
+            // permission must not misreport a successfully saved result as lost.
+            console.warn("Result saved; live-session mirror unavailable:", error.code || error.message);
+          });
         }
 
         resultSaved =
@@ -5134,94 +4854,6 @@
     }
 
 
-    function buildReportCard(detail) {
-      const card = document.createElement("section");
-      card.style.cssText =
-        "width:900px;padding:24px;margin:0;background:#fff;color:#111827;" +
-        "font-family:Arial,'Noto Sans',sans-serif;border-bottom:2px solid #cbd5e1;";
-
-      const statusColor =
-        !detail.attempted
-          ? "#64748b"
-          : detail.isCorrect
-            ? "#059669"
-            : "#dc2626";
-
-      const statusText =
-        !detail.attempted
-          ? "Not Attempted"
-          : detail.isCorrect
-            ? "Correct"
-            : "Incorrect";
-
-      card.innerHTML =
-        '<div style="display:flex;justify-content:space-between;gap:16px;">' +
-          '<strong style="font-size:18px;">Q' +
-            escapeHTML(detail.number) +
-            (detail.subject ? " - " + escapeHTML(detail.subject) : "") +
-          '</strong>' +
-          '<strong style="color:' + statusColor + ';">' +
-            statusText +
-          '</strong>' +
-        '</div>' +
-        (detail.passage
-          ? '<div style="margin-top:12px;padding:12px;background:#eff6ff;border-left:4px solid #2563eb;">' +
-              physicsToHTML(detail.passage) +
-            '</div>'
-          : "") +
-        '<div style="margin-top:12px;font-size:17px;line-height:1.55;">' +
-          physicsToHTML(detail.question) +
-        '</div>' +
-        renderQuestionTable(detail.table) +
-        '<div data-report-images style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;"></div>' +
-        (detail.options.length
-          ? '<ol type="A" style="margin:12px 0 0 24px;line-height:1.55;">' +
-              detail.options.map((option, index) =>
-                '<li data-option-index="' + index + '">' + physicsToHTML(option) + "</li>"
-              ).join("") +
-            "</ol>"
-          : "") +
-        '<div style="margin-top:14px;line-height:1.6;">' +
-          '<div><b>Student Answer:</b> ' +
-            physicsToHTML(detail.selectedAnswer) +
-          '</div>' +
-          '<div><b>Correct Answer:</b> ' +
-            physicsToHTML(
-              Array.isArray(detail.correctAnswer)
-                ? detail.correctAnswer.join(" | ")
-                : detail.correctAnswer
-            ) +
-          '</div>' +
-        '</div>';
-
-      const imageWrap =
-        card.querySelector("[data-report-images]");
-
-      function appendImage(container, source) {
-        const img = document.createElement("img");
-        const candidates = getQuestionImageCandidates(source);
-        let candidate = 0;
-        img.addEventListener("error", () => {
-          if (++candidate < candidates.length) img.src = candidates[candidate];
-          else { img.dataset.failed = "true"; img.alt = "Figure unavailable: " + source; }
-        });
-        img.src = candidates[0] || "";
-        img.crossOrigin = "anonymous";
-        img.alt = "Question figure";
-        img.style.cssText =
-          "display:block;max-width:100%;max-height:360px;object-fit:contain;";
-        container.appendChild(img);
-      }
-      (detail.media || []).forEach(source => appendImage(imageWrap, source));
-      (detail.optionMedia || []).forEach((items, index) => {
-        const container = card.querySelector('[data-option-index="' + index + '"]');
-        if (container) items.forEach(item => appendImage(container, item.src));
-      });
-
-      return card;
-    }
-
-
     function waitForReportImages(container) {
       return Promise.all(
         [...container.querySelectorAll("img")].map(img => new Promise((resolve, reject) => {
@@ -5255,6 +4887,7 @@
 
     window.downloadStudentReport =
       async () => {
+        if (!studentReportVisible || examFinishedAt === null) return;
         const button =
           document.getElementById("download-report-btn");
 
@@ -5267,6 +4900,10 @@
 
         let reportRoot = null;
         try {
+          const policy = await getDoc(doc(db, "exam_config", "current_test"));
+          studentReportVisible = policy.exists() && policy.data().showStudentReport !== false;
+          applyStudentReportVisibility();
+          if (!studentReportVisible) throw new Error("Performance reports are available through your administrator.");
           const saved = await savePerformanceDraft("report_download");
           if (!saved || !resultSaved) {
             throw new Error("Your result has not been saved yet. Please check your connection and retry the download; this will retry saving the same result.");
@@ -5689,6 +5326,35 @@
       }
     );
 
+
+    function applyStudentReportVisibility() {
+      const content = document.getElementById("student-report-content");
+      if (!content) return; // The exam-window overlay may replace the page.
+      const ledger = document.getElementById("review-ledger-container");
+      content.hidden = !studentReportVisible;
+      document.getElementById("download-report-btn").hidden = !studentReportVisible;
+      document.getElementById("result-page-title").textContent = studentReportVisible ? "Performance Dashboard" : "Test Completed";
+      document.getElementById("result-page-description").textContent = studentReportVisible
+        ? "Your metrics and evaluation sheet."
+        : "Your test has ended. Your administrator can view your performance report. Check the save status below before closing this page.";
+      ledger.replaceChildren();
+      if (studentReportVisible && examFinishedAt !== null) {
+        answerDetails.forEach(detail => {
+          const card = buildReportCard(detail);
+          card.style.width = "100%";
+          ledger.appendChild(card);
+        });
+        window.MathJax?.startup?.promise?.then(() => window.MathJax.typesetPromise([ledger])).catch(console.warn);
+      }
+    }
+
+    onSnapshot(doc(db, "exam_config", "current_test"), snapshot => {
+      studentReportVisible = snapshot.exists() && snapshot.data().showStudentReport !== false;
+      applyStudentReportVisibility();
+    }, () => {
+      studentReportVisible = false;
+      applyStudentReportVisibility();
+    });
   </script>
 
 </body>

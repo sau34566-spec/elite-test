@@ -787,6 +787,121 @@
         grid-template-columns:1fr
       }
     }
+    .question-format-line { display: block; white-space: pre-wrap; }
+    .question-format-gap { display: block; height: .65rem; }
+
+    .question-format-heading {
+      margin: .35rem 0 .25rem;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .question-format-statement,
+    .question-format-match-left,
+    .question-format-match-right {
+      padding-left: 1.4rem;
+      text-indent: -1.4rem;
+    }
+
+    .question-format-equation {
+      margin: .35rem 0;
+      padding: .45rem .65rem;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .72);
+      font-family: "Times New Roman", "Cambria Math", serif;
+      font-size: 1.05em;
+    }
+
+    .match-column-table {
+      display: block;
+      width: 100%;
+      margin: .75rem 0;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .match-column-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .match-column-cell {
+      display: block;
+      min-width: 0;
+      padding: .65rem .75rem;
+      border-bottom: 1px solid #e2e8f0;
+      overflow-wrap: anywhere;
+    }
+
+    .match-column-cell:first-child { border-right: 1px solid #e2e8f0; }
+    .match-column-row:last-child .match-column-cell { border-bottom: 0; }
+
+    .match-column-heading {
+      color: var(--primary);
+      background: #dbeafe;
+      font-weight: 800;
+    }
+
+    .match-column-empty { color: transparent; }
+    .option-label > span { min-width: 0; line-height: 1.45; }
+
+
+    .answer-report-card, .answer-report-card * { text-transform:none; letter-spacing:normal; overflow-wrap:anywhere; }
+    .answer-report-card ol { white-space:pre-wrap; }
+    .question-table { width:100%; border-collapse:collapse; min-width:0; }
+    .question-table th, .question-table td { padding:8px; border:1px solid #cbd5e1; white-space:normal; }
+    .question-table-scroll { overflow-x:auto; }
+    .security-event { padding:10px 0; border-bottom:1px solid #e2e8f0; overflow-wrap:anywhere; }
+    .modal-card { max-width:900px; }
+    @media print {
+      body > :not(#detail-modal) { display:none !important; }
+      #detail-modal { display:block !important; position:static; padding:0; background:white; }
+      #detail-modal .modal-card { width:100%; max-width:none; max-height:none; overflow:visible; padding:0; }
+      #detail-modal .actions, #close-modal { display:none !important; }
+      .answer-report-card { break-inside:avoid; }
+    }
+    .vector-symbol {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding-top: 0.12em;
+      margin: 0 0.02em;
+    }
+
+    .vector-symbol::after {
+      content: "→";
+      position: absolute;
+      left: 50%;
+      top: -0.72em;
+      transform: translateX(-50%);
+      font-size: 0.78em;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .unit-vector {
+      position: relative;
+      display: inline-block;
+      line-height: 1;
+      padding-top: 0.08em;
+      margin: 0 0.01em;
+    }
+
+    .unit-vector::before {
+      content: "ˆ";
+      position: absolute;
+      left: 50%;
+      top: -0.58em;
+      transform: translateX(-50%);
+      font-size: 0.72em;
+      font-weight: 700;
+      line-height: 1;
+      pointer-events: none;
+    }
+
   </style>
 </head>
 
@@ -1070,6 +1185,12 @@
           <select id="config-question-order"><option value="random">Random</option><option value="sequence">Sequence</option></select>
         </div>
 
+        <div class="setup-switch" style="margin:18px 0">
+          <label for="config-show-student-report"><input id="config-show-student-report" type="checkbox" checked> Show performance report to students after submission</label>
+          <p class="muted" style="margin-top:8px">ON: students can view and download their report. OFF: students see completion and save status; admin reports and downloads remain available.</p>
+          <button id="save-report-visibility-btn" type="button" class="btn btn-small" style="margin-top:10px">Apply Report Visibility</button>
+          <p id="report-visibility-status" role="status"></p>
+        </div>
         <h3 style="color:var(--primary);font-size:16px;margin-top:25px;margin-bottom:12px;">Student Access & Institute Details</h3>
         <div class="grid-2">
           <div class="form-group">
@@ -1512,6 +1633,8 @@
         style="margin-top:18px"
       >
 
+        <button id="print-report-btn" type="button" class="btn">Print / Save PDF</button>
+        <button id="download-detail-json-btn" type="button" class="btn">Download Full JSON</button>
         <button
           id="delete-one-btn"
           class="btn btn-danger"
@@ -1532,6 +1655,24 @@
   ========================================================== -->
 
   <script src="question-bank.js"></script>
+  <script src="exam-report.js"></script>
+  <script src="result-archive.js"></script>
+  <script src="admin-report.js"></script>
+  <script>
+    window.MathJax = {
+      loader: { load: ["[tex]/mhchem"] },
+      tex: {
+        packages: { "[+]": ["mhchem"] },
+        inlineMath: [["\\(", "\\)"], ["$", "$"]],
+        displayMath: [["\\[", "\\]"], ["$$", "$$"]]
+      },
+      options: {
+        skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
   <script src="question-upload.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/mammoth@1.11.0/mammoth.browser.min.js"></script>
   <script type="module">
@@ -1546,7 +1687,11 @@
       getDoc,
       collection,
       getDocs,
-      deleteDoc
+      deleteDoc,
+      query,
+      where,
+      documentId,
+      writeBatch
     }
     from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
@@ -2097,6 +2242,7 @@
           to unko delete nahi kiya ja raha.
         */
 
+        $("config-show-student-report").checked = data.showStudentReport !== false;
         $("config-question-order").value = data.questionOrder === "sequence" ? "sequence" : "random";
         $("config-class-mode").value = ["11", "12", "both"].includes(data.allowedClass) ? data.allowedClass : "12";
         $("config-centre-code").value = data.centreCode || "";
@@ -2167,6 +2313,7 @@ $("config-max-tab-switches").value =
       const maxTabSwitches=Math.max(1,Math.min(20,parseInt($("config-max-tab-switches").value,10)||3));
       const replaceQuestionOnSwitch=$("config-replace-on-switch").value==="yes";
       const questionOrder=$("config-question-order").value;
+      const showStudentReport=$("config-show-student-report").checked;
       const allowedClass=$("config-class-mode").value;
       const centreCode=$("config-centre-code").value.trim().toUpperCase();
       const instituteName=$("config-institute-name").value.trim();
@@ -2198,8 +2345,8 @@ $("config-max-tab-switches").value =
       examSetupState.subjects=examSetupState.subjects.map(item=>({...item,enabled:subjects[item.id]?.enabled===true}));
       const btn=$("save-config-btn"); btn.disabled=true; btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; setStatus("Saving exam configuration...","busy");
       try{
-        await setDoc(doc(db,"exam_config","current_test"),{durationMinutes,questionOrder,allowedClass,centreCode,institute:{name:instituteName,shortAddress:instituteShortAddress,fullAddress:instituteFullAddress,logoDataUrl},subjects,examSetup:{subjects:examSetupState.subjects,studentFields:examSetupState.studentFields,customFields:examSetupState.customFields,allowStudentSubjectSelection:examSetupState.allowStudentSubjectSelection,updatedAt:new Date()},windowStart:startMs,windowEnd:endMs,security:{maxTabSwitches,replaceQuestionOnSwitch},updatedAt:new Date()},{merge:true});
-        currentExamConfig={...currentExamConfig,durationMinutes,questionOrder,allowedClass,centreCode,institute:{name:instituteName,shortAddress:instituteShortAddress,fullAddress:instituteFullAddress,logoDataUrl},subjects,examSetup:JSON.parse(JSON.stringify(examSetupState))};
+        await setDoc(doc(db,"exam_config","current_test"),{durationMinutes,questionOrder,showStudentReport,allowedClass,centreCode,institute:{name:instituteName,shortAddress:instituteShortAddress,fullAddress:instituteFullAddress,logoDataUrl},subjects,examSetup:{subjects:examSetupState.subjects,studentFields:examSetupState.studentFields,customFields:examSetupState.customFields,allowStudentSubjectSelection:examSetupState.allowStudentSubjectSelection,updatedAt:new Date()},windowStart:startMs,windowEnd:endMs,security:{maxTabSwitches,replaceQuestionOnSwitch},updatedAt:new Date()},{merge:true});
+        currentExamConfig={...currentExamConfig,durationMinutes,questionOrder,showStudentReport,allowedClass,centreCode,institute:{name:instituteName,shortAddress:instituteShortAddress,fullAddress:instituteFullAddress,logoDataUrl},subjects,examSetup:JSON.parse(JSON.stringify(examSetupState))};
         updateExamStatus(); renderExamSetupPanel(); setStatus("Exam configuration saved successfully","ok"); alert("Exam settings saved successfully.");
       }catch(err){console.error("Save config error:",err);setStatus("Save failed: "+(err.code||err.message),"error");alert("Failed to save configuration:\n\n"+(err.code||err.message));}
       finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-floppy-disk"></i> Save & Apply Settings';}
@@ -2563,6 +2710,16 @@ $("config-max-tab-switches").value =
        FETCH RESULTS
     ========================================================== */
 
+    async function fetchResultHeaders() {
+      const prefix = window.ExamResultArchive.prefix;
+      // Preserve legacy IDs on either side of the reserved archive-ID range.
+      const snapshots = await Promise.all([
+        getDocs(query(collection(db, "results"), where(documentId(), "<", prefix))),
+        getDocs(query(collection(db, "results"), where(documentId(), ">=", prefix + "\uf8ff")))
+      ]);
+      return { docs: snapshots.flatMap(snapshot => snapshot.docs) };
+    }
+
     async function fetchLiveDatabaseRecords() {
 
       $("leaderboard-body").innerHTML = `
@@ -2593,10 +2750,12 @@ $("config-max-tab-switches").value =
 
       try {
 
-        const [resultSnap, sessionSnap] = await Promise.all([
-          getDocs(collection(db, "results")),
-          getDocs(collection(db, "exam_sessions"))
+        const [resultSnap, sessionRead] = await Promise.all([
+          fetchResultHeaders(),
+          getDocs(collection(db, "exam_sessions")).then(snapshot => ({ snapshot }), error => ({ error }))
         ]);
+        const sessionSnap = sessionRead.snapshot || { docs: [] };
+        if (sessionRead.error) console.warn("Live sessions unavailable; saved results are still shown:", sessionRead.error.code || sessionRead.error.message);
 
         const merged = new Map();
         sessionSnap.docs.forEach(d => merged.set(d.id, {
@@ -2607,7 +2766,7 @@ $("config-max-tab-switches").value =
           const session = merged.get(d.id);
           merged.set(d.id, {
             id:d.id,
-            data:() => ({...(session ? session.data() : {}), ...d.data()})
+            data:() => ({...(session ? session.data() : {}), ...d.data(), sourceCollection:"results", status:d.data().status || d.data().submissionStatus || "submitted"})
           });
         });
 
@@ -2634,7 +2793,7 @@ $("config-max-tab-switches").value =
 
 
         setStatus(
-          `Firestore connected — ${allStudentResults.length} submission(s)`,
+          `Firestore connected — ${allStudentResults.length} submission(s)${sessionRead.error ? " — live-session access unavailable" : ""}`,
           "ok"
         );
 
@@ -3295,6 +3454,7 @@ $("config-max-tab-switches").value =
               </td>
 
               <td>
+                <button type="button" class="btn btn-small view-security-btn" data-id="${escapeHtml(r.id)}">View</button>
                 ${r.liveSession
                   ? `<button type="button" class="btn btn-small btn-danger force-submit-btn" data-id="${escapeHtml(r.id)}"><i class="fa-solid fa-forward"></i> Force Submit</button>`
                   : `<span class="muted"><i class="fa-solid fa-check"></i> Saved</span>`}
@@ -3306,6 +3466,7 @@ $("config-max-tab-switches").value =
         })
         .join("");
 
+      body.querySelectorAll(".view-security-btn").forEach(btn => btn.addEventListener("click", () => openDetails(btn.dataset.id)));
       body.querySelectorAll(".force-submit-btn").forEach(btn => {
         btn.addEventListener("click", async () => {
           if (!confirm("Force submit this student's current saved result?")) return;
@@ -3321,7 +3482,7 @@ $("config-max-tab-switches").value =
        DETAILS MODAL
     ========================================================== */
 
-    function openDetails(id) {
+    async function openDetails(id) {
 
       const r =
         allStudentResults.find(
@@ -3335,6 +3496,25 @@ $("config-max-tab-switches").value =
       selectedRecordId =
         id;
 
+
+      $("detail-modal").classList.add("show");
+      $("print-report-btn").disabled = true;
+      $("download-detail-json-btn").disabled = true;
+      if (r.raw.answerDetailsArchive && !r.archiveLoaded) {
+        $("detail-content").textContent = "Loading complete report and figures...";
+        try {
+          if (r.raw.answerDetailsArchive.attemptId !== r.id) throw new Error("The saved report does not match this student attempt.");
+          r.answerDetails = await window.ExamResultArchive.load(r.raw, async partId => {
+            const snapshot = await getDoc(doc(db, "results", partId));
+            return snapshot.exists() ? snapshot.data() : null;
+          });
+          r.archiveLoaded = true;
+        } catch (error) {
+          if (selectedRecordId === id) $("detail-content").textContent = "Report could not be loaded: " + error.message + " Close and click View to retry.";
+          return;
+        }
+        if (selectedRecordId !== id) return;
+      }
 
       $("detail-content").innerHTML = `
 
@@ -3603,51 +3783,19 @@ $("config-max-tab-switches").value =
           <div
             style="
               margin-top:10px;
-              max-height:420px;
-              overflow:auto
+              overflow:visible
             "
           >
-            ${
-              r.answerDetails.length
-                ? r.answerDetails.map(item => `
-                    <div
-                      style="
-                        padding:10px 0;
-                        border-bottom:1px solid #e2e8f0;
-                        line-height:1.5
-                      "
-                    >
-                      <b>
-                        Q${escapeHtml(item.number)}.
-                        ${escapeHtml(item.question || "")}
-                      </b>
-                      ${item.passage ? '<p style="white-space:pre-wrap">' + escapeHtml(item.passage) + '</p>' : ''}
-                      ${item.table ? '<pre style="white-space:pre-wrap">Table: ' + escapeHtml(JSON.stringify(item.table, null, 2)) + '</pre>' : ''}
-                      ${Array.isArray(item.options) ? '<ol type="A">' + item.options.map(o => '<li style="white-space:pre-wrap">' + escapeHtml(o) + '</li>').join('') + '</ol>' : ''}
-                      <br>
-                      <span>
-                        Student:
-                        ${escapeHtml(item.selectedAnswer || "Not Attempted")}
-                      </span>
-                      <br>
-                      <span style="color:#059669">
-                        Correct:
-                        ${escapeHtml(
-                          Array.isArray(item.correctAnswer)
-                            ? item.correctAnswer.join(" | ")
-                            : item.correctAnswer || ""
-                        )}
-                      </span>
-                    </div>
-                  `).join("")
-                : '<span class="muted">Answer ledger is unavailable for this older submission.</span>'
-            }
+            <div id="admin-answer-ledger"></div>
           </div>
 
         </div>
       `;
 
 
+      window.AdminReport.render(r, $("admin-answer-ledger"), $("detail-content"));
+      $("print-report-btn").disabled = false;
+      $("download-detail-json-btn").disabled = false;
       $("detail-modal")
         .classList
         .add("show");
@@ -3848,6 +3996,22 @@ $("config-max-tab-switches").value =
        DELETE ONE RESULT
     ========================================================== */
 
+    async function deleteResultAndArchive(record) {
+      const ids = window.ExamResultArchive.archiveIds(record.raw);
+      if (record.raw.answerDetailsArchive && record.raw.answerDetailsArchive.attemptId !== record.id) throw new Error("Report attempt mismatch.");
+      // Delete the header first when more than one batch is required: incomplete
+      // cleanup leaves unreachable parts, never a visible but broken report.
+      const refs = [doc(db, "results", record.id), ...ids.map(id => doc(db, "results", id))];
+      for (let start = 0; start < refs.length; start += 200) {
+        const batch = writeBatch(db);
+        refs.slice(start, start + 200).forEach(ref => batch.delete(ref));
+        await batch.commit();
+      }
+      // The saved-result and live-session collections may have different rules.
+      try { await deleteDoc(doc(db, "exam_sessions", record.id)); }
+      catch (error) { console.warn("Saved report deleted; live session could not be removed:", error.code || error.message); }
+    }
+
     async function deleteOneResult() {
 
       if (!selectedRecordId) {
@@ -3877,14 +4041,7 @@ $("config-max-tab-switches").value =
 
       try {
 
-        await deleteDoc(
-          doc(
-            db,
-            "results",
-            selectedRecordId
-          )
-        );
-
+        await deleteResultAndArchive(r);
 
         closeDetails();
 
@@ -3962,28 +4119,10 @@ $("config-max-tab-switches").value =
 
       try {
 
-        const snap =
-          await getDocs(
-            collection(
-              db,
-              "results"
-            )
-          );
-
-
-        for (
-          const d of snap.docs
-        ) {
-
-          await deleteDoc(
-            doc(
-              db,
-              "results",
-              d.id
-            )
-          );
-        }
-
+        // Only the records listed in the confirmation are deleted. Archive parts
+        // are removed with their corresponding report.
+        const records = [...allStudentResults];
+        for (const record of records) await deleteResultAndArchive(record);
 
         await fetchLiveDatabaseRecords();
 
@@ -4351,6 +4490,24 @@ $("config-max-tab-switches").value =
       initializeDashboard();
     }
 
+
+    $("save-report-visibility-btn").addEventListener("click", async () => {
+      const button = $("save-report-visibility-btn");
+      button.disabled = true;
+      try {
+        const showStudentReport = $("config-show-student-report").checked;
+        await setDoc(doc(db, "exam_config", "current_test"), { showStudentReport, updatedAt: new Date() }, { merge: true });
+        currentExamConfig = { ...currentExamConfig, showStudentReport };
+        $("report-visibility-status").textContent = showStudentReport ? "Saved: student reports ON." : "Saved: student reports OFF.";
+      } catch (error) {
+        $("report-visibility-status").textContent = "Could not save. Please retry: " + (error.code || error.message);
+      } finally { button.disabled = false; }
+    });
+    $("print-report-btn").addEventListener("click", () => window.AdminReport.print());
+    $("download-detail-json-btn").addEventListener("click", () => {
+      const record = allStudentResults.find(item => item.id === selectedRecordId);
+      if (record) window.AdminReport.download(record);
+    });
   </script>
 
 </body>
