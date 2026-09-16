@@ -91,6 +91,31 @@ async function main(){
   console.log('PASS: all 170 bundled questions have resolvable answer keys; case, bracket and legacy-label regressions');
   console.log('PASS: report OFF/ON/live update/error, unchanged saved answers, score, duplicate submission and case preservation');
 
+  assert(!read('index.html').includes('Retry Result Save'));
+  assert.match(e.nodes.get('result-page-description').textContent,/^Thank you for attempting the test/);
+  const retry=environment();loadApp(retry,'index.html');
+  const scheduled=new Map();let timerId=0,calls=0;
+  retry.ctx.setTimeout=(fn,ms)=>{scheduled.set(++timerId,{fn,ms});return timerId;};
+  retry.ctx.clearTimeout=id=>scheduled.delete(id);
+  retry.ctx.setDoc=async()=>{calls++;if(calls===1)throw Error('simulated offline');};
+  retry.run("examFinishedAt=Date.now();examSessionId='retry-fixture';");
+  const first=retry.run('savePerformanceDraft()');
+  assert.equal(first,retry.run('savePerformanceDraft()'),'concurrent saves share promise');
+  assert.equal(await first,false);
+  assert.equal(scheduled.size,1);assert.equal([...scheduled.values()][0].ms,2000);
+  assert.match(retry.nodes.get('result-save-status').textContent,/retry automatically/);
+  const task=[...scheduled.values()][0];scheduled.clear();task.fn();
+  await retry.run('resultSavePromise');
+  assert.equal(retry.run('resultSaved'),true);assert.equal(scheduled.size,0);
+  assert.match(retry.nodes.get('result-save-status').textContent,/submitted successfully/);
+  const expired=environment();loadApp(expired,'index.html');let intervals=0;
+  expired.ctx.setInterval=()=>{intervals++;};
+  expired.run("isExamActive=true;sessionStorage.setItem('examEndTime',String(Date.now()-1000));startExamTimer(60);");
+  await expired.run('savePerformanceDraft()');
+  assert.equal(expired.run('isExamActive'),false);assert.equal(intervals,0);
+  assert.equal(expired.run('frozenResultPayload.submissionReason'),'time_up');
+  console.log('PASS: automatic retry, concurrent-save deduplication, success cancels retry; expired timer cannot restart');
+
   const a=environment();loadApp(a,'admin.html');
   a.ctx.document.getElementById('config-show-student-report').checked=false;
   await a.nodes.get('save-report-visibility-btn').listeners.click();

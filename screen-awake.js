@@ -6,6 +6,7 @@
   let pending = null;
   let retryTimer = 0;
   let generation = 0;
+  let retryAfter = 0;
 
   function status(message) {
     const node = document.getElementById("screen-awake-status");
@@ -16,6 +17,7 @@
     if (!wanted || document.visibilityState === "hidden") return Promise.resolve();
     if (sentinel && !sentinel.released) return Promise.resolve();
     if (pending) return pending;
+    if (Date.now() < retryAfter) return Promise.resolve();
     if (!navigator.wakeLock?.request) {
       status("Auto screen-on is unavailable. Increase your phone's screen timeout before the test.");
       return Promise.resolve();
@@ -29,6 +31,7 @@
           return;
         }
         sentinel = lock;
+        retryAfter = 0;
         status("Screen will stay on during the test.");
         lock.addEventListener("release", () => {
           if (sentinel !== lock) return;
@@ -40,6 +43,7 @@
           }
         });
       } catch {
+        retryAfter = Date.now() + 10000;
         status("Screen-on protection is unavailable. Check battery saver and screen timeout.");
       } finally {
         pending = null;
@@ -51,6 +55,7 @@
 
   function start() {
     wanted = true;
+    retryAfter = 0;
     return acquire();
   }
 
@@ -69,5 +74,5 @@
   document.addEventListener("webkitfullscreenchange", acquire);
   window.addEventListener("focus", acquire);
   window.addEventListener("pagehide", stop);
-  window.ExamScreenAwake = { start, stop };
+  window.ExamScreenAwake = { start, stop, ensure: acquire };
 })();

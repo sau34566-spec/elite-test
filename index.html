@@ -728,6 +728,7 @@
       object-position: left center;
     }
 
+    .performance-action-row:has(.report-action[hidden]) { display:none; }
     .report-action {
       width: 100%;
       justify-content: center;
@@ -1064,6 +1065,11 @@
         grid-template-columns: 1fr;
       }
     }
+    #exam-navigation-dialog { border:0;border-radius:16px;padding:28px;width:min(92vw,500px);margin:auto;color:#1e293b;box-shadow:0 24px 80px #0005; }
+    #exam-navigation-dialog::backdrop { background:rgba(15,23,42,.65); }
+    #exam-navigation-dialog p { line-height:1.6;margin:14px 0 22px; }
+    .navigation-actions { display:flex;gap:12px;flex-wrap:wrap; }
+    .navigation-actions .btn { flex:1;min-width:170px; }
   </style>
 </head>
 
@@ -1433,7 +1439,7 @@
         Performance Dashboard
       </h2>
 
-      <p class="subtitle" id="result-page-description">Your metrics and evaluation sheet.</p>
+      <p class="subtitle" id="result-page-description">Thank you for attempting the test! 🎓 We appreciate your time and effort. Keep practising and learning with Bookesh.</p>
       <div id="student-report-content" hidden>
 
       <div class="score-board">
@@ -1520,11 +1526,6 @@
       <p id="result-save-status" role="status" aria-live="polite">Saving your result...</p>
 
       <div class="performance-action-row">
-        <button type="button" class="btn btn-secondary" onclick="retryResultSave()">
-          <i class="fa-solid fa-rotate"></i>
-          Retry Result Save
-        </button>
-
         <button
           type="button"
           id="download-report-btn"
@@ -1610,11 +1611,21 @@
   <!-- =========================================================
        FIREBASE + APPLICATION
   ========================================================== -->
+
+  <dialog id="exam-navigation-dialog" aria-labelledby="navigation-title" aria-describedby="navigation-description">
+    <h2 id="navigation-title">Exit this test?</h2>
+    <p id="navigation-description"></p>
+    <div class="navigation-actions">
+      <button type="button" class="btn btn-secondary" id="navigation-no">No, continue test</button>
+      <button type="button" class="btn" id="navigation-yes">Yes, submit &amp; exit</button>
+    </div>
+  </dialog>
   <script src="security.js"></script>
   <script src="question-bank.js"></script>
   <script src="exam-report.js"></script>
   <script src="result-archive.js"></script>
   <script src="screen-awake.js"></script>
+  <script src="exam-navigation.js"></script>
   <script>
     window.MathJax = {
       loader: { load: ["[tex]/mhchem"] },
@@ -1739,6 +1750,8 @@
 
     let answerDetails = [];
     let resultSavePromise = null;
+    let resultRetryTimer = null;
+    let resultRetryDelay = 2000;
     let frozenResultPayload = null;
     let preparedReportArchive = null;
     let examFinishedAt = null;
@@ -1864,6 +1877,9 @@
 
       answerDetails = [];
       resultSavePromise = null;
+      clearTimeout(resultRetryTimer);
+      resultRetryTimer = null;
+      resultRetryDelay = 2000;
       frozenResultPayload = null;
       preparedReportArchive = null;
       examFinishedAt = null;
@@ -2540,7 +2556,7 @@
 
 
     window.addEventListener(
-      "beforeunload",
+      "pagehide",
       () => {
 
         if (!isExamActive) return;
@@ -3477,11 +3493,19 @@
           sessionStorage.removeItem("examSessionId");
           resultSaved = false;
           resultSavePromise = null;
+          clearTimeout(resultRetryTimer);
+          resultRetryTimer = null;
+          resultRetryDelay = 2000;
           frozenResultPayload = null;
           preparedReportArchive = null;
           examFinishedAt = null;
 
           isExamActive = true;
+          window.ExamNavigationGuard?.start({
+            active: () => isExamActive,
+            unsaved: () => examFinishedAt !== null && !resultSaved,
+            exit: async () => { calculateAndShowResults("confirmed_exit"); await savePerformanceDraft("confirmed_exit"); }
+          });
           void window.ExamScreenAwake?.start();
           if (!await syncExamSession({status:"in_progress"})) return;
 
@@ -3702,7 +3726,7 @@
         sessionStorage.getItem("examEndTime") || 0
       );
 
-      if (!endTime || endTime <= Date.now()) {
+      if (!Number.isFinite(endTime) || endTime <= 0) {
         endTime =
           Date.now() +
           Math.max(1, durationMins) * 60 * 1000;
@@ -3773,6 +3797,7 @@
             );
 
           if (secs % 10 === 0) {
+            if (isExamActive) void window.ExamScreenAwake?.ensure();
             void syncExamSession();
           }
 
@@ -3789,11 +3814,7 @@
       updateTimer();
 
 
-      timerInterval =
-        setInterval(
-          updateTimer,
-          1000
-        );
+      if (isExamActive) timerInterval = setInterval(updateTimer, 1000);
     }
 
 
@@ -4338,6 +4359,7 @@
       // Stop first, otherwise fullscreen exit itself could be counted.
       window.ExamSecurityGuard?.stop();
       window.ExamScreenAwake?.stop();
+      window.ExamNavigationGuard?.stop();
       void exitExamFullscreen();
 
       window.clearTimeout(securityNoticeTimer);
@@ -4628,6 +4650,10 @@
     }
 
 
+    window.addEventListener("online", () => {
+      if (examFinishedAt !== null && !resultSaved) void savePerformanceDraft("connection_restored");
+    });
+
     /* =========================================================
        SAVE PERFORMANCE DRAFT
     ========================================================== */
@@ -4635,8 +4661,17 @@
     function savePerformanceDraft(reason = "normal_finish") {
       if (resultSaved) return Promise.resolve(true);
       if (resultSavePromise) return resultSavePromise;
+      clearTimeout(resultRetryTimer);
+      resultRetryTimer = null;
       resultSavePromise = persistPerformanceResult(reason)
-        .finally(() => { resultSavePromise = null; });
+        .then(saved => {
+          if (!saved && examFinishedAt !== null && !resultSaved) {
+            resultRetryTimer = setTimeout(() => { resultRetryTimer = null; void savePerformanceDraft("automatic_retry"); }, resultRetryDelay);
+            resultRetryDelay = Math.min(resultRetryDelay * 2, 30000);
+          } else { resultRetryDelay = 2000; }
+          return saved;
+        })
+        .finally(() => { resultSavePromise = null; window.ExamNavigationGuard?.update(); });
       return resultSavePromise;
     }
 
@@ -4774,7 +4809,7 @@
 
 
       frozenResultPayload = payload;
-      document.getElementById("result-save-status").textContent = "Saving your result... Please keep this page open.";
+      document.getElementById("result-save-status").textContent = "Your answers are being saved. Please keep this page open until confirmation appears.";
       try {
         // Allocate once, reuse on retries; concurrent callers share one promise.
         if (!resultDocId) resultDocId = examSessionId || doc(collection(db, "results")).id;
@@ -4803,7 +4838,7 @@
 
         resultSaved =
           true;
-        document.getElementById("result-save-status").textContent = "Test submitted. Your result is saved; rating is optional and will not change your score.";
+        document.getElementById("result-save-status").textContent = "✅ Your test has been submitted successfully. Please share your feedback below to help us improve your experience.";
 
         sessionStorage.removeItem(
           "examStartTime"
@@ -4817,7 +4852,7 @@
         return true;
 
       } catch (err) {
-        document.getElementById("result-save-status").textContent = "Result could not be saved. Keep this page open, reconnect, then click Retry Result Save.";
+        document.getElementById("result-save-status").textContent = "Your submission is waiting to be saved. Please keep this page open and check your internet connection. We will retry automatically.";
 
         console.error(
           "Performance autosave error:",
@@ -4869,7 +4904,7 @@
     }
 
 
-    window.retryResultSave = () => savePerformanceDraft("manual_retry");
+
 
 
     function triggerDirectPdfDownload(pdf, filename) {
@@ -5335,8 +5370,8 @@
       document.getElementById("download-report-btn").hidden = !studentReportVisible;
       document.getElementById("result-page-title").textContent = studentReportVisible ? "Performance Dashboard" : "Test Completed";
       document.getElementById("result-page-description").textContent = studentReportVisible
-        ? "Your metrics and evaluation sheet."
-        : "Your test has ended. Your administrator can view your performance report. Check the save status below before closing this page.";
+        ? "Thank you for attempting the test! 🎓 We appreciate your time and effort. Review your performance below and keep building your confidence with Bookesh."
+        : "Thank you for attempting the test! 🎓 We appreciate your time and effort. Your administrator will review your performance. Keep practising and building your confidence with Bookesh.";
       ledger.replaceChildren();
       if (studentReportVisible && examFinishedAt !== null) {
         answerDetails.forEach(detail => {

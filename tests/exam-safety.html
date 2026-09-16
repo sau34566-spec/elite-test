@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Exam screen and navigation check</title>
+<style>body{font:18px system-ui;margin:0;padding:24px;background:#f1f5f9;color:#172554}main{max-width:700px;margin:auto;background:white;padding:24px;border-radius:16px}button{font:inherit;padding:12px 18px;margin:8px;border:1px solid #cbd5e1;border-radius:8px;cursor:pointer}button:disabled{opacity:.5}dialog{border:0;border-radius:16px;max-width:480px;width:80%;padding:24px}dialog::backdrop{background:#0f172aaa}#timer{font-size:40px;font-weight:bold}p{line-height:1.6}</style>
+<main><h1>Exam screen and navigation check</h1><p>This check does not create student records. Set your phone's normal screen timeout to 30 seconds, then start and leave the screen untouched for at least 60 seconds. Keep this tab visible.</p>
+<button id="start">Start 3-minute check</button><button id="finish" disabled>Finish check</button><p id="timer">03:00</p><p id="screen-awake-status">Screen protection starts with the check.</p><p id="check-state">Ready</p>
+<p>During the check, press Back and choose No: the timer should continue. Try Refresh and cancel the browser warning. Back → Yes ends this check. After finishing, leave the phone untouched: its normal screen timeout should work again.</p><p>Battery saver, browser support and phone settings can prevent wake lock. A physical check is successful only if the actual screen stays lit beyond its normal timeout and returns to normal after finishing.</p></main>
+  <dialog id="exam-navigation-dialog" aria-labelledby="navigation-title" aria-describedby="navigation-description">
+    <h2 id="navigation-title">Exit this test?</h2>
+    <p id="navigation-description"></p>
+    <div class="navigation-actions">
+      <button type="button" class="btn btn-secondary" id="navigation-no">No, continue test</button>
+      <button type="button" class="btn" id="navigation-yes">Yes, submit &amp; exit</button>
+    </div>
+  </dialog>
+
+<script src="../security.js"></script><script src="../screen-awake.js"></script><script src="../exam-navigation.js"></script>
+<script>
+let active=false,deadline=0,timer;
+const state=document.getElementById('check-state');
+function finish(){active=false;clearInterval(timer);ExamSecurityGuard.stop();ExamScreenAwake.stop();ExamNavigationGuard.stop();document.getElementById('finish').disabled=true;state.textContent='Check ended. Screen protection released.';if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});}
+document.getElementById('start').onclick=async()=>{active=true;deadline=Date.now()+180000;document.getElementById('start').disabled=true;document.getElementById('finish').disabled=false;state.textContent='Check running — timer continues during confirmation prompts.';ExamNavigationGuard.start({active:()=>active,exit:async()=>finish()});void ExamScreenAwake.start();await ExamSecurityGuard.requestFullscreen();ExamSecurityGuard.start({active:()=>active,onViolation:()=>{}});timer=setInterval(()=>{const left=Math.max(0,Math.ceil((deadline-Date.now())/1000));document.getElementById('timer').textContent=String(Math.floor(left/60)).padStart(2,'0')+':'+String(left%60).padStart(2,'0');if(left%10===0)void ExamScreenAwake.ensure();if(left===0)finish();},1000);};
+document.getElementById('finish').onclick=finish;
+</script></html>
