@@ -119,6 +119,7 @@
     });
 
     window.addEventListener("blur", () => {
+      if (window.ExamNavigationGuard?.isNativePromptPending()) return;
       window.clearTimeout(blurTimer);
       blurTimer = window.setTimeout(() => {
         if (!document.hasFocus()) report("TEST_WINDOW_FOCUS_LOST");
@@ -126,7 +127,10 @@
     });
 
     document.addEventListener("fullscreenchange", () => {
-      if (fullscreenWasEntered && !document.fullscreenElement) report("FULLSCREEN_EXITED");
+      if (fullscreenWasEntered && !document.fullscreenElement) {
+        if (isActive() && window.ExamNavigationGuard?.handleFullscreenExit()) return;
+        report("FULLSCREEN_EXITED");
+      }
     });
 
     window.addEventListener("resize", checkViewport);
