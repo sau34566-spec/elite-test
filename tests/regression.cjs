@@ -82,13 +82,13 @@ async function main(){
   assert.equal(bracketQuestion.__correctIndex,0);
   assert.equal(e.ctx.QuestionBank.normalizeQuestionRecord({q:'Label',options:['one','two'],a:'B)'},0,'label').__correctIndex,1);
   let total=0;
-  for(const file of fs.readdirSync(path.join(root,'question'))) {
+  for(const file of fs.readdirSync(path.join(root,'question')).filter(file=>fs.statSync(path.join(root,'question',file)).isFile())) {
     const bank=e.ctx.QuestionBank.validateBank(JSON.parse(read('question/'+file)),file);
     assert.equal(bank.filter(q=>q.__answerMode!=='text'&&!q.__correctIndices.length).length,0,file+' unresolved answer keys');
     total+=bank.length;
   }
-  assert.equal(total,170);
-  console.log('PASS: all 170 bundled questions have resolvable answer keys; case, bracket and legacy-label regressions');
+  assert.equal(total,236);
+  console.log('PASS: all 236 active bundled questions have resolvable answer keys; case, bracket and legacy-label regressions');
   console.log('PASS: report OFF/ON/live update/error, unchanged saved answers, score, duplicate submission and case preservation');
 
   assert(!read('index.html').includes('Retry Result Save'));

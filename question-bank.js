@@ -256,7 +256,7 @@
 
     const isTextAnswer =
       !options.length &&
-      /text|numeric|integer|decimal|short|fill/.test(mode);
+      /text|numeric|integer|decimal|short|fill|subjective/.test(mode);
 
     const isMultiple =
       correctIndices.length > 1 ||
@@ -304,7 +304,12 @@
       input.matchTable ??
       input.match ??
       input.columns ??
-      null;
+      ((Array.isArray(input.columnI) || Array.isArray(input.columnII))
+        ? {
+            columnI: input.columnI ?? [],
+            columnII: input.columnII ?? []
+          }
+        : null);
 
     // Current index.html expects q.a.
     q.a = isMultiple
@@ -346,7 +351,7 @@
       );
     }
 
-    return list.map((question, index) =>
+    return list.filter(question => question?.disabled !== true).map((question, index) =>
       normalizeQuestionRecord(
         question,
         index,
