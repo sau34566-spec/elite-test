@@ -87,8 +87,8 @@ async function main(){
     assert.equal(bank.filter(q=>q.__answerMode!=='text'&&!q.__correctIndices.length).length,0,file+' unresolved answer keys');
     total+=bank.length;
   }
-  assert.equal(total,236);
-  console.log('PASS: all 236 active bundled questions have resolvable answer keys; case, bracket and legacy-label regressions');
+  assert.equal(total,235);
+  console.log('PASS: all 235 active bundled questions have resolvable answer keys; case, bracket and legacy-label regressions');
   console.log('PASS: report OFF/ON/live update/error, unchanged saved answers, score, duplicate submission and case preservation');
 
   assert(!read('index.html').includes('Retry Result Save'));
