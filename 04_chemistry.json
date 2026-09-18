@@ -1,0 +1,20 @@
+{
+  "title":"Class 11 Chemistry Objective Questions","subject":"Chemistry","language":"bilingual","format":"mcq","totalQuestions":15,
+  "questions":[
+    {"id":1,"question":"What is the relationship between bond order and bond length? / आबंध क्रम और आबंध लंबाई के बीच क्या संबंध है?","options":["Directly proportional / सीधे समानुपाती","Inversely proportional / व्युत्क्रमानुपाती","No relation / कोई संबंध नहीं","Cannot predict / कहा नहीं जा सकता"],"correctOption":"B"},
+    {"id":2,"question":"Which of the following molecule doesn't exist? / निम्नलिखित में से कौन-सा अणु अस्तित्व में नहीं होता है?","options":["O₂","H₂","He₂","N₂"],"correctOption":"C"},
+    {"id":3,"question":"Which of the following contains no π bond? / निम्नलिखित में से किसमें कोई π-आबंध नहीं होता है?","options":["NO₂","CO₂","H₂O","SO₂"],"correctOption":"C"},
+    {"id":4,"question":"Which of the following molecule has permanent dipole moment? / निम्नलिखित में से किस अणु का स्थायी द्विध्रुव आघूर्ण होता है?","options":["CF₄","XeF₄","SF₄","BF₃"],"correctOption":"C"},
+    {"id":5,"question":"Which block of the elements are known as inner transition elements? / तत्वों के किस ब्लॉक को आंतरिक संक्रमण तत्व कहा जाता है?","options":["s-block","p-block","d-block","f-block"],"correctOption":"D"},
+    {"id":6,"question":"The Group I elements are also called as: / समूह I के तत्वों को भी कहा जाता है:","options":["Alkali metals / क्षार धातु","Noble gases / उत्कृष्ट गैसें","Chalcogens / कैल्कोजन","Halogens / हैलोजन"],"correctOption":"A"},
+    {"id":7,"question":"The atomic radii in a period generally: / किसी आवर्त में परमाणु त्रिज्या सामान्यतः:","options":["Increases / बढ़ती है","Decreases / घटती है","Remains constant / स्थिर रहती है","Irregular / अनियमित होती है"],"correctOption":"B"},
+    {"id":8,"question":"Oxidation state of Mn in KMnO₄ is: / KMnO₄ में Mn की ऑक्सीकरण अवस्था है:","options":["5","7","6","4"],"correctOption":"B"},
+    {"id":9,"question":"Which of the following orbitals has dumb-bell shape? / निम्नलिखित में से किस ऑर्बिटल की आकृति डंब-बेल होती है?","options":["s","p","d","f"],"correctOption":"B"},
+    {"id":10,"question":"The principal quantum number describes: / मुख्य क्वांटम संख्या बताती है:","options":["Energy and size of the orbital / ऑर्बिटल की ऊर्जा और आकार","Shape of the orbital / ऑर्बिटल की आकृति","Spatial orientation of the orbital / ऑर्बिटल का स्थानिक अभिविन्यास","Spin of the electron / इलेक्ट्रॉन का चक्रण"],"correctOption":"A"},
+    {"id":11,"question":"What is the shape of the orbital whose l = 1? / जिस ऑर्बिटल के लिए l = 1 है, उसकी आकृति कैसी होती है?","options":["Spherical / गोलाकार","Dumbbell / डंब-बेलाकार","Double dumbbell / डबल डंब-बेलाकार","Complex / जटिल"],"correctOption":"B"},
+    {"id":12,"question":"Total number of nodes for 3d-orbital is: / 3d-ऑर्बिटल के लिए नोड्स की कुल संख्या है:","options":["3","2","1","0"],"correctOption":"D"},
+    {"id":13,"question":"The empirical formula of glucose (C₆H₁₂O₆) is: / ग्लूकोज का मूलानुपाती सूत्र है:","options":["CHO","C₂HO","CHO₂","CH₂O"],"correctOption":"D"},
+    {"id":14,"question":"The number of moles of ammonia present in 34 g of NH₃ is: / 34 g NH₃ में अमोनिया के मोलों की संख्या है:","options":["1","2","3","4"],"correctOption":"B"},
+    {"id":15,"question":"In which of the following numbers are all zeros significant? / निम्नलिखित में से किस संख्या में सभी शून्य सार्थक अंक हैं?","options":["0.0005","0.0500","50.000","0.0050"],"correctOption":"C"}
+  ]
+}

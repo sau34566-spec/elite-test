@@ -1,0 +1,20 @@
+{
+  "title":"Class 11 Maths - Sets and Functions MCQs","subject":"Maths","language":"bilingual","format":"mcq","totalQuestions":15,
+  "questions":[
+    {"id":1,"question":"A set is called a null set if:","options":["It contains one element","It contains single elements","It contains more than two elements","None of these"],"correctOption":"D"},
+    {"id":2,"question":"If \\(A=\\{1,2,3,4,5,6\\}\\), then which one is true?","options":["\\(4\\notin A\\)","\\(5\\notin A\\)","\\(1\\in A'\\)","\\(3\\in A\\)"],"correctOption":"D"},
+    {"id":3,"question":"If \\(A=\\{a,e,i,o,u\\}\\) and \\(B=\\{a,i,u\\}\\), then \\(A\\cup B\\) is:","options":["B","A","\\(\\varnothing\\)","None of these"],"correctOption":"B"},
+    {"id":4,"question":"Two sets A and B are said to be disjoint if \\(A\\cap B\\) is:","options":["A","B","\\(\\varnothing\\)","None of these"],"correctOption":"C"},
+    {"id":5,"question":"If \\(U=\\{1,2,3,4,5,6,7,8,9,10\\}\\), \\(P=\\{1,2,5\\}\\) and \\(Q=\\{6,7\\}\\), then \\(P\\cap Q\\) is:","options":["P","Q","\\(\\varnothing\\)","None of these"],"correctOption":"C"},
+    {"id":6,"question":"Total number of possible subsets of \\(A=\\{1,\\{2,3\\}\\}\\) is:","options":["2","4","6","8"],"correctOption":"B"},
+    {"id":7,"question":"If \\(A=\\{3x+5:x\\in N, x\\leq6\\}\\), then roster form of set A is:","options":["{8, 11, 14, 17, 20, 23}","{8, 18, 17, 23}","{8, 14, 20, 23}","Cannot be expressed"],"correctOption":"A"},
+    {"id":8,"question":"If \\(A=\\{1,2,3\\}\\) and \\(B=\\{2,1,3\\}\\), then which one is true?","options":["A = B","A ≠ B","\\(A\\cup B=\\varnothing\\)","None of these"],"correctOption":"A"},
+    {"id":9,"question":"A set is a:","options":["Collection of objects","Collection of well-defined objects","Selection of objects","None of these"],"correctOption":"B"},
+    {"id":10,"question":"If \\((x+1,y+2)=(3,4)\\), then the values of x and y are:","options":["x=3, y=2","x=2, y=2","x=1, y=3","x=3, y=1"],"correctOption":"B"},
+    {"id":11,"question":"If \\(A=\\{1,2,3,4\\}\\) and \\(B=\\{1,2\\}\\), then number of elements in \\(A\\times B\\) is:","options":["8","4","2","1"],"correctOption":"A"},
+    {"id":12,"question":"If \\(A\\times B=\\{(a,x),(a,y),(b,x),(b,y)\\}\\), then set B is equal to:","options":["{a,b}","{a,b,x}","{a,b,x,y}","{x,y}"],"correctOption":"D"},
+    {"id":13,"question":"If \\(A=\\{-1,1\\}\\), then number of elements in \\(A\\times A\\times A\\) is:","options":["2","4","6","8"],"correctOption":"D"},
+    {"id":14,"question":"If \\(f(x)=x^3\\), then find the value of the expression.","equation":"\\[\\frac{f(2)-f(1)}{49}\\]","options":["\\(\\frac14\\)","\\(\\frac15\\)","\\(\\frac16\\)","\\(\\frac17\\)"],"correctOption":"D"},
+    {"id":15,"question":"Which one statement is true?","options":["Every relation is a function","Every function is a relation","Every relation must be a function","None of these"],"correctOption":"B"}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "title":"Class 11 English MCQ Set","subject":"English","language":"en","format":"mcq","totalQuestions":20,
+  "questions":[
+    {"id":1,"question":"Where is the sender's address written in a formal letter?","options":["At the bottom","At the top","In the middle","After the signature"],"correctOption":"A"},
+    {"id":2,"question":"What did Aram and Mourad eventually do with the horse?","options":["Sold it","Kept it permanently","Returned it to its rightful owner","Gave it to Uncle Khosrove"],"correctOption":"C"},
+    {"id":3,"question":"Which of these is essential in a notice?","options":["Jokes","Date","Personal opinion","Long paragraphs"],"correctOption":"B"},
+    {"id":4,"question":"A notice should generally be:","options":["Very lengthy","Informal and emotional","Brief and precise","Written like a story"],"correctOption":"C"},
+    {"id":5,"question":"Which language is most suitable for a notice?","options":["Clear and formal","Slang","Very emotional","Casual"],"correctOption":"A"},
+    {"id":6,"question":"Where is the sender's address written in a formal letter?","options":["At the bottom","At the top","In the middle","After the signature"],"correctOption":"B"},
+    {"id":7,"question":"What is the purpose of the subject in a formal letter?","options":["To tell a story","To briefly state the purpose of the letter","To introduce the writer","To end the letter"],"correctOption":"B"},
+    {"id":8,"question":"Which of these should be avoided in a formal letter?","options":["Clear language","Polite expressions","Slang and casual expressions","Proper format"],"correctOption":"C"},
+    {"id":9,"question":"Where did the grandmother spend most of her time in the village?","options":["In the fields","At the temple","At the market","At the school"],"correctOption":"B"},
+    {"id":10,"question":"Who is the poet of 'A Photograph'?","options":["Shirley Toulson","Kamala Das","Adrienne Rich","Robert Frost"],"correctOption":"A"},
+    {"id":11,"question":"What does the phrase 'terribly transient feet' suggest?","options":["People walk very fast","Human life is temporary","The girls were running","The sea was dangerous"],"correctOption":"B"},
+    {"id":12,"question":"What caused the major damage to the Wavewalker?","options":["A collision with another ship","A huge wave","A fire","Strong winds alone"],"correctOption":"B"},
+    {"id":13,"question":"What injury did the narrator suffer during the storm?","options":["A broken leg","A fractured arm and legs","Injury in the head and ribs","A broken ankle"],"correctOption":"C"},
+    {"id":14,"question":"Who is the playwright of 'Mother's Day'?","options":["J.B. Priestley","William Shakespeare","Gordon Cook","Khushwant Singh"],"correctOption":"B"},
+    {"id":15,"question":"What was Doris's attitude towards her mother?","options":["Respectful and caring","Rude and demanding","Loving and helpful","Fearful"],"correctOption":"B"},
+    {"id":16,"question":"At what age did Tutankhamun become the king of Egypt?","options":["5 years","12 years","15 years","9 years"],"correctOption":"D"},
+    {"id":17,"question":"What was Mrs. Dorling's address?","options":["46, Marconi Street","47, Marconi Street","48, Marconi Street","49, Marconi Street"],"correctOption":"A"},
+    {"id":18,"question":"We ____ for the bus for an hour.","options":["wait","waited","have been waiting","are waiting"],"correctOption":"C"},
+    {"id":19,"question":"They ____ cricket when it started raining.","options":["play","played","were playing","have played"],"correctOption":"C"},
+    {"id":20,"question":"____ Sun rises in the east.","options":["A","An","The","No article"],"correctOption":"C"}
+  ]
+}
