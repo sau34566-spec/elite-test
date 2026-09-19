@@ -1731,6 +1731,27 @@
 
 
     /* =========================================================
+       RESULT STORAGE FIREBASE
+       Exam configuration + exam sessions stay on the OLD Firebase.
+       Only student results/archives/ratings use this NEW Firebase.
+    ========================================================== */
+
+    const resultFirebaseConfig = {
+      apiKey: "AIzaSyBp1JrZy_dsJbXmg0jPfZrVEg7vlMbwRkM",
+      authDomain: "testhub-43fd8.firebaseapp.com",
+      databaseURL: "https://testhub-43fd8-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "testhub-43fd8",
+      storageBucket: "testhub-43fd8.firebasestorage.app",
+      messagingSenderId: "530965492161",
+      appId: "1:530965492161:web:b8ea984ef0c9cb14763f40",
+      measurementId: "G-W3LHB162NY"
+    };
+
+    const resultApp = initializeApp(resultFirebaseConfig, "resultStorageApp");
+    const resultDb = getFirestore(resultApp);
+
+
+    /* =========================================================
        GLOBAL VARIABLES
     ========================================================== */
 
@@ -2714,8 +2735,8 @@ $("config-max-tab-switches").value =
       const prefix = window.ExamResultArchive.prefix;
       // Preserve legacy IDs on either side of the reserved archive-ID range.
       const snapshots = await Promise.all([
-        getDocs(query(collection(db, "results"), where(documentId(), "<", prefix))),
-        getDocs(query(collection(db, "results"), where(documentId(), ">=", prefix + "\uf8ff")))
+        getDocs(query(collection(resultDb, "results"), where(documentId(), "<", prefix))),
+        getDocs(query(collection(resultDb, "results"), where(documentId(), ">=", prefix + "\uf8ff")))
       ]);
       return { docs: snapshots.flatMap(snapshot => snapshot.docs) };
     }
@@ -3284,7 +3305,7 @@ $("config-max-tab-switches").value =
         forceSubmittedByAdmin: true, forceSubmittedAt: now
       };
       try {
-        await setDoc(doc(db, "results", id), payload, {merge:true});
+        await setDoc(doc(resultDb, "results", id), payload, {merge:true});
         await setDoc(doc(db, "exam_sessions", id), {
           status:"final_submitted", submittedAt:payload.submittedAt,
           forceSubmittedByAdmin:true, forceSubmittedAt:now, lastSeen:now,
@@ -3505,7 +3526,7 @@ $("config-max-tab-switches").value =
         try {
           if (r.raw.answerDetailsArchive.attemptId !== r.id) throw new Error("The saved report does not match this student attempt.");
           r.answerDetails = await window.ExamResultArchive.load(r.raw, async partId => {
-            const snapshot = await getDoc(doc(db, "results", partId));
+            const snapshot = await getDoc(doc(resultDb, "results", partId));
             return snapshot.exists() ? snapshot.data() : null;
           });
           r.archiveLoaded = true;
@@ -4001,9 +4022,9 @@ $("config-max-tab-switches").value =
       if (record.raw.answerDetailsArchive && record.raw.answerDetailsArchive.attemptId !== record.id) throw new Error("Report attempt mismatch.");
       // Delete the header first when more than one batch is required: incomplete
       // cleanup leaves unreachable parts, never a visible but broken report.
-      const refs = [doc(db, "results", record.id), ...ids.map(id => doc(db, "results", id))];
+      const refs = [doc(resultDb, "results", record.id), ...ids.map(id => doc(resultDb, "results", id))];
       for (let start = 0; start < refs.length; start += 200) {
-        const batch = writeBatch(db);
+        const batch = writeBatch(resultDb);
         refs.slice(start, start + 200).forEach(ref => batch.delete(ref));
         await batch.commit();
       }
