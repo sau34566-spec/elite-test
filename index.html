@@ -1683,6 +1683,27 @@
 
 
     /* =========================================================
+       RESULT STORAGE FIREBASE
+       Exam configuration + exam sessions stay on the OLD Firebase.
+       Only student results/archives/ratings use this NEW Firebase.
+    ========================================================== */
+
+    const resultFirebaseConfig = {
+      apiKey: "AIzaSyBp1JrZy_dsJbXmg0jPfZrVEg7vlMbwRkM",
+      authDomain: "testhub-43fd8.firebaseapp.com",
+      databaseURL: "https://testhub-43fd8-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "testhub-43fd8",
+      storageBucket: "testhub-43fd8.firebasestorage.app",
+      messagingSenderId: "530965492161",
+      appId: "1:530965492161:web:b8ea984ef0c9cb14763f40",
+      measurementId: "G-W3LHB162NY"
+    };
+
+    const resultApp = initializeApp(resultFirebaseConfig, "studentResultStorageApp");
+    const resultDb = getFirestore(resultApp);
+
+
+    /* =========================================================
        GLOBAL STATE
     ========================================================== */
 
@@ -2948,7 +2969,7 @@
 
       try {
         if (fieldEnabled("email") && emailInput) {
-          const snap = await getDocs(query(collection(db,"results"),where("email","==",emailInput)));
+          const snap = await getDocs(query(collection(resultDb,"results"),where("email","==",emailInput)));
           if (!snap.empty) { if (duplicateError) duplicateError.style.display="flex"; return; }
         }
 
@@ -4812,15 +4833,15 @@
       document.getElementById("result-save-status").textContent = "Your answers are being saved. Please keep this page open until confirmation appears.";
       try {
         // Allocate once, reuse on retries; concurrent callers share one promise.
-        if (!resultDocId) resultDocId = examSessionId || doc(collection(db, "results")).id;
+        if (!resultDocId) resultDocId = examSessionId || doc(collection(resultDb, "results")).id;
         if (!preparedReportArchive) preparedReportArchive = window.ExamResultArchive.prepare(answerDetails, resultDocId);
         Object.assign(payload, preparedReportArchive.fields);
         await window.ExamResultArchive.save(preparedReportArchive, async entries => {
-          const batch = writeBatch(db);
-          entries.forEach(entry => batch.set(doc(db, "results", entry.id), entry.data));
+          const batch = writeBatch(resultDb);
+          entries.forEach(entry => batch.set(doc(resultDb, "results", entry.id), entry.data));
           await batch.commit();
         });
-        await setDoc(doc(db, "results", resultDocId), payload);
+        await setDoc(doc(resultDb, "results", resultDocId), payload);
         if (examSessionId) {
           await setDoc(doc(db,"exam_sessions",examSessionId), {
             ...payload,
