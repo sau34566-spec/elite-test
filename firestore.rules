@@ -3,14 +3,52 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Exam configuration
-    match /exam_config/{document} {
-      allow read, write: if true;
+    /*
+     * =========================================================
+     * RESULTS
+     * =========================================================
+     *
+     * This Firebase project is dedicated to result storage.
+     *
+     * Student side:
+     * - duplicate email check
+     * - result creation
+     * - result update / rating
+     *
+     * Admin side:
+     * - result list
+     * - result details
+     * - force submit/update
+     * - result delete
+     * - archive operations
+     *
+     * NOTE:
+     * Student result operations are currently unauthenticated
+     * in the website, therefore request.auth cannot be required
+     * here without breaking the existing test flow.
+     */
+
+    match /results/{resultId} {
+
+      // Student duplicate-email check + admin result reading
+      allow read: if true;
+
+      // Student result save + admin result operations
+      allow create, update, delete: if true;
     }
 
-    // Student results
-    match /results/{document} {
-      allow read, write: if true;
+
+    /*
+     * =========================================================
+     * ALL OTHER COLLECTIONS
+     * =========================================================
+     *
+     * The new Firebase project should be used only for results.
+     * Therefore every other collection remains blocked.
+     */
+
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
