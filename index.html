@@ -1664,40 +1664,44 @@
     } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 
-   /* =========================================================
-   FIREBASE — SINGLE PROJECT
-   All exam configuration, question banks, live sessions,
-   results, reports, ratings and feedback use ONE project.
+    /* =========================================================
+       FIREBASE CONFIG
+    ========================================================== */
 
-   FINAL PROJECT:
-   testhub-43fd8
-========================================================= */
+    const firebaseConfig = {
+      apiKey: "AIzaSyA8XeHrqnYP1FEpwpqUZEdKsVAJGDw2r7o",
+      authDomain: "physics-test-series-405c7.firebaseapp.com",
+      projectId: "physics-test-series-405c7",
+      storageBucket: "physics-test-series-405c7.firebasestorage.app",
+      messagingSenderId: "758620061190",
+      appId: "1:758620061190:web:b663c02fa5f01c6d8b8d87",
+      measurementId: "G-5CB60388J5"
+    };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBp1JrZy_dsJbXmg0jPfZrVEg7vlMbwRkM",
-  authDomain: "testhub-43fd8.firebaseapp.com",
-  databaseURL: "https://testhub-43fd8-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "testhub-43fd8",
-  storageBucket: "testhub-43fd8.firebasestorage.app",
-  messagingSenderId: "530965492161",
-  appId: "1:530965492161:web:b8ea984ef0c9cb14763f40",
-  measurementId: "G-W3LHB162NY"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
 
-/* =========================================================
-   FIREBASE COMPATIBILITY ALIAS
-   ---------------------------------------------------------
-   Existing result/report/feedback code uses resultDb.
-   We keep resultDb as an alias of the SAME Firestore
-   database so the rest of the application does not need
-   to be rewritten.
-========================================================= */
+    /* =========================================================
+       RESULT STORAGE FIREBASE
+       Exam configuration + exam sessions stay on the OLD Firebase.
+       Only student results/archives/ratings use this NEW Firebase.
+    ========================================================== */
 
-const resultDb = db;
+    const resultFirebaseConfig = {
+      apiKey: "AIzaSyBp1JrZy_dsJbXmg0jPfZrVEg7vlMbwRkM",
+      authDomain: "testhub-43fd8.firebaseapp.com",
+      databaseURL: "https://testhub-43fd8-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "testhub-43fd8",
+      storageBucket: "testhub-43fd8.firebasestorage.app",
+      messagingSenderId: "530965492161",
+      appId: "1:530965492161:web:b8ea984ef0c9cb14763f40",
+      measurementId: "G-W3LHB162NY"
+    };
+
+    const resultApp = initializeApp(resultFirebaseConfig, "studentResultStorageApp");
+    const resultDb = getFirestore(resultApp);
+
 
     /* =========================================================
        GLOBAL STATE
