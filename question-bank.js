@@ -262,6 +262,7 @@
       q.answer ??
       q.correct ??
       q.correctAnswer ??
+      q.correct_answer ??
       q.correct_option ??
       q.correctOption ??
       q.answer_text ??
@@ -1000,7 +1001,7 @@
         [
           ...new Set(
             question.__correctIndices ||
-              []
+            []
           )
         ].sort(
           (a, b) => a - b
