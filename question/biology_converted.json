@@ -1,0 +1,1102 @@
+[
+  {
+    "question_number": 1,
+    "question": "In angiosperms, microsporogenesis results in the formation of:",
+    "options": {
+      "A": "Megaspores",
+      "B": "Pollen grains",
+      "C": "Microspores",
+      "D": "Male gametes"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 2,
+    "question": "Innermost layer of anther wall nourishing pollen grains is:",
+    "options": {
+      "A": "Endothecium",
+      "B": "Tapetum",
+      "C": "Middle layer",
+      "D": "Epidermis"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 3,
+    "question": "Ploidy levels of functional megaspore and PEN are:",
+    "options": {
+      "A": "n and 2n",
+      "B": "n and 3n",
+      "C": "2n and 3n",
+      "D": "2n and n"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 4,
+    "question": "Persistent nucellus remaining in a seed is known as:",
+    "options": {
+      "A": "Perisperm",
+      "B": "Pericarp",
+      "C": "Scutellum",
+      "D": "Endosperm"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 5,
+    "question": "Which of the following plants shows cleistogamy?",
+    "options": {
+      "A": "Viola",
+      "B": "Oxalis",
+      "C": "Commelina",
+      "D": "All of these"
+    },
+    "correct_answer": "D"
+  },
+  {
+    "question_number": 6,
+    "question": "Filiform apparatus is a characteristic feature of:",
+    "options": {
+      "A": "Synergids",
+      "B": "Egg cell",
+      "C": "Antipodals",
+      "D": "Secondary nucleus"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 7,
+    "question": "Sertoli cells in human testes are regulated by pituitary hormone:",
+    "options": {
+      "A": "LH",
+      "B": "FSH",
+      "C": "GH",
+      "D": "Prolactin"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 8,
+    "question": "The part of fallopian tube closest to the ovary is:",
+    "options": {
+      "A": "Ampulla",
+      "B": "Isthmus",
+      "C": "Infundibulum",
+      "D": "Cervix"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 9,
+    "question": "Spermiogenesis is the conversion of:",
+    "options": {
+      "A": "Spermatogonia to primary spermatocytes",
+      "B": "Primary to secondary spermatocytes",
+      "C": "Spermatids into spermatozoa",
+      "D": "Secondary spermatocytes into spermatids"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 10,
+    "question": "Ovulation in human females is induced by a surge of:",
+    "options": {
+      "A": "Estrogen",
+      "B": "Progesterone",
+      "C": "LH",
+      "D": "FSH"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 11,
+    "question": "Middle muscular layer of uterus contracting in parturition is:",
+    "options": {
+      "A": "Perimetrium",
+      "B": "Myometrium",
+      "C": "Endometrium",
+      "D": "Epimetrium"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 12,
+    "question": "Colostrum secreted during early lactation is rich in:",
+    "options": {
+      "A": "IgG",
+      "B": "IgE",
+      "C": "IgA",
+      "D": "IgM"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 13,
+    "question": "Emergency contraceptives are effective if used within:",
+    "options": {
+      "A": "24 hours",
+      "B": "48 hours",
+      "C": "72 hours",
+      "D": "120 hours"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 14,
+    "question": "Which of the following is a non-medicated IUD?",
+    "options": {
+      "A": "CuT",
+      "B": "Lippes Loop",
+      "C": "Multiload 375",
+      "D": "Progestasert"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 15,
+    "question": "Saheli, a non-steroidal oral contraceptive pill, was developed at:",
+    "options": {
+      "A": "IISc Bengaluru",
+      "B": "CDRI Lucknow",
+      "C": "AIIMS New Delhi",
+      "D": "ICMR New Delhi"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 16,
+    "question": "Copper ions released from CuT-releasing IUDs:",
+    "options": {
+      "A": "Make uterus unsuitable for implantation",
+      "B": "Suppress sperm motility & fertilizing capacity",
+      "C": "Prevent ovulation completely",
+      "D": "Block gamete transport in fallopian tube"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 17,
+    "question": "Surgical sterilization procedure in human males is:",
+    "options": {
+      "A": "Tubectomy",
+      "B": "Vasectomy",
+      "C": "Castration",
+      "D": "Laparoscopy"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 18,
+    "question": "Amniocentesis checks fetal cells collected from:",
+    "options": {
+      "A": "Chorionic fluid",
+      "B": "Amniotic fluid",
+      "C": "Maternal blood",
+      "D": "Yolk sac"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 19,
+    "question": "Transfer of embryo up to 8 blastomeres into Fallopian tube is:",
+    "options": {
+      "A": "ZIFT",
+      "B": "GIFT",
+      "C": "ICSI",
+      "D": "IUI"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 20,
+    "question": "Which of the following STIs is completely curable if detected early?",
+    "options": {
+      "A": "Hepatitis-B",
+      "B": "Genital Herpes",
+      "C": "HIV infection",
+      "D": "Syphilis"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 21,
+    "question": "Dihybrid ratio for Independent Assortment is:",
+    "options": {
+      "A": "3 : 1",
+      "B": "1 : 2 : 1",
+      "C": "9 : 3 : 3 : 1",
+      "D": "9 : 7"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 22,
+    "question": "Joint expression of IA and IB in AB blood group is:",
+    "options": {
+      "A": "Incomplete dominance",
+      "B": "Co-dominance",
+      "C": "Multiple allelism",
+      "D": "Pleiotropy"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 23,
+    "question": "Starch grain size in pea seeds exhibits:",
+    "options": {
+      "A": "Complete dominance",
+      "B": "Incomplete dominance",
+      "C": "Co-dominance",
+      "D": "Epistasis"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 24,
+    "question": "Chromosomal theory of inheritance was experimentally verified by:",
+    "options": {
+      "A": "Sutton & Boveri",
+      "B": "T. H. Morgan",
+      "C": "Gregor Mendel",
+      "D": "Henking"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 25,
+    "question": "Down's syndrome is trisomy of chromosome number:",
+    "options": {
+      "A": "18",
+      "B": "13",
+      "C": "21",
+      "D": "23"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 26,
+    "question": "Klinefelter's syndrome genotype is:",
+    "options": {
+      "A": "44 + XO",
+      "B": "44 + XXY",
+      "C": "44 + XXX",
+      "D": "44 + XYY"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 27,
+    "question": "Haemophilia is a/an:",
+    "options": {
+      "A": "Autosomal dominant",
+      "B": "Autosomal recessive",
+      "C": "Sex-linked recessive",
+      "D": "Sex-linked dominant"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 28,
+    "question": "In Sickle-cell anaemia, codon substitution mutation is:",
+    "options": {
+      "A": "GAG to GUG",
+      "B": "GUG to GAG",
+      "C": "GAA to GUA",
+      "D": "GUC to GAG"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 29,
+    "question": "1 map unit (cM) distance equals:",
+    "options": {
+      "A": "1% recombination",
+      "B": "10% recombination",
+      "C": "50% recombination",
+      "D": "100% recombination"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 30,
+    "question": "Lack of enzyme phenylalanine hydroxylase causes:",
+    "options": {
+      "A": "Thalassemia",
+      "B": "Phenylketonuria",
+      "C": "Cystic fibrosis",
+      "D": "Albinism"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 31,
+    "question": "Hershey and Chase proved DNA as genetic material using:",
+    "options": {
+      "A": "14C and 15N",
+      "B": "32P and 35S",
+      "C": "14N and 15N",
+      "D": "32S and 35P"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 32,
+    "question": "In dsDNA, if Cytosine is 20%, percentage of Thymine is:",
+    "options": {
+      "A": "20%",
+      "B": "30%",
+      "C": "40%",
+      "D": "60%"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 33,
+    "question": "Semi-conservative DNA replication in E. coli proven by:",
+    "options": {
+      "A": "Meselson & Stahl",
+      "B": "Taylor et al.",
+      "C": "Avery et al.",
+      "D": "Watson & Crick"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 34,
+    "question": "Enzyme removing RNA primers in prokaryotic replication:",
+    "options": {
+      "A": "DNA Polymerase III",
+      "B": "DNA Polymerase I",
+      "C": "DNA Ligase",
+      "D": "Helicase"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 35,
+    "question": "Promoter and terminator are located relative to coding strand at:",
+    "options": {
+      "A": "5'-end & 3'-end",
+      "B": "3'-end & 5'-end",
+      "C": "5'-end at both",
+      "D": "3'-end at both"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 36,
+    "question": "RNA polymerase III in eukaryotes transcribes:",
+    "options": {
+      "A": "hnRNA",
+      "B": "28S, 18S, 5.8S rRNA",
+      "C": "tRNA, 5S rRNA, snRNA",
+      "D": "mRNA only"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 37,
+    "question": "Initiator codon AUG codes for which amino acid in eukaryotes?",
+    "options": {
+      "A": "Valine",
+      "B": "Methionine",
+      "C": "Lysine",
+      "D": "Glycine"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 38,
+    "question": "Which of the following is NOT a stop codon?",
+    "options": {
+      "A": "UAA",
+      "B": "UAG",
+      "C": "UGA",
+      "D": "UGG"
+    },
+    "correct_answer": "D"
+  },
+  {
+    "question_number": 39,
+    "question": "In lac operon, the i gene encodes for:",
+    "options": {
+      "A": "β-galactosidase",
+      "B": "Permease",
+      "C": "Transacetylase",
+      "D": "Repressor protein"
+    },
+    "correct_answer": "D"
+  },
+  {
+    "question_number": 40,
+    "question": "Total estimated human gene count revealed by HGP is:",
+    "options": {
+      "A": "30,000",
+      "B": "80,000",
+      "C": "1,00,000",
+      "D": "1,40,000"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 41,
+    "question": "Homologous organs indicate:",
+    "options": {
+      "A": "Convergent evolution",
+      "B": "Divergent evolution",
+      "C": "Adaptive radiation",
+      "D": "Parallel evolution"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 42,
+    "question": "Thorn of Bougainvillea and tendril of Cucurbita are:",
+    "options": {
+      "A": "Homologous",
+      "B": "Analogous",
+      "C": "Vestigial",
+      "D": "Atavistic"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 43,
+    "question": "Darwin observed natural selection during voyage on:",
+    "options": {
+      "A": "HMS Beagle",
+      "B": "HMS Challenger",
+      "C": "HMS Discovery",
+      "D": "HMS Victoria"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 44,
+    "question": "Industrial melanism in peppered moth demonstrates:",
+    "options": {
+      "A": "Artificial selection",
+      "B": "Natural selection",
+      "C": "Genetic drift",
+      "D": "Mutation"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 45,
+    "question": "Hardy-Weinberg equilibrium equation is represented as:",
+    "options": {
+      "A": "p2 + 2pq + q2 = 1",
+      "B": "p2 + pq + q2 = 1",
+      "C": "p + q = 1",
+      "D": "p2 + q2 = 1"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 46,
+    "question": "Evolution radiating from a common point in geography is:",
+    "options": {
+      "A": "Convergent",
+      "B": "Adaptive radiation",
+      "C": "Parallel",
+      "D": "Genetic drift"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 47,
+    "question": "First human-like hominid with brain capacity 650–800 cc:",
+    "options": {
+      "A": "Homo erectus",
+      "B": "Homo habilis",
+      "C": "Australopithecus",
+      "D": "Neanderthal"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 48,
+    "question": "Cranial capacity of Homo erectus fossils from Java was:",
+    "options": {
+      "A": "650 cc",
+      "B": "900 cc",
+      "C": "1400 cc",
+      "D": "1600 cc"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 49,
+    "question": "Random change in allele frequencies in small population:",
+    "options": {
+      "A": "Gene flow",
+      "B": "Genetic drift",
+      "C": "Mutation",
+      "D": "Natural selection"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 50,
+    "question": "Miller-Urey experiment synthesized amino acids using:",
+    "options": {
+      "A": "CH4, NH3, H2O vapor, H2 at 800°C",
+      "B": "CH4, NO2, H2O vapor, O2 at 800°C",
+      "C": "CO2, NH3, H2O, O2 at 600°C",
+      "D": "CH4, NH3, O2, H2 at 1000°C"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 51,
+    "question": "Causal organism of malignant tertian malaria is:",
+    "options": {
+      "A": "P. vivax",
+      "B": "P. malariae",
+      "C": "P. falciparum",
+      "D": "P. ovale"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 52,
+    "question": "Infectious stage of Plasmodium entering human body:",
+    "options": {
+      "A": "Trophozoite",
+      "B": "Merozoite",
+      "C": "Sporozoite",
+      "D": "Gametocyte"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 53,
+    "question": "Antibodies mediating allergic reactions in human blood are:",
+    "options": {
+      "A": "IgA",
+      "B": "IgG",
+      "C": "IgE",
+      "D": "IgM"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 54,
+    "question": "Immunity conferred by injecting pre-formed antibodies:",
+    "options": {
+      "A": "Active",
+      "B": "Passive",
+      "C": "Innate",
+      "D": "Autoimmunity"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 55,
+    "question": "Primary lymphoid organs in humans are:",
+    "options": {
+      "A": "Bone marrow & Spleen",
+      "B": "Bone marrow & Thymus",
+      "C": "Thymus & Spleen",
+      "D": "Lymph nodes & Tonsils"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 56,
+    "question": "Morphine is extracted from latex of:",
+    "options": {
+      "A": "Cannabis sativa",
+      "B": "Papaver somniferum",
+      "C": "Erythroxylum coca",
+      "D": "Atropa belladonna"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 57,
+    "question": "HIV virus causes AIDS by destroying:",
+    "options": {
+      "A": "B-lymphocytes",
+      "B": "Cytotoxic T-cells",
+      "C": "Helper T-cells (TH)",
+      "D": "Erythrocytes"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 58,
+    "question": "Spread of tumor cells to distant sites via blood is termed:",
+    "options": {
+      "A": "Metagenesis",
+      "B": "Metastasis",
+      "C": "Teratogenesis",
+      "D": "Transformation"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 59,
+    "question": "Non-ionizing radiation and strong magnetic fields are used in:",
+    "options": {
+      "A": "CT scan",
+      "B": "Radiography",
+      "C": "MRI",
+      "D": "PET scan"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 60,
+    "question": "Heroin is chemically synthesized by:",
+    "options": {
+      "A": "Nitration of morphine",
+      "B": "Acetylation of morphine",
+      "C": "Methylation of morphine",
+      "D": "Oxidation of cocaine"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 61,
+    "question": "Fungus used in commercial production of citric acid:",
+    "options": {
+      "A": "Aspergillus niger",
+      "B": "Trichoderma",
+      "C": "Acetobacter aceti",
+      "D": "Clostridium"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 62,
+    "question": "Blood cholesterol lowering statins are produced by:",
+    "options": {
+      "A": "S. cerevisiae",
+      "B": "Monascus purpureus",
+      "C": "P. chrysogenum",
+      "D": "Candida utilis"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 63,
+    "question": "Immunosuppressive agent Cyclosporin A is obtained from:",
+    "options": {
+      "A": "Trichoderma polysporum",
+      "B": "Monascus purpureus",
+      "C": "Methanobacterium",
+      "D": "Aspergillus niger"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 64,
+    "question": "Biochemical Oxygen Demand (BOD) measures:",
+    "options": {
+      "A": "Total organic matter in water",
+      "B": "Dissolved O2 in pure water",
+      "C": "Inorganic pollutants in water",
+      "D": "Heavy metal concentration"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 65,
+    "question": "Primary treatment of sewage physically involves:",
+    "options": {
+      "A": "Biological digestion by aerobic microbes",
+      "B": "Sequential filtration and sedimentation",
+      "C": "Chemical chlorination treatment",
+      "D": "Anaerobic sludge digestion"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 66,
+    "question": "Biogas primarily consists of mixture of:",
+    "options": {
+      "A": "CH4, CO2, H2",
+      "B": "CO2, NO2, H2S",
+      "C": "CH4, O2, CO",
+      "D": "C2H6, CO2, N2"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 67,
+    "question": "Free-living nitrogen-fixing soil bacterium is:",
+    "options": {
+      "A": "Rhizobium",
+      "B": "Azotobacter",
+      "C": "Anabaena",
+      "D": "Frankia"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 68,
+    "question": "Baculoviruses (Nucleopolyhedrovirus) are best used for:",
+    "options": {
+      "A": "Broad-spectrum chemical pest control",
+      "B": "Species-specific narrow spectrum biocontrol",
+      "C": "Enhancing soil fertility directly",
+      "D": "Controlling viral plant diseases"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 69,
+    "question": "Large holes in Swiss cheese are due to CO2 produced by:",
+    "options": {
+      "A": "P. shermanii",
+      "B": "Lactobacillus",
+      "C": "S. cerevisiae",
+      "D": "P. roqueforti"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 70,
+    "question": "Microbes like Spirulina are rich source of:",
+    "options": {
+      "A": "Fats",
+      "B": "Single Cell Protein",
+      "C": "Carbohydrates",
+      "D": "Vitamins only"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 71,
+    "question": "Restriction enzymes belong to a larger class called:",
+    "options": {
+      "A": "Ligases",
+      "B": "Nucleases",
+      "C": "Polymerases",
+      "D": "Isomerases"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 72,
+    "question": "In restriction enzyme EcoRI, the letter 'R' stands for:",
+    "options": {
+      "A": "Genus name",
+      "B": "Species name",
+      "C": "Strain name",
+      "D": "Order of discovery"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 73,
+    "question": "Recognition sequence cut by EcoRI is:",
+    "options": {
+      "A": "5'-GAATTC-3'",
+      "B": "5'-GGATCC-3'",
+      "C": "5'-AAGCTT-3'",
+      "D": "5'-GTCGAC-3'"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 74,
+    "question": "Gel electrophoresis separates DNA fragments because DNA is:",
+    "options": {
+      "A": "Positively charged",
+      "B": "Negatively charged",
+      "C": "Neutral",
+      "D": "Amphipathic"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 75,
+    "question": "Dye used to view DNA bands under UV light is:",
+    "options": {
+      "A": "Aniline blue",
+      "B": "Ethidium bromide",
+      "C": "Methylene blue",
+      "D": "Crystal violet"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 76,
+    "question": "Selectable marker gene ampR in pBR322 helps select:",
+    "options": {
+      "A": "Non-recombinants",
+      "B": "Transformants against ampicillin",
+      "C": "Competent cells",
+      "D": "Host cells without plasmids"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 77,
+    "question": "Divalent cation used in heat shock cell competency:",
+    "options": {
+      "A": "Na+",
+      "B": "Ca2+",
+      "C": "Mg2+",
+      "D": "K+"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 78,
+    "question": "In vitro DNA segment amplification technique is:",
+    "options": {
+      "A": "Northern blot",
+      "B": "PCR",
+      "C": "Electrophoresis",
+      "D": "Western blot"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 79,
+    "question": "Thermostable Taq polymerase is isolated from:",
+    "options": {
+      "A": "T. aquaticus",
+      "B": "E. coli",
+      "C": "A. tumefaciens",
+      "D": "B. thuringiensis"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 80,
+    "question": "Biolistics / Gene gun method uses micro-particles of:",
+    "options": {
+      "A": "Silver/Copper",
+      "B": "Gold/Tungsten",
+      "C": "Platinum/Iron",
+      "D": "Aluminum/Zinc"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 81,
+    "question": "Inactive Bt protoxin is activated in insect gut by:",
+    "options": {
+      "A": "Acidic pH",
+      "B": "Alkaline pH",
+      "C": "Gut enzymes",
+      "D": "High temperature"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 82,
+    "question": "Which gene controls cotton bollworm infestation?",
+    "options": {
+      "A": "cryIAc & cryIIAb",
+      "B": "cryIAb",
+      "C": "cryIIAc",
+      "D": "ampR"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 83,
+    "question": "RNA interference (RNAi) silences mRNA using:",
+    "options": {
+      "A": "ssDNA",
+      "B": "dsRNA",
+      "C": "ssRNA",
+      "D": "cDNA"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 84,
+    "question": "Polypeptide chains A and B of human insulin are linked by:",
+    "options": {
+      "A": "Hydrogen bonds",
+      "B": "Disulfide bridges",
+      "C": "Ionic bonds",
+      "D": "Peptide bonds"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 85,
+    "question": "First clinical gene therapy (1990) was given for deficiency of:",
+    "options": {
+      "A": "Insulin",
+      "B": "ADA",
+      "C": "Glucocerebrosidase",
+      "D": "Factor VIII"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 86,
+    "question": "Species interaction (+ , 0) where one benefits and other unharm:",
+    "options": {
+      "A": "Mutualism",
+      "B": "Commensalism",
+      "C": "Amensalism",
+      "D": "Parasitism"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 87,
+    "question": "In mycorrhiza, fungal symbiont provides plant with:",
+    "options": {
+      "A": "Organic food & carbohydrates",
+      "B": "Absorption of Phosphorus & water",
+      "C": "Fixed atmospheric nitrogen",
+      "D": "Growth hormones"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 88,
+    "question": "In logistic growth dN/dt = rN[(K-N)/K], symbol 'K' is:",
+    "options": {
+      "A": "Intrinsic rate",
+      "B": "Carrying capacity",
+      "C": "Resistance",
+      "D": "Population density"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 89,
+    "question": "Gause's Competitive Exclusion Principle states that:",
+    "options": {
+      "A": "Two competing species for same limited resources cannot coexist",
+      "B": "Species always coexist indefinitely",
+      "C": "Superior species is excluded by inferior",
+      "D": "Leads to immediate extinction of both"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 90,
+    "question": "Organisms tolerating wide range of temperatures are:",
+    "options": {
+      "A": "Stenothermal",
+      "B": "Eurythermal",
+      "C": "Euryhaline",
+      "D": "Stenohaline"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 91,
+    "question": "Rate of organic matter formation by consumers is:",
+    "options": {
+      "A": "Primary prod.",
+      "B": "Gross primary",
+      "C": "Net primary",
+      "D": "Secondary prod."
+    },
+    "correct_answer": "D"
+  },
+  {
+    "question_number": 92,
+    "question": "Maximum net primary productivity per unit area is in:",
+    "options": {
+      "A": "Tropical rainforest",
+      "B": "Deciduous forest",
+      "C": "Coral reef",
+      "D": "Mangroves"
+    },
+    "correct_answer": "A"
+  },
+  {
+    "question_number": 93,
+    "question": "Energy transferred between successive trophic levels:",
+    "options": {
+      "A": "1%",
+      "B": "5%",
+      "C": "10%",
+      "D": "50%"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 94,
+    "question": "Pyramid of biomass in sea/aquatic ecosystem is:",
+    "options": {
+      "A": "Upright",
+      "B": "Inverted",
+      "C": "Spindle",
+      "D": "Dumbbell"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 95,
+    "question": "Pioneer species in xerarch succession on bare rocks:",
+    "options": {
+      "A": "Mosses",
+      "B": "Lichens",
+      "C": "Phytoplankton",
+      "D": "Herbs"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 96,
+    "question": "Which of the following is an example of in-situ conservation?",
+    "options": {
+      "A": "Zoo park",
+      "B": "Botanical garden",
+      "C": "National park",
+      "D": "Seed bank"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 97,
+    "question": "High tropical species diversity is mainly attributed to:",
+    "options": {
+      "A": "Lower solar energy availability",
+      "B": "Predictable climate & long undisturbed evolutionary time",
+      "C": "Frequent historical glaciations",
+      "D": "High biological pest invasions"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 98,
+    "question": "In Rivet Popper hypothesis, rivets on wings represent:",
+    "options": {
+      "A": "Ecosystem",
+      "B": "Key species",
+      "C": "Dominant species",
+      "D": "Extinct species"
+    },
+    "correct_answer": "B"
+  },
+  {
+    "question_number": 99,
+    "question": "Prime cause of global biodiversity loss ('Evil Quartet'):",
+    "options": {
+      "A": "Over-exploitation",
+      "B": "Alien species",
+      "C": "Habitat loss/fragmentation",
+      "D": "Co-extinction"
+    },
+    "correct_answer": "C"
+  },
+  {
+    "question_number": 100,
+    "question": "The term \"Biodiversity\" was popularised by:",
+    "options": {
+      "A": "Edward Wilson",
+      "B": "Robert May",
+      "C": "Paul Ehrlich",
+      "D": "A. von Humboldt"
+    },
+    "correct_answer": "A"
+  }
+]

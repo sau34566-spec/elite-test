@@ -1,0 +1,685 @@
+[
+  {
+    "id": 1,
+    "question": "Out of the following complex compounds, which of the compound will be having the minimum conductance in solution?",
+    "options": [
+      "[Co(NH₃)₆]Cl₃",
+      "[Co(NH₃)₅Cl]Cl₂",
+      "[Co(NH₃)₃Cl₃]",
+      "[Co(NH₃)₄Cl₂]Cl"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 2,
+    "question": "Which of the following forms a set of a complex and a double salt, respectively?",
+    "options": [
+      "CuSO₄·5H₂O and CuCl₂·4NH₃",
+      "PtCl₂·2NH₃ and PtCl₂·4NH₃",
+      "K₂PtCl₂·2NH₃ and KAl(SO₄)₂·12H₂O",
+      "NiCl₂·6H₂O and NiCl₂(H₂O)₄"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 3,
+    "question": "The correct order of the stoichiometries of AgCl formed when AgNO₃ in excess is treated with the complexes: CoCl₃·6NH₃, CoCl₃·5NH₃, CoCl₃·4NH₃, respectively is",
+    "options": [
+      "3AgCl, 1AgCl, 2AgCl",
+      "3AgCl, 2AgCl, 1AgCl",
+      "2AgCl, 3AgCl, 2AgCl",
+      "1AgCl, 3AgCl, 2AgCl"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 4,
+    "question": "Cobalt(III) chloride forms several octahedral complexes with ammonia. Which of the following will not give test for chloride ions with silver nitrate at 25 °C?",
+    "options": [
+      "CoCl₃·5NH₃",
+      "CoCl₃·6NH₃",
+      "CoCl₃·3NH₃",
+      "CoCl₃·4NH₃"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 5,
+    "question": "An excess of AgNO₃ is added to 100 mL of a 0.01 M solution of dichlorotetraaquachromium(III) chloride. The number of moles of AgCl precipitated would be",
+    "options": [
+      "0.003",
+      "0.01",
+      "0.001",
+      "0.002"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 6,
+    "question": "Which of the following will exhibit maximum ionic conductivity?",
+    "options": [
+      "K₄[Fe(CN)₆]",
+      "[Co(NH₃)₆]Cl₃",
+      "[Cu(NH₃)₄]Cl₂",
+      "[Ni(CO)₄]"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 7,
+    "question": "A coordination complex compound of cobalt has the molecular formula containing five ammonia molecules, one nitro group and two chlorine atoms for one cobalt atom. One mole of this compound produces three mole ions in an aqueous solution. On reacting this solution with excess of AgNO₃ solution, we get two moles of AgCl precipitate. The ionic formula for this complex would be",
+    "options": [
+      "[Co(NH₃)₅(NO₂)]Cl₂",
+      "[Co(NH₃)₅Cl][Cl(NO₂)]",
+      "[Co(NH₃)₄(NO₂)Cl][(NH₃)Cl]",
+      "[Co(NH₃)₅][(NO₂)₂Cl₂]"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 8,
+    "question": "Ethylene diaminetetraacetate (EDTA) ion is a/an",
+    "options": [
+      "hexadentate ligand",
+      "ambidentate ligand",
+      "monodentate ligand",
+      "bidentate ligand"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 9,
+    "question": "Which of the following is not an ambidentate ligand?",
+    "options": [
+      "C₂O₄²⁻",
+      "SCN⁻",
+      "NO₂⁻",
+      "CN⁻"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 10,
+    "question": "Given below are two statements:\nStatement I: [Co(NH₃)₆]³⁺ is a homoleptic complex whereas [Co(NH₃)₄Cl₂]⁺ is a heteroleptic complex.\nStatement II: Complex [Co(NH₃)₆]³⁺ has only one kind of ligands but [Co(NH₃)₄Cl₂]⁺ has more than one kind of ligands.\nIn the light of the above statements, choose the correct answer from the options given below:",
+    "options": [
+      "Both Statement I and Statement II are true.",
+      "Both Statement I and Statement II are false.",
+      "Statement I is true but Statement II is false.",
+      "Statement I is false and Statement II is true."
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 11,
+    "question": "Which complex compound is most stable?",
+    "options": [
+      "[CoCl₂(en)₂]NO₃",
+      "[Co(NH₃)₆]₂(SO₄)₃",
+      "[Co(NH₃)₄(H₂O)Br](NO₃)₂",
+      "[Co(NH₃)₃(NO₃)₃]"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 12,
+    "question": "Ethylene diaminetetraacetate (EDTA) ion is",
+    "options": [
+      "tridentate ligand with three “N” donor atoms",
+      "hexadentate ligand with four “O” and two “N” donor atoms",
+      "unidentate ligand",
+      "bidentate ligand with two “N” donor atoms"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 13,
+    "question": "The correct increasing order of trans-effect of the following species is",
+    "options": [
+      "NH₃ > CN⁻ > Br⁻ > C₆H₅",
+      "CN⁻ > C₆H₅ > Br⁻ > NH₃",
+      "Br⁻ > CN⁻ > NH₃ > C₆H₅",
+      "CN⁻ > Br⁻ > C₆H₅ > NH₃"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 14,
+    "question": "The sum of coordination number and oxidation number of the metal M in the complex [M(en)₂(C₂O₄)]Cl (where en is ethylenediamine) is",
+    "options": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 15,
+    "question": "The anion of acetylacetone (acac) forms Co(acac)₃ chelate with Co³⁺. The rings of the chelate are",
+    "options": [
+      "five membered",
+      "four membered",
+      "six membered",
+      "three membered"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 16,
+    "question": "Coordination number of Ni in [Ni(C₂O₄)₃]⁴⁻ is",
+    "options": [
+      "3",
+      "6",
+      "4",
+      "2"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 17,
+    "question": "The coordination number and oxidation state of Cr in K₃[Cr(C₂O₄)₃] are respectively",
+    "options": [
+      "3 and +3",
+      "3 and 0",
+      "6 and +3",
+      "4 and +2"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 18,
+    "question": "Which of the following ligands is expected to be bidentate?",
+    "options": [
+      "CH₃NH₂",
+      "CH₃C≡N",
+      "Br⁻",
+      "C₂O₄²⁻"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 19,
+    "question": "Homoleptic complex from the following complexes is",
+    "options": [
+      "pentaamminecarbonatocobalt(III) chloride",
+      "triammineaquachromium(III) chloride",
+      "potassium trioxalatoaluminate(III)",
+      "diamminechloridonitrito-N-platinum(II)"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 20,
+    "question": "The IUPAC name of the complex [Ag(H₂O)₂][Ag(CN)₂] is",
+    "options": [
+      "dicyanidosilver(II) diaquaargentate(II)",
+      "diaquasilver(II)dicyanidoargentate(II)",
+      "dicyanidosilver(I) diaquaargentate(I)",
+      "diaquasilver(I)dicyanidoargentate(I)"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 21,
+    "question": "The name of complex ion, [Fe(CN)₆]³⁻ is",
+    "options": [
+      "hexacyanoferrate(III) ion",
+      "tricyanoferrate(III) ion",
+      "hexacyanidoferrate(III) ion",
+      "hexacyanoiron(III) ion"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 22,
+    "question": "The correct IUPAC name for [CrF₂(en)₂]Cl is",
+    "options": [
+      "chlorodifluoridoethylenediaminechromium(III) chloride",
+      "difluoridobis(ethylenediamine)chromium(III) chloride",
+      "difluoro-bis-(ethylenediamine)chromium(III) chloride",
+      "chlorodifluoridobis(ethylenediamine)chromium(III)"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 23,
+    "question": "The hypothetical complex chlorodiaquatrammine cobalt(III) chloride can be represented as",
+    "options": [
+      "[CoCl(NH₃)₃(H₂O)₂]Cl₂",
+      "[Co(NH₃)₃(H₂O)Cl₃]",
+      "[Co(NH₃)₂(H₂O)₂Cl]",
+      "[Co(NH₃)₃(H₂O)₃]Cl₃"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 24,
+    "question": "IUPAC name of [Pt(NH₃)₃(Br)(NO₂)Cl]Cl is",
+    "options": [
+      "triamminebromochloronitroplatinum(IV) chloride",
+      "triamminebromonitrochloroplatinum(IV) chloride",
+      "triamminechlorobromonitroplatinum(IV) chloride",
+      "triammine nitrochlorobromoplatinum(IV) chloride"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 25,
+    "question": "The formula of dichlorobis(urea)copper(II) is",
+    "options": [
+      "[Cu{O=C(NH₂)₂}Cl]Cl",
+      "[CuCl₂]{O=C(NH₂)₂}",
+      "[Cu{O=C(NH₂)₂}Cl₂]",
+      "[CuCl₂{O=C(NH₂)₂}₂]"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 26,
+    "question": "Match List I with List II.\nList I (Complex): A. [Co(NH₃)₅(NO₂)]Cl₂; B. [Co(NH₃)₅(SO₄)]Br; C. [Co(NH₃)₆][Cr(CN)₆]; D. [Co(H₂O)₆]Cl₃.\nList II (Type of isomerism): I. Solvate isomerism; II. Linkage isomerism; III. Ionization isomerism; IV. Coordination isomerism.\nChoose the correct answer from the options given below:",
+    "media": [
+      {
+        "src": "assets/q26.png",
+        "alt": "Question 26 matching table"
+      }
+    ],
+    "options": [
+      "A-II, B-III, C-IV, D-I",
+      "A-I, B-III, C-IV, D-II",
+      "A-I, B-IV, C-II, D-II",
+      "A-II, B-IV, C-III, D-I"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 27,
+    "question": "Identify the suitable reagent for the following conversion: methyl benzoate to benzaldehyde.",
+    "media": [
+      {
+        "src": "assets/q27.png",
+        "alt": "Question 27 figure"
+      }
+    ],
+    "options": [
+      "(i) NaBH₄, (ii) H⁺/H₂O",
+      "H₂/Pd-BaSO₄",
+      "(i) LiAlH₄, (ii) H⁺/H₂O",
+      "(i) AlH(i-Bu)₂, (ii) H₂O"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 28,
+    "question": "Identify the correct reagents, that would bring about the following transformation: cyclohexyl-CH₂-CH=CH₂ → cyclohexyl-CH₂-CH₂-CHO",
+    "media": [
+      {
+        "src": "assets/q28.png",
+        "alt": "Question 28 figure"
+      }
+    ],
+    "options": [
+      "(i) H₂O/H⁺; (ii) CrO₃",
+      "(i) BH₃; (ii) H₂O₂/OH⁻; (iii) PCC",
+      "(i) BH₃; (ii) H₂O₂/OH⁻; (iii) KMnO₄; (iv) H₃O⁺",
+      "(i) H₂O/H⁺; (ii) PCC"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 29,
+    "question": "The following conversion is known as",
+    "media": [
+      {
+        "src": "assets/q29.png",
+        "alt": "Question 29 figure"
+      }
+    ],
+    "options": [
+      "Stephen reaction",
+      "Gattermann-Koch reaction",
+      "Etard reaction",
+      "Rosenmund reaction"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 30,
+    "question": "The intermediate compound X in the following chemical reaction is",
+    "media": [
+      {
+        "src": "assets/q30.png",
+        "alt": "Question 30 figure"
+      }
+    ],
+    "options": [
+      "C₆H₅–CH(Cl)H",
+      "C₆H₅–CH(OCrOHCl₂)₂",
+      "C₆H₅–CH(OCOCH₃)₂",
+      "C₆H₅–CHCl₂"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 31,
+    "question": "Identify compound X in the following sequence of reactions: toluene —Cl₂/hν→ X —H₂O, 373 K→ benzaldehyde",
+    "media": [
+      {
+        "src": "assets/q31.png",
+        "alt": "Question 31 figure"
+      }
+    ],
+    "options": [
+      "chlorobenzene",
+      "benzyl chloride",
+      "benzal chloride (C₆H₅CHCl₂)",
+      "benzotrichloride (C₆H₅CCl₃)"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 32,
+    "question": "Reaction by which benzaldehyde cannot be prepared",
+    "media": [
+      {
+        "src": "assets/q32.png",
+        "alt": "Question 32 figure"
+      }
+    ],
+    "options": [
+      "C₆H₆ + CO + HCl in presence of anhydrous AlCl₃",
+      "C₆H₅COOH + Zn/Hg and conc. HCl",
+      "C₆H₅CH₃ + CrO₂Cl₂ in CS₂ followed by H₃O⁺",
+      "C₆H₅COCl + H₂ in presence of Pd-BaSO₄"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 33,
+    "question": "Consider the following reaction: benzoyl chloride + H₂/Pd-BaSO₄ → A. The product A is",
+    "media": [
+      {
+        "src": "assets/q33.png",
+        "alt": "Question 33 figure"
+      }
+    ],
+    "options": [
+      "C₆H₅CHO",
+      "C₆H₅OH",
+      "C₆H₅COCH₃",
+      "C₆H₅Cl"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 34,
+    "question": "Which one of the following can be oxidised to the corresponding carbonyl compound?",
+    "options": [
+      "2-Hydroxypropane",
+      "ortho-Nitrophenol",
+      "Phenol",
+      "2-Methyl-2-hydroxypropane"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 35,
+    "question": "In the following reaction, product P is: R–COCl + H₂/Pd-BaSO₄ → P",
+    "options": [
+      "RCH₂OH",
+      "RCOOH",
+      "RCHO",
+      "RCH₃"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 36,
+    "question": "Product P in the following reaction is obtained from a nitrile and CH₃MgBr followed by H₃O⁺.",
+    "media": [
+      {
+        "src": "assets/q36.png",
+        "alt": "Question 36 figure"
+      }
+    ],
+    "options": [
+      "m-methoxybenzyl alcohol",
+      "m-methoxyacetophenone",
+      "m-methoxybenzaldehyde",
+      "m-methoxybenzoic acid"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 37,
+    "question": "Which alkene on ozonolysis gives CH₃CH₂CHO and CH₃COCH₃?",
+    "media": [
+      {
+        "src": "assets/q37.png",
+        "alt": "Question 37 figure"
+      }
+    ],
+    "options": [
+      "CH₃CH₂CH=C(CH₃)₂",
+      "CH₃CH₂CH=CHCH₂CH₃",
+      "CH₃CH₂CH=CHCH₃",
+      "CH₃–C(CH₃)=CHCH₃"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 38,
+    "question": "In the reaction, CH₃CN + 2HCl (ether) → X; boiling H₂O → Y; the term Y is",
+    "options": [
+      "acetaldehyde",
+      "ethanamine",
+      "acetone",
+      "dimethylamine"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 39,
+    "question": "Ketones [RCOR₁] where R = R₁ = alkyl group. It can be obtained in one step by",
+    "options": [
+      "oxidation of tertiary alcohol",
+      "reaction of acid halide with alcohols",
+      "hydrolysis of esters with alcohols",
+      "oxidation of primary alcohol"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 40,
+    "question": "The oxidation of toluene to benzaldehyde by chromyl chloride is called",
+    "options": [
+      "Etard reaction",
+      "Reimer–Tiemann reaction",
+      "Wurtz reaction",
+      "Cannizzaro’s reaction"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 41,
+    "question": "Given below are two statements.\nStatement-I: The boiling points of aldehydes and ketones are higher than hydrocarbons of comparable molecular masses because of weak molecular association in aldehydes and ketones due to dipole-dipole interactions.\nStatement-II: The boiling points of aldehydes and ketones are lower than the alcohols of similar molecular masses due to the absence of H-bonding.\nIn the light of the above statements, choose the most appropriate answer from the options given below:",
+    "options": [
+      "Both statement-I and statement-II are correct.",
+      "Both statement-I and statement-II are incorrect.",
+      "Statement-I is correct but statement-II is incorrect.",
+      "Statement-I is incorrect but statement-II is correct."
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 42,
+    "question": "The major product of the following reaction is",
+    "media": [
+      {
+        "src": "assets/q42.png",
+        "alt": "Question 42 figure"
+      }
+    ],
+    "options": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 43,
+    "question": "The 3d-orbitals having electron density in all the three axes is",
+    "options": [
+      "3dxy",
+      "3dz²",
+      "3dyz",
+      "3dzx"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 44,
+    "question": "Observe the given boundary surface diagrams of two orbitals I and II and choose the correct option.",
+    "media": [
+      {
+        "src": "assets/q44.png",
+        "alt": "Question 44 figure"
+      }
+    ],
+    "options": [
+      "I – dₓ²₋ᵧ², II – dᵧz",
+      "I – dᵧz, II – dₓ²₋ᵧ²",
+      "I – dₓz, II – d_z²",
+      "I – dₓy, II – dₓz"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 45,
+    "question": "The number of radial nodes and angular nodes for d-orbital can be represented as",
+    "options": [
+      "(n − 2) radial nodes + 1 angular node = (n − 1) total nodes",
+      "(n − 1) radial nodes + 1 angular node = (n − 1) total nodes",
+      "(n − 3) radial nodes + 2 angular nodes = (n − l − 1) total nodes",
+      "(n − 3) radial nodes + 2 angular nodes = (n − 1) total nodes"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 46,
+    "question": "Few statements are given regarding nodes in the orbitals. Mark the statement which is not correct.",
+    "options": [
+      "In case of pz-orbital, xy plane is a nodal plane.",
+      "ns-orbital has (n + 1) nodes.",
+      "The number of angular nodes is given by l.",
+      "The total number of nodes is given by (n − 1) i.e., sum of l angular nodes and (n − l − 1) radial nodes."
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 47,
+    "question": "Statement I: Shape associated with the orbital designated by n = 2, l = 1 is double dumbbell.\nStatement II: It belongs to d-orbital.",
+    "options": [
+      "Statement I is false but statement II is true.",
+      "Both Statement I and Statement II are true.",
+      "Both Statement I and Statement II are false.",
+      "Statement I is true but statement II is false."
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 48,
+    "question": "Which of the following is not a correct statement regarding the energies of orbitals?",
+    "options": [
+      "The lower the value of (n + l) for an orbital, lower is its energy.",
+      "Electrons in the same subshell have equal energy.",
+      "Energy of s-orbital is lower than the p-orbital and that of p-orbital is lower than the d-orbital.",
+      "If two orbitals have same value for (n + l), orbital with higher value of n will have lower energy."
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 49,
+    "question": "Few electrons have following quantum numbers: (i) n = 4, l = 1; (ii) n = 4, l = 0; (iii) n = 3, l = 2; (iv) n = 3, l = 1. Arrange them in the order of increasing energy from lowest to highest.",
+    "options": [
+      "(iv) < (ii) < (iii) < (i)",
+      "(ii) < (iv) < (i) < (iii)",
+      "(i) < (iii) < (ii) < (iv)",
+      "(iii) < (i) < (iv) < (ii)"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 50,
+    "question": "An electron can enter into the orbital when",
+    "options": [
+      "value of n is minimum",
+      "value of l is minimum",
+      "value of (n + l) is minimum",
+      "value of (n + m) is minimum"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 51,
+    "question": "The orbital diagram in which the Aufbau principle is violated is",
+    "media": [
+      {
+        "src": "assets/q51.png",
+        "alt": "Question 51 figure"
+      }
+    ],
+    "options": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 52,
+    "question": "Which of the sequences given below shows the correct increasing order of energy?",
+    "options": [
+      "3s, 3p, 4s, 4p, 3d, 5s, 5p, 4d",
+      "3s, 3p, 3d, 4s, 4p, 4d, 5s, 5p",
+      "3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p",
+      "3s, 3p, 4s, 5p, 3d, 4d, 5p"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 53,
+    "question": "Which of the following configurations does not follow Hund’s rule of maximum multiplicity?",
+    "options": [
+      "1s², 2s², 2p⁶, 3s², 3p²",
+      "1s², 2s², 2p⁶, 3s², 3p⁶, 4s², 3d⁶",
+      "1s², 2s², 2p⁶, 3s², 3p⁶, 4s¹, 3d⁵",
+      "1s², 2s², 2p⁶, 3s², 3p⁶, 3d⁴, 4s²"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 54,
+    "question": "Read the following statements and mark the incorrect statement.",
+    "options": [
+      "No two electrons in an atom can have all the four quantum numbers same.",
+      "All the orbitals in a subshell are first occupied singly with parallel spins.",
+      "The outer electronic configuration of chromium atom is 3d⁴ 4s².",
+      "Lyman series of hydrogen spectrum lies in ultraviolet region."
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 55,
+    "question": "What is the electronic configuration of O²⁻ ion?",
+    "options": [
+      "1s² 2s² 2p⁶",
+      "1s² 2s² 2p⁴",
+      "1s² 2s² 2p⁵",
+      "1s² 2s² 2p³"
+    ],
+    "correctOption": "A"
+  }
+]
