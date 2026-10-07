@@ -1,0 +1,622 @@
+[
+  {
+    "id": 1,
+    "q": "The magnetic field dB⃗ due to a small current element Idl⃗ at a distance r⃗ and element-carrying current I is",
+    "options": [
+      "dB⃗ = (μ₀/4π) × (I dl⃗ × r⃗)/r",
+      "dB⃗ = (μ₀/4π) × (I dl⃗ × r⃗)/r²",
+      "dB⃗ = (μ₀/4π) × (I dl⃗ × r⃗)/r³",
+      "dB⃗ = (μ₀/4π) × (I dl⃗ × r⃗)/r⁴"
+    ],
+    "a": "dB⃗ = (μ₀/4π) × (I dl⃗ × r⃗)/r³"
+  },
+  {
+    "id": 2,
+    "q": "Given below are two statements : Statement I. Biot-Savart’s law gives us the expression for the magnetic field strength of an infinitesimal current element (Idl) of a current-carrying conductor only. Statement II. Biot-Savart’s law is analogous to Coulomb’s inverse square law of charge q, with the former being related to the field produced by a scalar source, Idl while the latter being produced by a vector source, q.",
+    "options": [
+      "Both Statement I and Statement II are correct.",
+      "Both Statement I and Statement II are incorrect.",
+      "Statement I is correct but Statement II is incorrect.",
+      "Statement I is incorrect but Statement II is correct."
+    ],
+    "a": "Statement I is correct but Statement II is incorrect."
+  },
+  {
+    "id": 3,
+    "q": "The shape of the magnetic field lines due to an infinite long, straight current-carrying conductor is",
+    "options": [
+      "a straight line",
+      "circular",
+      "elliptical",
+      "a plane"
+    ],
+    "a": "circular"
+  },
+  {
+    "id": 4,
+    "q": "A straight wire of diameter 0.5 mm carrying a current of 1 A is replaced by another wire of 1 mm diameter carrying the same current. The strength of the magnetic field far away is",
+    "options": [
+      "twice the earlier value",
+      "one half of the earlier value",
+      "one quarter of the earlier value",
+      "same as the earlier value."
+    ],
+    "a": "same as the earlier value."
+  },
+  {
+    "id": 5,
+    "q": "Two long parallel wires P and Q are both perpendicular to the plane of the paper with distance of 5 m between them. If P and Q carry currents of 2.5 A and 5 A respectively in the same direction, then the magnetic field at a point half-way between the wires is",
+    "options": [
+      "√3 μ₀/(2π) T",
+      "μ₀/π T",
+      "3μ₀/(2π) T",
+      "μ₀/(2π) T"
+    ],
+    "a": "μ₀/(2π) T"
+  },
+  {
+    "id": 6,
+    "q": "Two equal electric currents are flowing perpendicular to each other as shown in the figure. AB and CD are perpendicular to each other and symmetrically placed w.r.t. the currents. Where do we expect the resultant magnetic field to be zero?",
+    "options": [
+      "on AB",
+      "on CD",
+      "on both AB and CD",
+      "on both OD and BO."
+    ],
+    "a": "on AB",
+    "image": "assets/q6.png"
+  },
+  {
+    "id": 7,
+    "q": "Two identical long conducting wires AOB and COD are placed at right angle to each other, with one above other such that O is their common point for the two. The wires carry I₁ and I₂ currents, respectively. Point P is lying at distance d from O along a direction perpendicular to the plane containing the wires. The magnetic field at the point P will be",
+    "options": [
+      "μ₀/(2πd) (I₁/I₂)",
+      "μ₀/(2πd) (I₁ + I₂)",
+      "μ₀/(2πd) (I₁² − I₂²)",
+      "μ₀/(2πd) (I₁² + I₂²)¹ᐟ²"
+    ],
+    "a": "μ₀/(2πd) (I₁² + I₂²)¹ᐟ²"
+  },
+  {
+    "id": 8,
+    "q": "A closely packed coil having 1000 turns has an average radius of 62.8 cm. If current carried by the wire of the coil is 1 A, the value of magnetic field produced at the centre of the coil will be (permeability of free space = 4π × 10⁻⁷ H/m) nearly",
+    "options": [
+      "10⁻¹ T",
+      "10⁻² T",
+      "10² T",
+      "10⁻³ T"
+    ],
+    "a": "10⁻³ T"
+  },
+  {
+    "id": 9,
+    "q": "A circular coil A has a radius a and the current flowing in it is I. Another circular coil B has a radius 2a and if 2I is the current flowing through it, then the magnetic fields at the centre of the circular coils are in the ratio of",
+    "options": [
+      "1 : 1",
+      "2 : 1",
+      "3 : 1",
+      "4 : 1"
+    ],
+    "a": "1 : 1"
+  },
+  {
+    "id": 10,
+    "q": "Two circular coils 1 and 2 are made from the same wire but the radius of the first coil is twice that of the second coil. What ratio of the potential difference (in volt) should be applied across them, so that the magnetic field at their centres is the same?",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "a": "4"
+  },
+  {
+    "id": 11,
+    "q": "A wire of certain length is bent to form a circular coil of smaller radius so as to have two turns, then magnetic field produced at the centre by the same value of current is",
+    "options": [
+      "one quarter of its value in first case",
+      "one half of its value in first case",
+      "two times its value in first case",
+      "four times its value in first case."
+    ],
+    "a": "four times its value in first case."
+  },
+  {
+    "id": 12,
+    "q": "A long wire carrying a steady current is bent into a circular loop of one turn. The magnetic field at the centre of the loop is B. It is then bent into a circular coil of n turns. The magnetic field at the centre of this coil of n turns will be",
+    "options": [
+      "2nB",
+      "2n²B",
+      "nB",
+      "n²B"
+    ],
+    "a": "n²B"
+  },
+  {
+    "id": 13,
+    "q": "The magnetic field on the axis of a circular loop of radius 100 cm carrying current I = √2 A, at point 1 m away from the centre of the loop is given by",
+    "options": [
+      "3.14 × 10⁻⁷ T",
+      "6.28 × 10⁻⁷ T",
+      "3.14 × 10⁻⁴ T",
+      "6.28 × 10⁻⁴ T"
+    ],
+    "a": "3.14 × 10⁻⁷ T"
+  },
+  {
+    "id": 14,
+    "q": "An electron moving in a circular orbit of radius r makes n rotations per second. The magnetic field produced at the centre has magnitude",
+    "options": [
+      "zero",
+      "μ₀n²e/r",
+      "μ₀ne/(2r)",
+      "μ₀ne/(2πr)"
+    ],
+    "a": "μ₀ne/(2r)"
+  },
+  {
+    "id": 15,
+    "q": "A thin ring of radius R metre has charge q coulomb uniformly spread on it. The ring rotates about its axis with a constant frequency of f revolutions/s. The value of magnetic induction in Wb/m² at the centre of the ring is",
+    "options": [
+      "μ₀qf/(2πR)",
+      "μ₀q/(2πfR)",
+      "μ₀q/(2fR)",
+      "μ₀qf/(2R)"
+    ],
+    "a": "μ₀qf/(2R)"
+  },
+  {
+    "id": 16,
+    "q": "Two similar coils of radius R are lying concentrically with their planes at right angles to each other. The currents flowing in them are I and 2I, respectively. The resultant magnetic field induction at the centre will be",
+    "options": [
+      "√5 μ₀I/(2R)",
+      "3μ₀I/(2R)",
+      "μ₀I/(2R)",
+      "μ₀I/R"
+    ],
+    "a": "√5 μ₀I/(2R)"
+  },
+  {
+    "id": 17,
+    "q": "A wire carrying current I has the shape as shown in the given figure. Linear parts of the wire are very long and parallel to X-axis while semicircular portion of radius R is lying in Y-Z plane. Magnetic field at point O is",
+    "options": [
+      "B⃗ = −(μ₀I/(4πR))(πî − 2k̂)",
+      "B⃗ = −(μ₀I/(4πR))(πî + 2k̂)",
+      "B⃗ = (μ₀I/(4πR))(πî − 2k̂)",
+      "B⃗ = (μ₀I/(4πR))(πî + 2k̂)"
+    ],
+    "a": "B⃗ = (μ₀I/(4πR))(πî − 2k̂)",
+    "image": "assets/q17.png"
+  },
+  {
+    "id": 18,
+    "q": "A long solenoid of radius 1 mm has 100 turns per mm. If 1 A current flows in the solenoid, the magnetic field strength at the centre of the solenoid is",
+    "options": [
+      "6.28 × 10⁻² T",
+      "12.56 × 10⁻² T",
+      "12.56 × 10⁻⁴ T",
+      "6.28 × 10⁻⁴ T"
+    ],
+    "a": "12.56 × 10⁻⁴ T"
+  },
+  {
+    "id": 19,
+    "q": "A thick current carrying cable of radius R carries current I uniformly distributed across its cross-section. The variation of magnetic field B(r) due to the cable with the distance r from the axis of the cable is represented by",
+    "options": [
+      "graph (a)",
+      "graph (b)",
+      "graph (c)",
+      "graph (d)"
+    ],
+    "a": "graph (b)",
+    "image": "assets/q19.png"
+  },
+  {
+    "id": 20,
+    "q": "From Ampere’s circuital law for a long straight wire of circular cross-section carrying a steady current, the variation of magnetic field in the inside and outside region of the wire is",
+    "options": [
+      "uniform and remains constant for both the regions.",
+      "a linearly increasing function of distance upto the boundary of the wire and then linearly decreasing for the outside region.",
+      "a linearly increasing function of distance r upto the boundary of the wire and then decreasing one with 1/r dependence for the outside region.",
+      "a linearly decreasing function of distance upto the boundary of the wire and then a linearly increasing one for the outside region."
+    ],
+    "a": "a linearly increasing function of distance r upto the boundary of the wire and then decreasing one with 1/r dependence for the outside region."
+  },
+  {
+    "id": 21,
+    "q": "A long straight wire of radius a carries a steady current I. The current is uniformly distributed over its cross-section. The ratio of the magnetic fields B and B′ at radial distances a/2 and 2a respectively, from the axis of the wire is",
+    "options": [
+      "1/4",
+      "1/2",
+      "1",
+      "4"
+    ],
+    "a": "1"
+  },
+  {
+    "id": 22,
+    "q": "If a long hollow copper pipe carries a current, the magnetic field produced will be",
+    "options": [
+      "inside the pipe only",
+      "outside the pipe only",
+      "neither inside nor outside the pipe",
+      "both inside and outside the pipe."
+    ],
+    "a": "both inside and outside the pipe."
+  },
+  {
+    "id": 23,
+    "q": "The value of Planck’s constant is",
+    "options": [
+      "6.63 × 10⁻³⁴ J/sec",
+      "6.63 × 10⁻³⁴ kg-m²/sec",
+      "6.63 × 10⁻³⁴ kg-m²",
+      "6.63 × 10⁻³⁴ J-sec."
+    ],
+    "a": "6.63 × 10⁻³⁴ J-sec."
+  },
+  {
+    "id": 24,
+    "q": "The energy of a photon of wavelength λ is",
+    "options": [
+      "hcλ",
+      "hc/λ",
+      "λ/(hc)",
+      "λh/c"
+    ],
+    "a": "hc/λ"
+  },
+  {
+    "id": 25,
+    "q": "If a photon has velocity c and frequency ν, then which of the following represents its wavelength?",
+    "options": [
+      "hν/c²",
+      "hν",
+      "hc/E",
+      "hν/c"
+    ],
+    "a": "hν/c"
+  },
+  {
+    "id": 26,
+    "q": "Momentum of photon of wavelength λ is",
+    "options": [
+      "hν/c",
+      "zero",
+      "hλ/c²",
+      "hλ/c"
+    ],
+    "a": "hν/c"
+  },
+  {
+    "id": 27,
+    "q": "The momentum of a photon of energy 1 MeV in kg m/s will be",
+    "options": [
+      "5 × 10⁻²²",
+      "0.33 × 10⁶",
+      "7 × 10⁻²⁴",
+      "10⁻²²"
+    ],
+    "a": "5 × 10⁻²²"
+  },
+  {
+    "id": 28,
+    "q": "The momentum of a photon of an electromagnetic radiation is 3.3 × 10⁻²⁹ kg m s⁻¹. What is the frequency of the associated waves? [h = 6.6 × 10⁻³⁴ Js ; c = 3 × 10⁸ ms⁻¹]",
+    "options": [
+      "1.5 × 10¹³ Hz",
+      "7.5 × 10¹² Hz",
+      "6 × 10³ Hz",
+      "3 × 10⁶ Hz"
+    ],
+    "a": "1.5 × 10¹³ Hz"
+  },
+  {
+    "id": 29,
+    "q": "The wavelength of a 1 keV photon is 1.24 × 10⁻⁹ m. What is the frequency of 1 MeV photon?",
+    "options": [
+      "1.24 × 10¹⁵",
+      "2.4 × 10²⁰",
+      "1.24 × 10¹⁸",
+      "2.4 × 10²³"
+    ],
+    "a": "2.4 × 10²⁰"
+  },
+  {
+    "id": 30,
+    "q": "A radio transmitter operates at a frequency 880 kHz and a power of 10 kW. The number of photons emitted per second is",
+    "options": [
+      "1.72 × 10³¹",
+      "1.327 × 10²⁵",
+      "1.327 × 10³⁷",
+      "1.327 × 10⁴⁵"
+    ],
+    "a": "1.72 × 10³¹"
+  },
+  {
+    "id": 31,
+    "q": "The mass of a photon at rest is",
+    "options": [
+      "zero",
+      "1.67 × 10⁻³⁵ kg",
+      "1 amu",
+      "9 × 10⁻³¹ kg"
+    ],
+    "a": "zero"
+  },
+  {
+    "id": 32,
+    "q": "The number of photons per second on an average emitted by the source of monochromatic light of wavelength 600 nm, when it delivers the power of 3.3 × 10⁻³ watt will be (h = 6.6 × 10⁻³⁴ Js)",
+    "options": [
+      "10¹⁸",
+      "10¹⁷",
+      "10¹⁶",
+      "10¹⁵"
+    ],
+    "a": "10¹⁶"
+  },
+  {
+    "id": 33,
+    "q": "A source S₁ is producing 10¹⁵ photons per second of wavelength 5000 Å. Another source S₂ is producing 1.02 × 10¹⁵ photons per second of wavelength 5100 Å. Then, (power of S₂)/(power of S₁) is equal to",
+    "options": [
+      "1.00",
+      "1.02",
+      "1.04",
+      "0.98"
+    ],
+    "a": "1.00"
+  },
+  {
+    "id": 34,
+    "q": "As the intensity of incident light increases",
+    "options": [
+      "kinetic energy of emitted photoelectrons increases",
+      "photoelectric current decreases",
+      "photoelectric current increases",
+      "kinetic energy of emitted photoelectrons decreases."
+    ],
+    "a": "photoelectric current increases"
+  },
+  {
+    "id": 35,
+    "q": "The number of photo-electrons emitted for light of a frequency ν (higher than the threshold frequency ν₀) is proportional to",
+    "options": [
+      "Threshold frequency (ν₀)",
+      "Intensity of light",
+      "Frequency of light (ν)",
+      "ν − ν₀"
+    ],
+    "a": "Intensity of light"
+  },
+  {
+    "id": 36,
+    "q": "Which of the following statement is correct?",
+    "options": [
+      "the photocurrent increases with intensity of light",
+      "the stopping potential increases with increase of incident light",
+      "the current in photocell increases with increasing frequency",
+      "the photocurrent is proportional to the applied voltage."
+    ],
+    "a": "the photocurrent increases with intensity of light"
+  },
+  {
+    "id": 37,
+    "q": "A photo-cell is illuminated by a source of light, which is placed at a distance d from the cell. If the distance becomes d/2, then number of electrons emitted per second will be",
+    "options": [
+      "same",
+      "four times",
+      "two times",
+      "one-fourth."
+    ],
+    "a": "four times"
+  },
+  {
+    "id": 38,
+    "q": "A photoelectric cell is illuminated by a point source of light 1 m away. When the source is shifted to 2 m, then",
+    "options": [
+      "each emitted electron carries one quarter of the initial energy",
+      "number of electrons emitted is half the initial number",
+      "each emitted electron carries half the initial energy",
+      "number of electrons emitted is a quarter of the initial number."
+    ],
+    "a": "number of electrons emitted is a quarter of the initial number."
+  },
+  {
+    "id": 39,
+    "q": "By photoelectric effect, Einstein proved",
+    "options": [
+      "E = hν",
+      "K.E. = ½mv²",
+      "E = mc²",
+      "E = −Rhc/n²"
+    ],
+    "a": "E = hν"
+  },
+  {
+    "id": 40,
+    "q": "According to Einstein’s photoelectric equation, the graph between the kinetic energy of photoelectrons ejected and the frequency of incident radiation is",
+    "options": [
+      "graph (a)",
+      "graph (b)",
+      "graph (c)",
+      "graph (d)"
+    ],
+    "a": "graph (d)",
+    "image": "assets/q30.png"
+  },
+  {
+    "id": 41,
+    "q": "A photocell employs photoelectric effect to convert",
+    "options": [
+      "change in the frequency of light into a change in the electric current",
+      "change in the frequency of light into a change in electric voltage",
+      "change in the intensity of illumination into a change in photoelectric current",
+      "change in the intensity of illumination into a change in the work function of the photo cathode."
+    ],
+    "a": "change in the intensity of illumination into a change in photoelectric current"
+  },
+  {
+    "id": 42,
+    "q": "When ultraviolet rays are incident on metal plate then photoelectric effect does not occur, it occurs by incidence of",
+    "options": [
+      "infrared rays",
+      "X-rays",
+      "radio wave",
+      "micro wave."
+    ],
+    "a": "X-rays"
+  },
+  {
+    "id": 43,
+    "q": "A 5 watt source emits monochromatic light of wavelength 5000 Å. When placed 0.5 m away, it liberates photoelectrons from a photosensitive metallic surface. When the source is moved to a distance of 1.0 m, the number of photoelectrons liberated will be reduced by a factor of",
+    "options": [
+      "8",
+      "16",
+      "2",
+      "4"
+    ],
+    "a": "4"
+  },
+  {
+    "id": 44,
+    "q": "A 200 W sodium street lamp emits yellow light of wavelength 0.6 μm. Assuming it to be 25% efficient in converting electrical energy to light, the number of photons of yellow light it emits per second is",
+    "options": [
+      "1.5 × 10²⁰",
+      "6 × 10¹⁸",
+      "62 × 10²⁰",
+      "3 × 10¹⁹"
+    ],
+    "a": "1.5 × 10²⁰"
+  },
+  {
+    "id": 45,
+    "q": "The displacement of a body is given to be proportional to the cube of time elapsed. The magnitude of the acceleration of the body is",
+    "options": [
+      "increasing with time",
+      "decreasing with time",
+      "constant but not zero",
+      "zero"
+    ],
+    "a": "increasing with time"
+  },
+  {
+    "id": 46,
+    "q": "A particle moves along the x-axis. The position x of the particle with respect to time t from the origin is given by x = b₀ + b₁t + b₂t². The acceleration of particle is",
+    "options": [
+      "b₀",
+      "b₁",
+      "b₂",
+      "2b₂"
+    ],
+    "a": "2b₂"
+  },
+  {
+    "id": 47,
+    "q": "A car moves along a straight line, whose equation of motion is given by s = 12t + 3t² − 2t³ where s is in metres and t in seconds. The velocity of the car at the start will be",
+    "options": [
+      "7 ms⁻¹",
+      "9 ms⁻¹",
+      "12 ms⁻¹",
+      "16 ms⁻¹"
+    ],
+    "a": "12 ms⁻¹"
+  },
+  {
+    "id": 48,
+    "q": "A particle moves along a straight line OX. At a time t (in seconds) the distance x (in metres) of the particle from O is given by x = 40 + 12t − t³. How long would the particle travel before coming to rest?",
+    "options": [
+      "16 m",
+      "24 m",
+      "40 m",
+      "56 m"
+    ],
+    "a": "16 m"
+  },
+  {
+    "id": 49,
+    "q": "The position x of a particle varies with time t as x = at² − bt³. The acceleration will be zero at time t equal to",
+    "options": [
+      "a/(3b)",
+      "zero",
+      "2a/(3b)",
+      "a/b"
+    ],
+    "a": "a/(3b)"
+  },
+  {
+    "id": 50,
+    "q": "Motion of a particle is given by equation s = (3t³ + 7t² + 14t + 8) m. The value of acceleration of the particle at t = 1 sec is",
+    "options": [
+      "10 m/s²",
+      "32 m/s²",
+      "23 m/s²",
+      "16 m/s²"
+    ],
+    "a": "32 m/s²"
+  },
+  {
+    "id": 51,
+    "q": "A particle moves along a straight line such that its displacement at any time t is given by s = (t³ − 6t² + 3t + 4) metres. The velocity when the acceleration is zero, is",
+    "options": [
+      "3 m/s",
+      "42 m/s",
+      "−9 m/s",
+      "−15 m/s"
+    ],
+    "a": "−9 m/s"
+  },
+  {
+    "id": 52,
+    "q": "The motion of a particle along a straight line is described by equation: x = 8 + 12t − t³, where x is in metre and t in second. The retardation of the particle when its velocity becomes zero, is",
+    "options": [
+      "24 ms⁻²",
+      "zero",
+      "6 ms⁻²",
+      "12 ms⁻²"
+    ],
+    "a": "12 ms⁻²"
+  },
+  {
+    "id": 53,
+    "q": "A particle moves a distance x in time t according to equation: x = (t + 5)⁻¹. The acceleration of particle is proportional to",
+    "options": [
+      "(velocity)³ᐟ²",
+      "(distance)²",
+      "(distance)⁻²",
+      "(velocity)²ᐟ³"
+    ],
+    "a": "(velocity)³ᐟ²"
+  },
+  {
+    "id": 54,
+    "q": "The relation between time t and distance x is t = ax² + bx, where a and b are constants. The acceleration is",
+    "options": [
+      "−2abv²",
+      "−2bv³",
+      "−2av³",
+      "−2av²"
+    ],
+    "a": "−2av³"
+  },
+  {
+    "id": 55,
+    "q": "The position of a particle as a function of time t, is given by x(t) = at + bt² − ct³ where a, b and c are constants. When the particle attains zero acceleration, then its velocity will be",
+    "options": [
+      "a + b²/(4c)",
+      "a + b²/(3c)",
+      "a + b²/(2c)",
+      "a + b²/c"
+    ],
+    "a": "a + b²/(3c)"
+  },
+  {
+    "id": 56,
+    "q": "The velocity of a particle is v = v₀ + gt + ft². If its position is x = 0 at t = 0, then its displacement after time (t = 1) is",
+    "options": [
+      "v₀ + g/2 + f",
+      "v₀ + 2g + 3f",
+      "v₀ + g/2 + f/3",
+      "v₀ + g + f"
+    ],
+    "a": "v₀ + g/2 + f/3"
+  }
+]
