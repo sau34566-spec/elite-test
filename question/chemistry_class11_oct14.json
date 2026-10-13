@@ -1,0 +1,429 @@
+[
+  {
+    "id": 1,
+    "question": "A 0.1 M solution of Na₂S₂O₃ reacts with iodine according to the equation: I₂ + 2S₂O₃²⁻ → 2I⁻ + S₄O₆²⁻. Identify the correct statements. A. 25 mL of 0.1 M Na₂S₂O₃ reacts with 0.00125 mol of I₂. B. 1 mole of iodine requires 2 moles of thiosulphate ions. C. 0.01 mol of Na₂S₂O₃ produces 0.01 mol of I₂. D. S₂O₃²⁻ acts as a reducing agent in the above reaction.",
+    "options": [
+      "A and B only",
+      "A, B and D only",
+      "B and C only",
+      "B, C and D only"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 2,
+    "question": "A compound contains 40% carbon, 6.7% hydrogen and 53.3% oxygen by mass. If its molar mass is 60 g/mol, the number of atoms of hydrogen in its molecular formula is (C = 12, H = 1, O = 16).",
+    "options": [
+      "3",
+      "6",
+      "4",
+      "5"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 3,
+    "question": "A sample of a mixture of NaHCO₃ and Na₂CO₃ weighing 5.30 g was heated. After heating, the residue weighed 4.20 g. Reaction: 2NaHCO₃ → Na₂CO₃ + CO₂ + H₂O. Molar masses: NaHCO₃ = 84, Na₂CO₃ = 106 g/mol. Identify the correct statements: (A) Mass loss is approx. 1 g due to CO₂ and H₂O evolved from NaHCO₃. (B) Mass of NaHCO₃ in the original mixture is 2.2 g. (C) Moles of NaHCO₃ = 0.0262 mol. (D) % Na₂CO₃ in original sample = 60.38%.",
+    "options": [
+      "Only A",
+      "A and D only",
+      "A, C and D only",
+      "A, B and D only"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 4,
+    "question": "An ore contains 80% pure ZnS by mass. The number of grams of the ore required to obtain 65 g of zinc metal is (nearest integer). Molar masses: Zn = 65, ZnS = 97 g/mol.",
+    "options": [
+      "140 g",
+      "220 g",
+      "212 g",
+      "121 g"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 5,
+    "question": "In the reaction 2Al + 3Cl₂ → 2AlCl₃, what mass of AlCl₃ will be formed when 6.75 g of Al reacts with excess chlorine gas? (Al = 27 g/mol, AlCl₃ = 133.5 g/mol)",
+    "options": [
+      "33.38 g",
+      "13.50 g",
+      "16.69 g",
+      "26.70 g"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 6,
+    "question": "If 200 mL of 1.5 M Na₂CO₃ solution reacts with HCl as per Na₂CO₃ + 2HCl → 2NaCl + CO₂ + H₂O, what volume of 2 M HCl is required for complete neutralisation?",
+    "options": [
+      "150 mL",
+      "200 mL",
+      "300 mL",
+      "100 mL"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 7,
+    "question": "A sample of hydrocarbon CₓHᵧ was completely combusted in excess oxygen. The products were 8.8 g CO₂ and 5.4 g H₂O. What is the empirical formula of the hydrocarbon? (C = 12, H = 1, O = 16)",
+    "options": [
+      "CH₃",
+      "C₂H₄",
+      "CH₂",
+      "C₃H₈"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 8,
+    "question": "If wheat grains were continuously released at the rate of 10¹⁰ grains per second, how many years would it approximately take to dispense a quantity equal to Avogadro's number of grains?",
+    "options": [
+      "1.9 × 10⁶ years",
+      "1.9 × 10⁸ years",
+      "6.02 × 10¹⁰ years",
+      "3.15 × 10⁷ years"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 9,
+    "question": "An atom of uranium possesses a mass of 238 atomic mass units. The approximate mass of this atom expressed in grams would be closest to",
+    "options": [
+      "3.95 × 10⁻²⁵ g",
+      "3.95 × 10⁻²² g",
+      "1.66 × 10⁻²⁴ g",
+      "1.66 × 10⁻²³ g"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 10,
+    "question": "If a sample of carbon contains approximately twice the Avogadro number of atoms, what would be the nearest mass (in grams) of such a sample? (C = 12)",
+    "options": [
+      "6 g",
+      "24 g",
+      "12 g",
+      "36 g"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 11,
+    "question": "When 7 mg of the ¹⁴C isotope is considered (mass number = 14), and the neutron mass is taken equal to that of a hydrogen atom, which option correctly represents the total mass and number of neutrons present?",
+    "options": [
+      "4.0 × 10⁻³ g and 2.41 × 10²¹",
+      "3.95 × 10⁻³ g and 3.011 × 10²³",
+      "2.40 × 10²¹ g and 3.997 × 10⁻³ g",
+      "7.0 × 10⁻³ g and 5.0 × 10⁻⁴ mol"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 12,
+    "question": "Two electrons occupying the same orbital are distinguished by",
+    "options": [
+      "magnetic quantum number",
+      "azimuthal quantum number",
+      "spin quantum number",
+      "principal quantum number"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 13,
+    "question": "Radius of the first excited state of helium ion is given as: a₀ → radius of first stationary state of hydrogen atom.",
+    "options": [
+      "r = a₀/2",
+      "r = 2a₀",
+      "r = a₀/4",
+      "r = 4a₀"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 14,
+    "question": "For electrons in 2s and 2p orbitals, the orbital angular momentum values, respectively, are",
+    "options": [
+      "√2 h/2π and 0",
+      "0 and √6 h/2π",
+      "h/2π and √2 h/2π",
+      "0 and √2 h/2π"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 15,
+    "question": "Consider the ground state of chromium atom (Z = 24). How many electrons have azimuthal quantum number l = 1 and l = 2, respectively?",
+    "options": [
+      "12 and 5",
+      "16 and 5",
+      "16 and 4",
+      "12 and 4"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 16,
+    "question": "The number of electrons present in all the completely filled subshells having n = 4 and s = +½ is",
+    "options": [
+      "16",
+      "8",
+      "32",
+      "14"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 17,
+    "question": "The four quantum numbers for the electron in the outermost orbital of potassium (atomic number 19) are",
+    "options": [
+      "n = 4, l = 2, m = −1, s = +½",
+      "n = 2, l = 0, m = 0, s = +½",
+      "n = 4, l = 0, m = 0, s = +½",
+      "n = 3, l = 0, m = 1, s = +½"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 18,
+    "question": "The number of radial nodes for a 3p orbital is",
+    "options": [
+      "1",
+      "2",
+      "4",
+      "3"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 19,
+    "question": "Statement I: According to Bohr's model of the hydrogen atom, the angular momentum of an electron in a given stationary state is quantised. Statement II: The concept of an electron in Bohr's orbit violates the Heisenberg uncertainty principle. Choose the most appropriate answer.",
+    "options": [
+      "Statement I is incorrect but Statement II is correct",
+      "Statement I is correct but Statement II is incorrect",
+      "Both Statement I and Statement II are incorrect",
+      "Both Statement I and Statement II are correct"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 20,
+    "question": "The energy of an electron in the first Bohr orbit of hydrogen atom is −2.18 × 10⁻¹⁸ J. Its energy in the third Bohr orbit is",
+    "options": [
+      "three times this value",
+      "1/9th of this value",
+      "one third of this value",
+      "1/27th of this value"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 21,
+    "question": "If the radius of the first orbit of the hydrogen atom is a₀, then the de Broglie wavelength of the electron in the third orbit is",
+    "options": [
+      "3πa₀",
+      "πa₀/3",
+      "6πa₀",
+      "πa₀/6"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 22,
+    "question": "Arrange the following orbitals in decreasing order of energy: A. n = 3, l = 0, m = 0; B. n = 4, l = 0, m = 0; C. n = 3, l = 1, m = 0; D. n = 3, l = 2, m = 1.",
+    "options": [
+      "D > B > A > C",
+      "A > C > B > D",
+      "B > D > C > A",
+      "D > B > C > A"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 23,
+    "question": "The minimum energy that must be possessed by photons to produce the photoelectric effect with platinum metal is (threshold frequency = 1.3 × 10¹⁵ s⁻¹; h = 6.6 × 10⁻³⁴ J s).",
+    "options": [
+      "3.21 × 10⁻¹⁴ J",
+      "6.24 × 10⁻¹⁶ J",
+      "8.58 × 10⁻¹⁹ J",
+      "9.76 × 10⁻²⁰ J"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 24,
+    "question": "If the radius of the third Bohr orbit of hydrogen atom is r₃ and the radius of the fourth Bohr orbit is r₄, then",
+    "options": [
+      "r₄ = (9/16)r₃",
+      "r₄ = (16/9)r₃",
+      "r₄ = (3/4)r₃",
+      "r₄ = (4/3)r₃"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 25,
+    "question": "Statement I: Rutherford's gold foil experiment cannot explain the line spectrum of hydrogen atom. Statement II: Bohr's model of the hydrogen atom contradicts Heisenberg's uncertainty principle. Choose the most appropriate answer.",
+    "options": [
+      "Both statements I and II are false",
+      "Statement I is false but Statement II is true",
+      "Both statements I and II are true",
+      "Statement I is true but Statement II is false"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 26,
+    "question": "The geometrical isomerism is shown by (refer to the four structures in the figure).",
+    "media": [
+      {
+        "src": "assets/q26_geometrical_isomerism.png",
+        "alt": "Four methyl-substituted cyclohexane structures with exocyclic =CH2 or =CHCl groups"
+      }
+    ],
+    "options": [
+      "Structure (1)",
+      "Structure (2)",
+      "Structure (3)",
+      "Structure (4)"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 27,
+    "question": "Geometrical isomerism is NOT shown by",
+    "options": [
+      "Pent-2-ene",
+      "1-Chloropropene",
+      "3-Chloropropene",
+      "1,2-Dibromoethene"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 28,
+    "question": "Which of the following represents cis-trans isomerism?",
+    "options": [
+      "ClCH = CHCl",
+      "Cl₂C = CH₂",
+      "ClCH₂CH₂Cl",
+      "Cl₂C = CCl₂"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 29,
+    "question": "Methyl acetate and propionic acid are",
+    "options": [
+      "functional isomers",
+      "structural isomers",
+      "stereoisomers",
+      "geometrical isomers"
+    ],
+    "correctOption": "A"
+  },
+  {
+    "id": 30,
+    "question": "Which has E-configuration? (Refer to the structures in the figure.)",
+    "media": [
+      {
+        "src": "assets/q30_e_configuration.png",
+        "alt": "Three alkene structures for determining E configuration"
+      }
+    ],
+    "options": [
+      "Structure (1)",
+      "Structure (2)",
+      "Structure (3)",
+      "None of the above"
+    ],
+    "correctOption": "C"
+  },
+  {
+    "id": 31,
+    "question": "Which of the following has Z-configuration? (Refer to the structures in the figure.)",
+    "media": [
+      {
+        "src": "assets/q31_z_configuration.png",
+        "alt": "Three alkene structures for determining Z configuration"
+      }
+    ],
+    "options": [
+      "Structure (1)",
+      "Structure (2)",
+      "Structure (3)",
+      "All the above"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 32,
+    "question": "The correct IUPAC name of BrCH₂–CH=CH–CH₂–CH=CH–CH₃ (as drawn) is",
+    "media": [
+      {
+        "src": "assets/q32_iupac_heptadiene.png",
+        "alt": "Zigzag structure of bromo-substituted heptadiene"
+      }
+    ],
+    "options": [
+      "7-bromo-2Z,5E-heptadiene",
+      "1-bromo-2Z,5E-heptadiene",
+      "1-bromo-2Z,5Z-heptadiene",
+      "1-bromo-2E,5Z-heptadiene"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 33,
+    "question": "Tautomerism is exhibited by (refer to structures (a)–(d) in the figure).",
+    "media": [
+      {
+        "src": "assets/q33_tautomerism.png",
+        "alt": "Four structures for a tautomerism question"
+      }
+    ],
+    "options": [
+      "(a) only",
+      "(a), (c) and (d)",
+      "(b), (c) and (d)",
+      "All four"
+    ],
+    "correctOption": "B"
+  },
+  {
+    "id": 34,
+    "question": "Choose the correct name for the compound CH₃–C≡C–CH=C(Br)–CH₃.",
+    "media": [
+      {
+        "src": "assets/q34_iupac_bromohexeneyne.png",
+        "alt": "Structure of bromo-substituted hexen-yne"
+      }
+    ],
+    "options": [
+      "(2E)-2-bromohex-4-yn-2-ene",
+      "(4E)-5-bromohex-2-en-4-yne",
+      "(4E)-5-bromohex-4-en-2-yne",
+      "(2E)-2-bromohex-2-en-4-yne"
+    ],
+    "correctOption": "D"
+  },
+  {
+    "id": 35,
+    "question": "Which one of the following will show geometrical isomerism? (Refer to the four structures in the figure.)",
+    "media": [
+      {
+        "src": "assets/q35_geometrical_isomerism.png",
+        "alt": "Four bromo-substituted cyclohexane structures with exocyclic =CH2 or =CHBr groups"
+      }
+    ],
+    "options": [
+      "Structure (a)",
+      "Structure (b)",
+      "Structure (c)",
+      "Structure (d)"
+    ],
+    "correctOption": "C"
+  }
+]
