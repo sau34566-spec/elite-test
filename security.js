@@ -197,10 +197,15 @@
 
     document.addEventListener("pointercancel", (event) => {
       activePointers.delete(event.pointerId);
-      const hadQuestionPointer = Boolean(pointerStart);
-      clearLongPress();
-      pointerStart = null;
-      if (hadQuestionPointer) report("QUESTION_POINTER_CANCELLED", "suspicious");
+
+      // Browsers commonly dispatch pointercancel when a touch gesture becomes
+      // a native vertical scroll. That is normal navigation within a long
+      // question, not evidence of cheating. End only this pointer's long-press
+      // tracking; multi-touch and completed long-press checks remain separate.
+      if (pointerStart && event.pointerId === pointerStart.id) {
+        clearLongPress();
+        pointerStart = null;
+      }
     }, { passive: true });
   }
 
