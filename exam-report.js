@@ -160,9 +160,25 @@
     }
 
 
+    function normalizeBarePhysicsMath(value) {
+      // Some imported Physics options contain TeX commands without MathJax
+      // delimiters. Also repair the legacy \frac(a)(b) notation used by
+      // a few question banks before passing the expression to MathJax.
+      return String(value ?? "")
+        .replace(/\\frac\\s*\\(([^()]*)\\)\\s*\\(([^()]*)\\)/g, "\\\\frac{$1}{$2}")
+        .split("\\n")
+        .map(line => {
+          const trimmed = line.trim();
+          if (!trimmed || /\\\\\\(|\\\\\\[|\\$\\$?/.test(trimmed)) return line;
+          if (!/\\\\(?:frac|dfrac|tfrac|sqrt|sum|prod|int|lim|times|cdot|div|pm|mp|pi|theta|alpha|beta|gamma|Delta|Omega|Rightarrow|rightarrow|leftarrow|leq|geq|neq|approx|sin|cos|tan|log|ln|mathrm|mathbf|text|begin)\\b/.test(trimmed)) return line;
+          return line.replace(trimmed, "\\\\(" + trimmed + "\\\\)");
+        })
+        .join("\\n");
+    }
+
     function physicsToHTML(value) {
 
-      const normalizedText = String(value ?? "")
+      const normalizedText = normalizeBarePhysicsMath(value)
         .replace(/\r\n?/g, "\n");
 
       const hasColumnOne =
