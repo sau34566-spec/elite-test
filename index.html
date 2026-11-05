@@ -3170,10 +3170,25 @@
       const taggedSource =
         sourceQuestions.map(
           (question, sourceIndex) => {
+            /*
+              Keep each option's correctness attached to the option while
+              shuffling. The old code shuffled option text/media but kept
+              __correctIndex unchanged, so a different option could be
+              marked as correct after randomization.
+            */
+            const correctIndexes =
+              question.__correctIndices ||
+              (
+                Number.isInteger(question.__correctIndex)
+                  ? [question.__correctIndex]
+                  : []
+              );
+
             const optionPairs =
               question.options.map((option, index) => ({
                 option,
-                media: question.__optionMedia[index] || []
+                media: question.__optionMedia[index] || [],
+                isCorrect: correctIndexes.includes(index)
               }));
 
             const orderedPairs =
@@ -3182,10 +3197,21 @@
                 ? shuffleArray(optionPairs)
                 : optionPairs;
 
+            const remappedCorrectIndexes =
+              orderedPairs.reduce(
+                (indexes, item, index) => {
+                  if (item.isCorrect) indexes.push(index);
+                  return indexes;
+                },
+                []
+              );
+
             return {
               ...question,
               options: orderedPairs.map(item => item.option),
               __optionMedia: orderedPairs.map(item => item.media),
+              __correctIndices: remappedCorrectIndexes,
+              __correctIndex: remappedCorrectIndexes[0] ?? -1,
               __subject: subject,
               __sourceIndex: sourceIndex,
               __questionId: `${subject}:${sourceIndex}`
