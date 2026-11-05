@@ -162,18 +162,17 @@
 
     function normalizeBarePhysicsMath(value) {
       // Some imported Physics options contain TeX commands without MathJax
-      // delimiters. Also repair the legacy \frac(a)(b) notation used by
-      // a few question banks before passing the expression to MathJax.
+      // delimiters. Repair legacy \frac(a)(b) notation before rendering.
       return String(value ?? "")
-        .replace(/\\frac\\s*\\(([^()]*)\\)\\s*\\(([^()]*)\\)/g, "\\\\frac{$1}{$2}")
-        .split("\\n")
+        .replace(/\\frac\s*\(([^()]*)\)\s*\(([^()]*)\)/g, "\\frac{$1}{$2}")
+        .split("\n")
         .map(line => {
           const trimmed = line.trim();
-          if (!trimmed || /\\\\\\(|\\\\\\[|\\$\\$?/.test(trimmed)) return line;
-          if (!/\\\\(?:frac|dfrac|tfrac|sqrt|sum|prod|int|lim|times|cdot|div|pm|mp|pi|theta|alpha|beta|gamma|Delta|Omega|Rightarrow|rightarrow|leftarrow|leq|geq|neq|approx|sin|cos|tan|log|ln|mathrm|mathbf|text|begin)\\b/.test(trimmed)) return line;
-          return line.replace(trimmed, "\\\\(" + trimmed + "\\\\)");
+          if (!trimmed || /\\\(|\\\[|\$\$?/.test(trimmed)) return line;
+          if (!/\\(?:frac|dfrac|tfrac|sqrt|sum|prod|int|lim|times|cdot|div|pm|mp|pi|theta|alpha|beta|gamma|Delta|Omega|Rightarrow|rightarrow|leftarrow|leq|geq|neq|approx|sin|cos|tan|log|ln|mathrm|mathbf|text|begin)\b/.test(trimmed)) return line;
+          return line.replace(trimmed, "\\(" + trimmed + "\\)");
         })
-        .join("\\n");
+        .join("\n");
     }
 
     function physicsToHTML(value) {
