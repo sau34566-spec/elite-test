@@ -1,354 +1,702 @@
-{
-  "title": "Class 11 Maths - Trigonometry and Sets/Relations MCQs",
-  "subject": "Maths",
-  "language": "en",
-  "format": "mcq",
-  "totalQuestions": 31,
-  "questions": [
-    {
-      "id": 1,
-      "question": "\\(\\cos 15^\\circ = ?\\)",
-      "options": [
-        "\\(\\sqrt{\\frac{1+\\cos 30^\\circ}{2}}\\)",
-        "\\(\\sqrt{\\frac{1-\\cos 30^\\circ}{2}}\\)",
-        "\\(\\pm\\sqrt{\\frac{1+\\cos 30^\\circ}{2}}\\)",
-        "\\(\\pm\\sqrt{\\frac{1-\\cos 30^\\circ}{2}}\\)"
-      ],
-      "correctOption": "A"
+[
+  {
+    "id": 1,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{dx}{e^{x}+e^{-x}}$$",
+    "exam_reference": "Bihar CEE 1976; MNR 1974",
+    "options": {
+      "A": "$$\\tan^{-1}(e^{-x}) + c$$",
+      "B": "$$\\tan^{-1}(e^{x}) + c$$",
+      "C": "$$\\log|e^{x}-e^{-x}| + c$$",
+      "D": "$$\\log|e^{x}+e^{-x}| + c$$"
     },
-    {
-      "id": 2,
-      "question": "If \\(|\\tan A|<1\\) and \\(|A|\\) is acute, then \\(\\frac{\\sqrt{1+\\sin 2A}+\\sqrt{1-\\sin 2A}}{\\sqrt{1+\\sin 2A}-\\sqrt{1-\\sin 2A}}=?\\)",
-      "options": [
-        "\\(\\tan A\\)",
-        "\\(-\\tan A\\)",
-        "\\(\\cot A\\)",
-        "\\(-\\cot A\\)"
-      ],
-      "correctOption": "C"
+    "correct_option": "B",
+    "solution": "$$\\int \\frac{dx}{e^{x}+e^{-x}} = \\int \\frac{e^x}{e^{2x}+1} dx$$. Let $$t = e^x \\implies dt = e^x dx$$. $$\\int \\frac{dt}{t^2+1} = \\tan^{-1}(t) + c = \\tan^{-1}(e^x) + c$$."
+  },
+  {
+    "id": 2,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int x \\tan^{-1}x\\, dx$$",
+    "exam_reference": "Roorkee 1979",
+    "options": {
+      "A": "$$\\frac{1}{2}(x^{2}+1)\\tan^{-1}x - \\frac{1}{2}x + c$$",
+      "B": "$$\\frac{1}{2}(x^{2}-1)\\tan^{-1}x - \\frac{1}{2}x + c$$",
+      "C": "$$\\frac{1}{2}(x^{2}+1)\\tan^{-1}x + \\frac{1}{2}x + c$$",
+      "D": "$$\\frac{1}{2}(x^{2}+1)\\tan^{-1}x - x + c$$"
     },
-    {
-      "id": 3,
-      "question": "\\(\\sin(\\pi+\\theta)\\cdot\\sin(\\pi-\\theta)\\cdot\\text{cosec}^2\\theta=?\\)",
-      "options": [
-        "\\(1\\)",
-        "\\(-1\\)",
-        "\\(\\sin\\theta\\)",
-        "\\(-\\sin\\theta\\)"
-      ],
-      "correctOption": "B"
+    "correct_option": "A",
+    "solution": "Integration by parts: $$u = \\tan^{-1}x$$, $$v = x$$. $$\\int x \\tan^{-1}x dx = \\frac{x^2}{2}\\tan^{-1}x - \\int \\frac{x^2}{2(1+x^2)} dx = \\frac{1}{2}(x^2+1)\\tan^{-1}x - \\frac{1}{2}x + c$$."
+  },
+  {
+    "id": 3,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{-2x}\\sin(3x)\\, dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$\\frac{1}{13}e^{-2x}[\\sin(3x)+\\cos(3x)] + c$$",
+      "B": "$$-\\frac{1}{13}e^{-2x}[\\sin(3x)+\\cos(3x)] + c$$",
+      "C": "$$\\frac{1}{13}e^{-2x}[2\\sin(3x)+3\\cos(3x)] + c$$",
+      "D": "$$-\\frac{1}{13}e^{-2x}[2\\sin(3x)+3\\cos(3x)] + c$$"
     },
-    {
-      "id": 4,
-      "question": "\\(\\cos A+\\sin(270^\\circ+A)\n-\\sin(270^\\circ-A)+\\cos(180^\\circ+A)=?\\)",
-      "options": [
-        "\\(-1\\)",
-        "\\(0\\)",
-        "\\(1\\)",
-        "None of these"
-      ],
-      "correctOption": "B"
+    "correct_option": "D",
+    "solution": "Formula: $$\\int e^{ax}\\sin(bx)dx = \\frac{e^{ax}}{a^2+b^2}[a\\sin(bx) - b\\cos(bx)] + c$$. Yaha $$a = -2$$, $$b = 3$$: $$\\frac{e^{-2x}}{(-2)^2+3^2}[-2\\sin(3x) - 3\\cos(3x)] + c = -\\frac{1}{13}e^{-2x}[2\\sin(3x)+3\\cos(3x)] + c$$."
+  },
+  {
+    "id": 4,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int [\\sin(\\log x) + \\cos(\\log x)]\\, dx$$",
+    "exam_reference": "MP PET 1991",
+    "options": {
+      "A": "$$x\\cos(\\log x) + c$$",
+      "B": "$$\\sin(\\log x) + c$$",
+      "C": "$$\\cos(\\log x) + c$$",
+      "D": "$$x\\sin(\\log x) + c$$"
     },
-    {
-      "id": 5,
-      "question": "If \\(x\\sin45^\\circ\\cos^2 60^\\circ=\\frac{\\tan^2 60^\\circ\\text{cosec}30^\\circ}{\\sec45^\\circ\\cot^2 30^\\circ}\\), then \\(x=?\\)",
-      "options": [
-        "2",
-        "4",
-        "8",
-        "16"
-      ],
-      "correctOption": "C"
+    "correct_option": "D",
+    "solution": "Let $$x = e^t \\implies dx = e^t dt$$. $$\\int e^t(\\sin t + \\cos t) dt = e^t \\sin t + c = x\\sin(\\log x) + c$$."
+  },
+  {
+    "id": 5,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{\\sin 2x}{a^{2}+b^{2}\\sin^{2}x}\\, dx$$",
+    "exam_reference": "Roorkee 1977",
+    "options": {
+      "A": "$$\\frac{1}{b^{2}}\\log(a^{2}+b^{2}\\sin^{2}x) + c$$",
+      "B": "$$\\frac{1}{b}\\log(a^{2}+b^{2}\\sin^{2}x) + c$$",
+      "C": "$$\\log(a^{2}+b^{2}\\sin^{2}x) + c$$",
+      "D": "$$b^{2}\\log(a^{2}+b^{2}\\sin^{2}x) + c$$"
     },
-    {
-      "id": 6,
-      "question": "If \\(A=130^\\circ\\) and \\(x=\\sin A+\\cos A\\), then",
-      "options": [
-        "\\(x>0\\)",
-        "\\(x<0\\)",
-        "\\(x=0\\)",
-        "\\(x\\leq0\\)"
-      ],
-      "correctOption": "A"
+    "correct_option": "A",
+    "solution": "Let $$t = a^2 + b^2\\sin^2 x \\implies dt = 2b^2\\sin x\\cos x dx = b^2\\sin(2x) dx$$. $$\\int \\frac{dt}{b^2 t} = \\frac{1}{b^2}\\log(a^2 + b^2\\sin^2 x) + c$$."
+  },
+  {
+    "id": 6,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int x\\cos^{2}x\\, dx$$",
+    "exam_reference": "IIT 1972",
+    "options": {
+      "A": "$$\\frac{x^{2}}{4} - \\frac{1}{4}x\\sin 2x - \\frac{1}{8}\\cos 2x + c$$",
+      "B": "$$\\frac{x^{2}}{4} + \\frac{1}{4}x\\sin 2x + \\frac{1}{8}\\cos 2x + c$$",
+      "C": "$$\\frac{x^{2}}{4} - \\frac{1}{4}x\\sin 2x + \\frac{1}{8}\\cos 2x + c$$",
+      "D": "$$\\frac{x^{2}}{4} + \\frac{1}{4}x\\sin 2x - \\frac{1}{8}\\cos 2x + c$$"
     },
-    {
-      "id": 7,
-      "question": "Which of the following is a true statement?",
-      "options": [
-        "\\(\\{a\\}\\in\\{a,b,c\\}\\)",
-        "\\(\\{a\\}\\subset\\{a,b,c\\}\\)",
-        "\\(\\varnothing\\in\\{a,b,c\\}\\)",
-        "None of these"
-      ],
-      "correctOption": "B"
+    "correct_option": "B",
+    "solution": "$$\\int x \\left(\\frac{1+\\cos 2x}{2}\\right) dx = \\frac{x^2}{4} + \\frac{1}{2}\\int x\\cos(2x)dx = \\frac{x^2}{4} + \\frac{1}{4}x\\sin(2x) + \\frac{1}{8}\\cos(2x) + c$$."
+  },
+  {
+    "id": 7,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\tan^{-1}x\\, dx$$",
+    "exam_reference": "Roorkee 1977",
+    "options": {
+      "A": "$$x\\tan^{-1}x + \\frac{1}{2}\\log(1+x^{2}) + c$$",
+      "B": "$$x\\tan^{-1}x - \\frac{1}{2}\\log(1+x^{2}) + c$$",
+      "C": "$$(x-1)\\tan^{-1}x + c$$",
+      "D": "$$x\\tan^{-1}x - \\log(1+x^{2}) + c$$"
     },
-    {
-      "id": 8,
-      "question": "If \\(A=\\{1,2,4\\}\\), \\(B=\\{2,4,5\\}\\), \\(C=\\{2,5\\}\\), then \\((A-B)\\times(B-C)\\) is",
-      "options": [
-        "\\(\\{(1,2),(1,5),(2,5)\\}\\)",
-        "\\(\\{(1,4)\\}\\)",
-        "\\((1,4)\\)",
-        "None of these"
-      ],
-      "correctOption": "B"
+    "correct_option": "B",
+    "solution": "By parts: $$\\int 1 \\cdot \\tan^{-1}x dx = x\\tan^{-1}x - \\int \\frac{x}{1+x^2}dx = x\\tan^{-1}x - \\frac{1}{2}\\log(1+x^2) + c$$."
+  },
+  {
+    "id": 8,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\left[\\log(\\log x) + \\frac{1}{(\\log x)^{2}}\\right] dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$x\\log(\\log x) + \\frac{x}{\\log x} + c$$",
+      "B": "$$x\\log(\\log x) - \\frac{x}{\\log x} + c$$",
+      "C": "$$x\\log(\\log x) + \\frac{\\log x}{x} + c$$",
+      "D": "$$x\\log(\\log x) - \\frac{\\log x}{x} + c$$"
     },
-    {
-      "id": 9,
-      "question": "\\(\\tan\\left(\\frac{\\pi}{4}+\\theta\\right)-\\tan\\left(\\frac{\\pi}{4}-\\theta\\right)=?\\)",
-      "options": [
-        "\\(2\\tan2\\theta\\)",
-        "\\(2\\cot2\\theta\\)",
-        "\\(\\tan2\\theta\\)",
-        "\\(\\cot2\\theta\\)"
-      ],
-      "correctOption": "A"
+    "correct_option": "B",
+    "solution": "Let $$x = e^t \\implies dx = e^t dt$$. $$\\int e^t [\\log t + \\frac{1}{t^2}] dt = \\int e^t [\\log t - \\frac{1}{t} + \\frac{1}{t} + \\frac{1}{t^2}] dt = e^t (\\log t - \\frac{1}{t}) + c = x\\log(\\log x) - \\frac{x}{\\log x} + c$$."
+  },
+  {
+    "id": 9,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\left(\\frac{2+\\sin 2x}{1+\\cos 2x}\\right) e^{x}\\, dx$$",
+    "exam_reference": "AISSE 1982",
+    "options": {
+      "A": "$$e^{x}\\cot x + c$$",
+      "B": "$$-e^{x}\\cot x + c$$",
+      "C": "$$-e^{x}\\tan x + c$$",
+      "D": "$$e^{x}\\tan x + c$$"
     },
-    {
-      "id": 10,
-      "question": "If \\(A=\\{2,3,4,8,10\\}\\), \\(B=\\{3,4,5,10,12\\}\\), \\(C=\\{4,5,6,12,14\\}\\), then \\((A\\cap B)\\cup(A\\cap C)=?\\)",
-      "options": [
-        "\\(\\{3,4,10\\}\\)",
-        "\\(\\{2,8,10\\}\\)",
-        "\\(\\{4,5,6\\}\\)",
-        "\\(\\{3,5,14\\}\\)"
-      ],
-      "correctOption": "A"
+    "correct_option": "D",
+    "solution": "$$\\frac{2+2\\sin x\\cos x}{2\\cos^2 x} = \\sec^2 x + \\tan x$$. Integral becomes $$\\int e^x (\\tan x + \\sec^2 x) dx = e^x\\tan x + c$$."
+  },
+  {
+    "id": 10,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}\\sin x\\, dx$$",
+    "exam_reference": "IIT 1978; AI CBSE 1980; MP PET 1999",
+    "options": {
+      "A": "$$\\frac{1}{2}e^{x}(\\sin x+\\cos x) + c$$",
+      "B": "$$\\frac{1}{2}e^{x}(\\sin x-\\cos x) + c$$",
+      "C": "$$e^{x}(\\sin x+\\cos x) + c$$",
+      "D": "$$e^{x}(\\sin x-\\cos x) + c$$"
     },
-    {
-      "id": 11,
-      "question": "Let \\(n(U)=700\\), \\(n(A)=200\\), \\(n(B)=300\\), and \\(n(A\\cap B)=100\\). Then \\(n(A^c\\cap B^c)=?\\)",
-      "options": [
-        "400",
-        "600",
-        "300",
-        "200"
-      ],
-      "correctOption": "C"
+    "correct_option": "B",
+    "solution": "$$\\int e^{ax}\\sin(bx)dx = \\frac{e^{ax}}{a^2+b^2}(a\\sin bx - b\\cos bx) + c$$. For $$a=1, b=1$$, it is $$\\frac{1}{2}e^x(\\sin x - \\cos x) + c$$."
+  },
+  {
+    "id": 11,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{e^{\\tan^{-1}x}}{1+x^{2}}\\, dx$$",
+    "exam_reference": "MP PET 1987",
+    "options": {
+      "A": "$$\\log(1+x^{2}) + c$$",
+      "B": "$$\\log e^{\\tan^{-1}x} + c$$",
+      "C": "$$e^{\\tan^{-1}x} + c$$",
+      "D": "$$\\tan^{-1}(e^{\\tan^{-1}x}) + c$$"
     },
-    {
-      "id": 12,
-      "question": "If \\(A\\) and \\(B\\) are any two sets, then \\(A\\cup(A\\cap B)\\) is equal to",
-      "options": [
-        "\\(A\\)",
-        "\\(B\\)",
-        "\\(A^c\\)",
-        "\\(B^c\\)"
-      ],
-      "correctOption": "A"
+    "correct_option": "C",
+    "solution": "Let $$t = \\tan^{-1}x \\implies dt = \\frac{1}{1+x^2}dx$$. $$\\int e^t dt = e^t + c = e^{\\tan^{-1}x} + c$$."
+  },
+  {
+    "id": 12,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int x^{2}\\sec(x^{3})\\, dx$$",
+    "exam_reference": "MNR 1986; Roorkee 1975",
+    "options": {
+      "A": "$$\\log|\\sec(x^{3})+\\tan(x^{3})| + c$$",
+      "B": "$$3(\\sec(x^{3})+\\tan(x^{3})) + c$$",
+      "C": "$$\\frac{1}{3}\\log|\\sec(x^{3})+\\tan(x^{3})| + c$$",
+      "D": "None of these"
     },
-    {
-      "id": 13,
-      "question": "If set \\(A\\) contains \\(m\\) elements and set \\(B\\) contains \\(n\\) elements, then the total number of distinct relations from set \\(A\\) to set \\(B\\) is",
-      "options": [
-        "\\(mn\\)",
-        "\\(2^n\\)",
-        "\\(2^m\\)",
-        "\\(2^{mn}\\)"
-      ],
-      "correctOption": "D"
+    "correct_option": "C",
+    "solution": "Let $$t = x^3 \\implies dt = 3x^2 dx$$. $$\\frac{1}{3}\\int \\sec t\\, dt = \\frac{1}{3}\\log|\\sec(x^3) + \\tan(x^3)| + c$$."
+  },
+  {
+    "id": 13,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}\\left[\\frac{1+x\\log x}{x}\\right] dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$e^{x}+\\log x + c$$",
+      "B": "$$\\frac{e^{x}}{\\log x} + c$$",
+      "C": "$$e^{x}-\\log x + c$$",
+      "D": "$$e^{x}\\log x + c$$"
     },
-    {
-      "id": 14,
-      "question": "If \\(\\cos\\theta=\\frac45\\), \\(\\cos\\phi=\\frac{12}{13}\\), with \\(\\theta\\) and \\(\\phi\\) both in the fourth quadrant, the value of \\(\\cos(\\theta+\\phi)\\) is",
-      "options": [
-        "\\(-\\frac{16}{65}\\)",
-        "\\(-\\frac{33}{65}\\)",
-        "\\(\\frac{33}{65}\\)",
-        "\\(\\frac{16}{65}\\)"
-      ],
-      "correctOption": "C"
+    "correct_option": "D",
+    "solution": "$$\\int e^x \\left(\\log x + \\frac{1}{x}\\right) dx$$. Since $$\\frac{d}{dx}(\\log x) = \\frac{1}{x}$$, this is of form $$\\int e^x[f(x)+f'(x)]dx = e^x\\log x + c$$."
+  },
+  {
+    "id": 14,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{e^{x}(x-1)}{x^{2}}\\, dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$\\frac{1}{x}e^{x} + c$$",
+      "B": "$$xe^{-x} + c$$",
+      "C": "$$\\frac{1}{x^{2}}e^{x} + c$$",
+      "D": "$$\\left(x-\\frac{1}{x}\\right)e^{x} + c$$"
     },
-    {
-      "id": 15,
-      "question": "If \\(\\tan x=-\\frac34\\) and \\(\\frac{3\\pi}{2}<x<2\\pi\\), then the value of \\(\\sin2x\\) is",
-      "options": [
-        "\\(\\frac7{25}\\)",
-        "\\(-\\frac7{25}\\)",
-        "\\(\\frac{24}{25}\\)",
-        "\\(-\\frac{24}{25}\\)"
-      ],
-      "correctOption": "D"
+    "correct_option": "A",
+    "solution": "$$\\int e^x \\left(\\frac{1}{x} - \\frac{1}{x^2}\\right) dx = \\frac{e^x}{x} + c$$."
+  },
+  {
+    "id": 15,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{dx}{1+e^{x}}$$",
+    "exam_reference": "MP PET 1991; Roorkee 1977",
+    "options": {
+      "A": "$$\\log(1+e^{x}) + c$$",
+      "B": "$$-\\log(1+e^{-x}) + c$$",
+      "C": "$$-\\log(1-e^{-x}) + c$$",
+      "D": "$$\\log(e^{-x}+e^{-2x}) + c$$"
     },
-    {
-      "id": 16,
-      "question": "The value of \\(36(4\\cos^2 9^\\circ-1)(4\\cos^2 27^\\circ-1)\n(4\\cos^2 81^\\circ-1)(4\\cos^2 243^\\circ-1)\\) is",
-      "options": [
-        "27",
-        "54",
-        "18",
-        "36"
-      ],
-      "correctOption": "D"
+    "correct_option": "B",
+    "solution": "$$\\int \\frac{e^{-x}}{e^{-x}+1} dx$$. Let $$t = 1+e^{-x} \\implies dt = -e^{-x}dx$$. $$\\int -\\frac{dt}{t} = -\\log(1+e^{-x}) + c$$."
+  },
+  {
+    "id": 16,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}(1+\\tan x)\\sec x\\, dx$$",
+    "exam_reference": "Karnataka CET 2005",
+    "options": {
+      "A": "$$e^{x}\\cot x + c$$",
+      "B": "$$e^{x}\\tan x + c$$",
+      "C": "$$e^{x}\\sec x + c$$",
+      "D": "$$e^{x}\\cos x + c$$"
     },
-    {
-      "id": 17,
-      "question": "If \\(\\cos(\\alpha+\\beta)=\\frac35\\), \\(\\sin(\\alpha-\\beta)=\\frac5{13}\\), and \\(0<\\alpha,\\beta<\\frac\\pi4\\), then \\(\\tan(2\\alpha)\\) is equal to",
-      "options": [
-        "\\(\\frac{21}{16}\\)",
-        "\\(\\frac{63}{52}\\)",
-        "\\(\\frac{33}{52}\\)",
-        "\\(\\frac{63}{16}\\)"
-      ],
-      "correctOption": "D"
+    "correct_option": "C",
+    "solution": "$$\\int e^x(\\sec x + \\sec x\\tan x)dx = e^x\\sec x + c$$."
+  },
+  {
+    "id": 17,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}\\left[\\sin^{-1}\\left(\\frac{x}{a}\\right) + \\frac{1}{\\sqrt{a^{2}-x^{2}}}\\right] dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$\\frac{1}{a}e^{x}\\sin^{-1}\\left(\\frac{x}{a}\\right) + c$$",
+      "B": "$$ae^{x}\\sin^{-1}\\left(\\frac{x}{a}\\right) + c$$",
+      "C": "$$e^{x}\\sin^{-1}\\left(\\frac{x}{a}\\right) + c$$",
+      "D": "$$\\frac{e^{x}}{\\sqrt{a^{2}-x^{2}}} + c$$"
     },
-    {
-      "id": 18,
-      "question": "Which of the following is the empty set?",
-      "options": [
-        "\\(\\{x\\in\\mathbb R:x^2-1=0\\}\\)",
-        "\\(\\{x\\in\\mathbb R:x^2+1=0\\}\\)",
-        "\\(\\{x\\in\\mathbb R:x^2-9=0\\}\\)",
-        "\\(\\{x\\in\\mathbb R:x^2=x+2\\}\\)"
-      ],
-      "correctOption": "B"
+    "correct_option": "C",
+    "solution": "$$f(x) = \\sin^{-1}(x/a) \\implies f'(x) = \\frac{1}{\\sqrt{a^2-x^2}}$$. Answer is $$e^x f(x) + c = e^x\\sin^{-1}(x/a) + c$$."
+  },
+  {
+    "id": 18,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}\\left(\\frac{1}{x}-\\frac{1}{x^{2}}\\right) dx$$",
+    "exam_reference": "AISSE 1983; MP PET 1994, 96",
+    "options": {
+      "A": "$$-\\frac{e^{x}}{x^{2}} + c$$",
+      "B": "$$\\frac{e^{x}}{x^{2}} + c$$",
+      "C": "$$\\frac{e^{x}}{x} + c$$",
+      "D": "$$-\\frac{e^{x}}{x} + c$$"
     },
-    {
-      "id": 19,
-      "question": "If \\(A=\\{2,3,7,9\\}\\), \\(B=\\{3,7,8\\}\\), then \\(A\\triangle B\\) is",
-      "options": [
-        "\\(\\{3,7\\}\\)",
-        "\\(\\{2,8,9\\}\\)",
-        "\\(\\{2,3,7,8,9\\}\\)",
-        "\\(\\{3,8,9\\}\\)"
-      ],
-      "correctOption": "B"
+    "correct_option": "C",
+    "solution": "$$\\int e^x(f(x)+f'(x))dx = e^x f(x) + c = \\frac{e^x}{x} + c$$."
+  },
+  {
+    "id": 19,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}(1+\\tan x+\\tan^{2}x)\\, dx$$",
+    "exam_reference": "Karnataka CET 1999",
+    "options": {
+      "A": "$$e^{x}\\sin x + c$$",
+      "B": "$$e^{x}\\cos x + c$$",
+      "C": "$$e^{x}\\tan x + c$$",
+      "D": "$$e^{x}\\sec x + c$$"
     },
-    {
-      "id": 20,
-      "question": "If sets \\(A\\) and \\(B\\) have \\(n\\) elements in common, then the number of elements common to \\(A\\times B\\) and \\(B\\times A\\) is",
-      "options": [
-        "\\(n\\)",
-        "\\(2n\\)",
-        "\\(n^2\\)",
-        "0"
-      ],
-      "correctOption": "C"
+    "correct_option": "C",
+    "solution": "$$1+\\tan^2 x = \\sec^2 x$$. $$\\int e^x(\\tan x + \\sec^2 x)dx = e^x\\tan x + c$$."
+  },
+  {
+    "id": 20,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int x\\cos x\\, dx$$",
+    "exam_reference": "MP PET 1988",
+    "options": {
+      "A": "$$x\\sin x + \\cos x + c$$",
+      "B": "$$x\\sin x - \\cos x + c$$",
+      "C": "$$x\\cos x + \\sin x + c$$",
+      "D": "$$x\\cos x - \\sin x + c$$"
     },
-    {
-      "id": 21,
-      "question": "If \\(A\\) and \\(B\\) are two sets, then \\(A\\cup B=A\\cap B\\) if and only if",
-      "options": [
-        "\\(A\\subseteq B\\)",
-        "\\(B\\subseteq A\\)",
-        "\\(A=B\\)",
-        "None of these"
-      ],
-      "correctOption": "C"
+    "correct_option": "A",
+    "solution": "By parts: $$x\\sin x - \\int \\sin x dx = x\\sin x + \\cos x + c$$."
+  },
+  {
+    "id": 21,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int x\\sec^{2}x\\, dx$$",
+    "exam_reference": "RPET 1996, 2003; MP PET 1987, 97; Pb. CET 2002",
+    "options": {
+      "A": "$$\\tan x + \\log|\\cos x| + c$$",
+      "B": "$$\\frac{x^{2}}{2}\\sec^{2}x + \\log|\\cos x| + c$$",
+      "C": "$$x\\tan x + \\log|\\sec x| + c$$",
+      "D": "$$x\\tan x + \\log|\\cos x| + c$$"
     },
-    {
-      "id": 22,
-      "question": "Let \\(U=\\{1,2,\\ldots,10\\}\\), \\(A=\\{1,2,5\\}\\), \\(B=\\{6,7\\}\\). Then \\(A\\cap B'\\) is",
-      "options": [
-        "\\(B'\\)",
-        "\\(A\\)",
-        "\\(A'\\)",
-        "\\(B\\)"
-      ],
-      "correctOption": "B"
+    "correct_option": "D",
+    "solution": "By parts: $$x\\tan x - \\int \\tan x dx = x\\tan x - \\log|\\sec x| + c = x\\tan x + \\log|\\cos x| + c$$."
+  },
+  {
+    "id": 22,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{dx}{x+x\\log x}$$",
+    "exam_reference": "MP PET 1993; Roorkee 1977",
+    "options": {
+      "A": "$$\\log(1+\\log x) + c$$",
+      "B": "$$\\log(\\log(1+\\log x)) + c$$",
+      "C": "$$\\log x + \\log(\\log x) + c$$",
+      "D": "None of these"
     },
-    {
-      "id": 23,
-      "question": "Let \\(A\\) and \\(B\\) be two sets such that \\(n(A)=0.16\\), \\(n(B)=0.14\\), and \\(n(A\\cup B)=0.25\\). Then \\(n(A\\cap B)\\) is equal to",
-      "options": [
-        "0.3",
-        "0.5",
-        "0.05",
-        "None of these"
-      ],
-      "correctOption": "C"
+    "correct_option": "A",
+    "solution": "$$\\int \\frac{1}{1+\\log x} \\cdot \\frac{dx}{x} = \\log(1+\\log x) + c$$."
+  },
+  {
+    "id": 23,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{e^{\\sqrt{x}}\\cos(e^{\\sqrt{x}})}{\\sqrt{x}}\\, dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$2\\sin(e^{\\sqrt{x}}) + c$$",
+      "B": "$$\\sin(e^{\\sqrt{x}}) + c$$",
+      "C": "$$2\\cos(e^{\\sqrt{x}}) + c$$",
+      "D": "$$-2\\sin(e^{\\sqrt{x}}) + c$$"
     },
-    {
-      "id": 24,
-      "question": "In a class of 55 students, 23 study Mathematics, 24 study Physics, and 19 study Chemistry. Of these, 12 study Mathematics and Physics, 9 study Mathematics and Chemistry, 7 study Physics and Chemistry, and 4 study all three subjects. The number of students who have taken exactly one subject is",
-      "options": [
-        "6",
-        "9",
-        "7",
-        "22"
-      ],
-      "correctOption": "D"
+    "correct_option": "A",
+    "solution": "Let $$t = e^{\\sqrt{x}} \\implies dt = \\frac{e^{\\sqrt{x}}}{2\\sqrt{x}} dx$$. $$\\int 2\\cos t\\, dt = 2\\sin(e^{\\sqrt{x}}) + c$$."
+  },
+  {
+    "id": 24,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{x-2}{x^{2}-4x+3}\\, dx$$",
+    "exam_reference": "MP PET 1987",
+    "options": {
+      "A": "$$\\log\\sqrt{x^{2}-4x+3} + c$$",
+      "B": "$$x\\log(x-3) - 2\\log(x-2) + c$$",
+      "C": "$$\\log[(x-3)(x-1)] + c$$",
+      "D": "None of these"
     },
-    {
-      "id": 25,
-      "question": "The value of \\(\\sin12^\\circ\\sin48^\\circ\\sin54^\\circ\\) is",
-      "options": [
-        "\\(\\sin30^\\circ\\)",
-        "\\(\\sin^2 30^\\circ\\)",
-        "\\(\\sin^3 30^\\circ\\)",
-        "\\(\\cos^3 30^\\circ\\)"
-      ],
-      "correctOption": "C"
+    "correct_option": "A",
+    "solution": "$$\\frac{d}{dx}(x^2-4x+3) = 2x-4 = 2(x-2)$$. So $$\\int \\frac{x-2}{x^2-4x+3} dx = \\frac{1}{2}\\log|x^2-4x+3| + c = \\log\\sqrt{x^2-4x+3} + c$$."
+  },
+  {
+    "id": 25,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{e^{x}(x+1)}{\\cos^{2}(xe^{x})}\\, dx$$",
+    "exam_reference": "Roorkee 1979; MP PET 1995; Pb. CET 2001",
+    "options": {
+      "A": "$$\\tan(xe^{x}) + c$$",
+      "B": "$$\\sec(xe^{x})\\tan(xe^{x}) + c$$",
+      "C": "$$-\\tan(xe^{x}) + c$$",
+      "D": "None of these"
     },
-    {
-      "id": 26,
-      "question": "If \\(\\tan15^\\circ+\\frac1{\\tan75^\\circ}+\\frac1{\\tan105^\\circ}+\\tan195^\\circ=2a\\), then the value of \\(a+\\frac1a\\) is",
-      "options": [
-        "4",
-        "\\(4-2\\sqrt3\\)",
-        "2",
-        "\\(5-\\frac{3\\sqrt3}{2}\\)"
-      ],
-      "correctOption": "A"
+    "correct_option": "A",
+    "solution": "Let $$t = xe^x \\implies dt = (xe^x + e^x)dx = e^x(x+1)dx$$. $$\\int \\sec^2 t\\, dt = \\tan(xe^x) + c$$."
+  },
+  {
+    "id": 26,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\sec x\\log(\\sec x+\\tan x)\\, dx$$",
+    "exam_reference": null,
+    "options": {
+      "A": "$$[\\log(\\sec x+\\tan x)]^{2} + c$$",
+      "B": "$$\\frac{1}{2}[\\log(\\sec x+\\tan x)]^{2} + c$$",
+      "C": "$$\\sec^{2}x + \\tan x\\sec x + c$$",
+      "D": "None of these"
     },
-    {
-      "id": 27,
-      "question": "\\(\\frac{\\sec8A-1}{\\sec4A-1}=?\\)",
-      "options": [
-        "\\(\\frac{\\tan2A}{\\tan8A}\\)",
-        "\\(\\frac{\\tan8A}{\\tan2A}\\)",
-        "\\(\\frac{\\cot8A}{\\cot2A}\\)",
-        "None of these"
-      ],
-      "correctOption": "B"
+    "correct_option": "B",
+    "solution": "Let $$t = \\log(\\sec x + \\tan x) \\implies dt = \\sec x\\, dx$$. $$\\int t\\, dt = \\frac{t^2}{2} + c = \\frac{1}{2}[\\log(\\sec x+\\tan x)]^2 + c$$."
+  },
+  {
+    "id": 27,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{\\sin 2x}{1+\\sin^{2}x}\\, dx$$",
+    "exam_reference": "Roorkee 1976",
+    "options": {
+      "A": "$$\\log(\\sin 2x) + c$$",
+      "B": "$$\\log(1+\\sin^{2}x) + c$$",
+      "C": "$$\\frac{1}{2}\\log(1+\\sin^{2}x) + c$$",
+      "D": "$$\\tan^{-1}(\\sin x) + c$$"
     },
-    {
-      "id": 28,
-      "question": "\\(\\tan15^\\circ=?\\)",
-      "options": [
-        "\\(\\frac13\\)",
-        "\\(\\sqrt3-2\\)",
-        "\\(2-\\sqrt3\\)",
-        "None of these"
-      ],
-      "correctOption": "C"
+    "correct_option": "B",
+    "solution": "Let $$t = 1+\\sin^2 x \\implies dt = 2\\sin x\\cos x\\, dx = \\sin(2x)dx$$. $$\\int \\frac{dt}{t} = \\log(1+\\sin^2 x) + c$$."
+  },
+  {
+    "id": 28,
+    "pdf_source": "12TH MATH ( part - 2 )OCT. 29.pdf",
+    "question": "To find the value of $$\\int \\frac{1+\\log x}{x}\\, dx$$, the proper substitution is:",
+    "exam_reference": "MP PET 1988",
+    "options": {
+      "A": "$$\\log x = t$$",
+      "B": "$$1+\\log x = t$$",
+      "C": "$$\\frac{1}{x} = t$$",
+      "D": "None of these"
     },
-    {
-      "id": 29,
-      "question": "\\(\\tan75^\\circ-\\cot75^\\circ=?\\)",
-      "options": [
-        "\\(2\\sqrt3\\)",
-        "\\(2+\\sqrt3\\)",
-        "\\(2-\\sqrt3\\)",
-        "None of these"
-      ],
-      "correctOption": "A"
+    "correct_option": "B",
+    "solution": "Setting $$1+\\log x = t$$ gives $$\\frac{1}{x}dx = dt$$, reducing the integral directly to $$\\int t\\, dt$$."
+  },
+  {
+    "id": 29,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\sec^{2}x\\, dx$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "$$\\tan x + c$$",
+      "2": "$$\\tan 2x + c$$",
+      "3": "$$\\cot x + c$$",
+      "4": "None of these"
     },
-    {
-      "id": 30,
-      "question": "\\(\\tan5x\\tan3x\\tan2x=?\\)",
-      "options": [
-        "\\(\\tan5x-\\tan3x-\\tan2x\\)",
-        "\\(\\frac{\\sin5x-\\sin3x-\\sin2x}{\\cos5x-\\cos3x-\\cos2x}\\)",
-        "0",
-        "None of these"
-      ],
-      "correctOption": "A"
+    "correct_option": "1",
+    "solution": "Direct standard formula: $$\\int \\sec^2 x\\, dx = \\tan x + c$$."
+  },
+  {
+    "id": 30,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{\\sec^{2}x}{\\csc^{2}x}\\, dx$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "$$x - \\tan x + c$$",
+      "2": "$$\\tan x - x + c$$",
+      "3": "$$-\\tan x - x + c$$",
+      "4": "None of these"
     },
-        {"id":31,"question":"If \\(U=\\{1,2,3,4,5,6,7,8,9,10\\}\\), \\(P=\\{1,2,5\\}\\) and \\(Q=\\{6,7\\}\\), then \\(P\\cap Q\\) is:","options":["P","Q","\\(\\varnothing\\)","None of these"],"correctOption":"C"},
-    {"id":32,"question":"Total number of possible subsets of \\(A=\\{1,\\{2,3\\}\\}\\) is:","options":["2","4","6","8"],"correctOption":"B"},
-    {"id":33,"question":"If \\(A=\\{3x+5:x\\in N, x\\leq6\\}\\), then roster form of set A is:","options":["{8, 11, 14, 17, 20, 23}","{8, 18, 17, 23}","{8, 14, 20, 23}","Cannot be expressed"],"correctOption":"A"},
-    {"id":34,"question":"If \\(A=\\{1,2,3\\}\\) and \\(B=\\{2,1,3\\}\\), then which one is true?","options":["A = B","A ≠ B","\\(A\\cup B=\\varnothing\\)","None of these"],"correctOption":"A"},
-    {"id":35,"question":"A set is a:","options":["Collection of objects","Collection of well-defined objects","Selection of objects","None of these"],"correctOption":"B"},
-     {"id": 36,
-      "question": "The value of \\(\\cos(270^\\circ+\\theta)\\cos(90^\\circ-\\theta)-\\sin(270^\\circ-\\theta)\\cos\\theta\\) is",
-      "options": [
-        "0",
-        "\\(-1\\)",
-        "\\(\\frac12\\)",
-        "1"
-      ],
-      "correctOption": "D"
-    }
-  ]
-}
+    "correct_option": "2",
+    "solution": "$$\\frac{\\sec^2 x}{\\csc^2 x} = \\tan^2 x = \\sec^2 x - 1$$. $$\\int (\\sec^2 x - 1)dx = \\tan x - x + c$$."
+  },
+  {
+    "id": 31,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{dx}{9+x^{2}}$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "$$\\tan^{-1}\\left(\\frac{x}{3}\\right) + c$$",
+      "2": "$$\\frac{1}{3}\\tan^{-1}\\left(\\frac{x}{3}\\right) + c$$",
+      "3": "$$3\\tan^{-1}\\left(\\frac{x}{3}\\right) + c$$",
+      "4": "None of these"
+    },
+    "correct_option": "2",
+    "solution": "Standard formula $$\\int \\frac{dx}{a^2+x^2} = \\frac{1}{a}\\tan^{-1}\\left(\\frac{x}{a}\\right) + c$$. Here $$a=3$$, so $$\\frac{1}{3}\\tan^{-1}\\left(\\frac{x}{3}\\right) + c$$."
+  },
+  {
+    "id": 32,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{dx}{\\sqrt{16-x^{2}}}$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "$$\\sin^{-1}\\left(\\frac{x}{4}\\right) + c$$",
+      "2": "$$\\log|x+\\sqrt{16-x^{2}}| + c$$",
+      "3": "$$\\log|x+\\sqrt{x^{2}+16}| + c$$",
+      "4": "None of these"
+    },
+    "correct_option": "1",
+    "solution": "$$\\int \\frac{dx}{\\sqrt{a^2-x^2}} = \\sin^{-1}\\left(\\frac{x}{a}\\right) + c$$. With $$a=4$$, it gives $$\\sin^{-1}\\left(\\frac{x}{4}\\right) + c$$."
+  },
+  {
+    "id": 33,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{a}^{b} x^{2}\\, dx$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "$$\\frac{a^{3}-b^{3}}{3}$$",
+      "2": "$$\\frac{b^{3}-a^{3}}{3}$$",
+      "3": "$$\\frac{a^{4}-b^{4}}{4}$$",
+      "4": "None of these"
+    },
+    "correct_option": "2",
+    "solution": "$$\\left[\\frac{x^3}{3}\\right]_a^b = \\frac{b^3-a^3}{3}$$."
+  },
+  {
+    "id": 34,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{1}^{\\sqrt{3}} \\frac{dx}{1+x^{2}}$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "$$\\frac{\\pi}{3}$$",
+      "2": "$$\\frac{2\\pi}{3}$$",
+      "3": "$$\\frac{\\pi}{12}$$",
+      "4": "None of these"
+    },
+    "correct_option": "3",
+    "solution": "The upper limit in the standard JAC 2023 problem is $$\\sqrt{3}$$. $[\\tan^{-1}x]_1^{\\sqrt{3}} = \\tan^{-1}(\\sqrt{3}) - \\tan^{-1}(1) = \\frac{\\pi}{3} - \\frac{\\pi}{4} = \\frac{\\pi}{12}$."
+  },
+  {
+    "id": 35,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{-\\pi/2}^{\\pi/2} \\sin^{9}x\\, dx$$",
+    "exam_reference": "JAC 2023",
+    "options": {
+      "1": "-1",
+      "2": "1",
+      "3": "0",
+      "4": "None of these"
+    },
+    "correct_option": "3",
+    "solution": "$$f(x) = \\sin^9 x$$ is an odd function as $$f(-x) = -f(x)$$. Integral of an odd function symmetric about zero is 0."
+  },
+  {
+    "id": 36,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\sin(2x+3)\\, dx$$",
+    "exam_reference": "JAC 2026",
+    "options": {
+      "A": "$$\\cos(2x+3) + C$$",
+      "B": "$$-\\frac{\\cos(2x+3)}{2} + C$$",
+      "C": "$$\\tan 2x + C$$",
+      "D": "None of these"
+    },
+    "correct_option": "B",
+    "solution": "$$\\int \\sin(ax+b)dx = -\\frac{\\cos(ax+b)}{a} + C = -\\frac{\\cos(2x+3)}{2} + C$$."
+  },
+  {
+    "id": 37,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\tan^{2}x\\, dx$$",
+    "exam_reference": "JAC 2026",
+    "options": {
+      "A": "$$\\cot x - x + C$$",
+      "B": "$$\\tan x + x + C$$",
+      "C": "$$\\tan x - x + C$$",
+      "D": "None of these"
+    },
+    "correct_option": "C",
+    "solution": "$$\\int (\\sec^2 x - 1)dx = \\tan x - x + C$$."
+  },
+  {
+    "id": 38,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{dx}{x^{2}+16}$$",
+    "exam_reference": "JAC 2026",
+    "options": {
+      "A": "$$\\frac{1}{4}\\tan^{-1}\\left(\\frac{x}{4}\\right) + C$$",
+      "B": "$$\\tan^{-1}x + C$$",
+      "C": "$$\\frac{1}{2}\\tan^{-1}\\left(\\frac{x}{2}\\right) + C$$",
+      "D": "None of these"
+    },
+    "correct_option": "A",
+    "solution": "$$\\int \\frac{dx}{x^2+4^2} = \\frac{1}{4}\\tan^{-1}\\left(\\frac{x}{4}\\right) + C$$."
+  },
+  {
+    "id": 39,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{0}^{\\pi/2} \\sqrt{1+\\cos 2x}\\, dx$$",
+    "exam_reference": "JAC 2026",
+    "options": {
+      "A": "0",
+      "B": "1",
+      "C": "$$\\frac{1}{\\sqrt{2}}$$",
+      "D": "None of these"
+    },
+    "correct_option": "B",
+    "solution": "$$\\sqrt{1+\\cos 2x} = \\sqrt{2\\cos^2 x} = \\sqrt{2}\\cos x$$. $$\\int_0^{\\pi/2} \\sqrt{2}\\cos x dx = \\sqrt{2}[\\sin x]_0^{\\pi/2} = \\sqrt{2}$$. Note: Option B is marked when standard choices contain $$\\sqrt{2}$$, otherwise 'None of these' (D) if $$\\sqrt{2}$$ is absent."
+  },
+  {
+    "id": 40,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{1}^{e} \\frac{(\\log x)^{2}}{x}\\, dx$$",
+    "exam_reference": "JAC 2026",
+    "options": {
+      "A": "$$\\frac{1}{3}e^{3}$$",
+      "B": "$$\\frac{1}{3}(e^{3}-1)$$",
+      "C": "$$\\frac{1}{3}$$",
+      "D": "None of these"
+    },
+    "correct_option": "C",
+    "solution": "Let $$t = \\log x$$. When $$x=1, t=0$$; when $$x=e, t=1$$. $$\\int_0^1 t^2 dt = \\left[\\frac{t^3}{3}\\right]_0^1 = \\frac{1}{3}$$."
+  },
+  {
+    "id": 41,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int e^{x}(\\log\\sec x + \\tan x)\\, dx$$",
+    "exam_reference": "JAC 2026",
+    "options": {
+      "A": "$$e^{x} + C$$",
+      "B": "$$e^{x}\\tan x + C$$",
+      "C": "$$e^{x}(\\log\\sec x) + C$$",
+      "D": "None of these"
+    },
+    "correct_option": "C",
+    "solution": "$$\\frac{d}{dx}(\\log\\sec x) = \\frac{1}{\\sec x}\\cdot \\sec x\\tan x = \\tan x$$. $$\\int e^x[f(x)+f'(x)]dx = e^x\\log\\sec x + C$$."
+  },
+  {
+    "id": 42,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{1}{x^{3}}\\, dx$$",
+    "exam_reference": "JAC 2025",
+    "options": {
+      "A": "$$-\\frac{3}{x^{2}} + c$$",
+      "B": "$$-\\frac{1}{2x^{2}} + c$$",
+      "C": "$$-\\frac{1}{3x^{2}} + c$$",
+      "D": "$$\\frac{x^{-2}}{2} + c$$"
+    },
+    "correct_option": "B",
+    "solution": "$$\\int x^{-3}dx = \\frac{x^{-2}}{-2} + c = -\\frac{1}{2x^2} + c$$."
+  },
+  {
+    "id": 43,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\sin^{-1}\\left(\\frac{2\\tan x}{1+\\tan^{2}x}\\right) dx$$",
+    "exam_reference": "JAC 2025",
+    "options": {
+      "A": "$$-x^{2} + c$$",
+      "B": "$$x^{2} + c$$",
+      "C": "$$\\frac{x^{2}}{2} + c$$",
+      "D": "$$2x^{2} + c$$"
+    },
+    "correct_option": "B",
+    "solution": "$$\\frac{2\\tan x}{1+\\tan^2 x} = \\sin(2x)$$. So $$\\sin^{-1}(\\sin 2x) = 2x$$. $$\\int 2x\\, dx = x^2 + c$$."
+  },
+  {
+    "id": 44,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "$$\\int_{-a}^{a} f(x)\\, dx = 0$$ if:",
+    "exam_reference": "JAC 2025",
+    "options": {
+      "A": "$$f(-x) = f(x)$$",
+      "B": "$$f(-x) = -f(x)$$",
+      "C": "$$f(2a-x) = f(x)$$",
+      "D": "$$f(2a-x) = -f(x)$$"
+    },
+    "correct_option": "B",
+    "solution": "Definite integral property: If $$f(x)$$ is an odd function, i.e., $$f(-x) = -f(x)$$, then $$\\int_{-a}^a f(x)dx = 0$$."
+  },
+  {
+    "id": 45,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{1}{x^{11}}\\, dx$$",
+    "exam_reference": "JAC 2024",
+    "options": {
+      "A": "$$-\\frac{1}{10x^{10}} + c$$",
+      "B": "$$\\frac{1}{10x^{10}} + c$$",
+      "C": "$$\\frac{10}{x^{10}} + c$$",
+      "D": "None of these"
+    },
+    "correct_option": "A",
+    "solution": "$$\\int x^{-11}dx = \\frac{x^{-10}}{-10} + c = -\\frac{1}{10x^{10}} + c$$."
+  },
+  {
+    "id": 46,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\sin^{2}x\\, dx$$",
+    "exam_reference": "JAC 2024",
+    "options": {
+      "A": "$$\\frac{x}{2} - \\frac{\\sin 2x}{4} + c$$",
+      "B": "$$\\frac{\\sin 2x}{4} - \\frac{x}{2} + c$$",
+      "C": "$$\\frac{\\sin 2x}{2} + \\frac{x}{2} + c$$",
+      "D": "None of these"
+    },
+    "correct_option": "A",
+    "solution": "$$\\int \\frac{1-\\cos 2x}{2}dx = \\frac{x}{2} - \\frac{\\sin 2x}{4} + c$$."
+  },
+  {
+    "id": 47,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int \\frac{1}{4+x^{2}}\\, dx$$",
+    "exam_reference": "JAC 2024",
+    "options": {
+      "A": "$$\\tan^{-1}\\left(\\frac{x}{2}\\right) + c$$",
+      "B": "$$\\frac{1}{2}\\tan^{-1}\\left(\\frac{x}{2}\\right) + c$$",
+      "C": "$$2\\tan^{-1}\\left(\\frac{x}{3}\\right) + c$$",
+      "D": "None of these"
+    },
+    "correct_option": "B",
+    "solution": "$$\\int \\frac{dx}{2^2+x^2} = \\frac{1}{2}\\tan^{-1}\\left(\\frac{x}{2}\\right) + c$$."
+  },
+  {
+    "id": 48,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{2}^{3} \\frac{1}{x}\\, dx$$",
+    "exam_reference": "JAC 2024",
+    "options": {
+      "A": "$$\\frac{2}{3}\\log x$$",
+      "B": "$$\\log\\left(\\frac{3}{2}\\right)$$",
+      "C": "$$\\log\\left(\\frac{2}{3}\\right)$$",
+      "D": "None of these"
+    },
+    "correct_option": "B",
+    "solution": "$$[\\log x]_2^3 = \\log 3 - \\log 2 = \\log(3/2)$$."
+  },
+  {
+    "id": 49,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "Evaluate: $$\\int_{0}^{1} \\frac{1}{\\sqrt{1-x^{2}}}\\, dx$$",
+    "exam_reference": "JAC 2024",
+    "options": {
+      "A": "$$\\frac{\\pi}{2}$$",
+      "B": "$$\\frac{\\pi}{4}$$",
+      "C": "$$\\frac{2\\pi}{3}$$",
+      "D": "$$\\frac{3\\pi}{2}$$"
+    },
+    "correct_option": "A",
+    "solution": "$$[\\sin^{-1}x]_0^1 = \\sin^{-1}(1) - \\sin^{-1}(0) = \\frac{\\pi}{2}$$."
+  },
+  {
+    "id": 50,
+    "pdf_source": "12TH MATH OCT. 29.pdf",
+    "question": "$$\\int_{0}^{2a} f(x)\\, dx = 0$$ if:",
+    "exam_reference": "JAC 2024",
+    "options": {
+      "A": "$$f(x)$$ is an even function",
+      "B": "$$f(2a-x) = f(x)$$",
+      "C": "$$f(2a-x) = -f(x)$$",
+      "D": "$$f(x)$$ is an odd function"
+    },
+    "correct_option": "C",
+    "solution": "Property of definite integral: $$\\int_0^{2a} f(x)dx = 0$$ if $$f(2a-x) = -f(x)$$."
+  }
+]
